@@ -1,0 +1,6798 @@
+[
+{
+  "model": "incidents.customuser",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$wTjpWD2BoLQc5JrJGGkR4R$14NcbLsN9YrUb36aQznpv9VV/dxr5RP5qX1Q84vOTvI=",
+    "last_login": "2025-10-25T22:33:33.904Z",
+    "is_superuser": false,
+    "username": "Jeline",
+    "first_name": "Jeline",
+    "last_name": "Santillan",
+    "email": "jdsantillandionson@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T14:37:21.697Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "8",
+    "section": "3",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$D4jJMfPTt6hfVvOwsFlzua$9DrQDL17CNxwcqu/jv3hdkac4LB7X12nW/n2wHDzDcg=",
+    "last_login": "2025-10-25T14:38:35.788Z",
+    "is_superuser": false,
+    "username": "ana",
+    "first_name": "Anna",
+    "last_name": "Cruz",
+    "email": "annaaa@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T14:38:34.291Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$KmszzWcYC6OvXYpSnGjFTb$/5r2T6OhYbYHst9IJdCihpz3lnQSvCJFAYehK4RFX0w=",
+    "last_login": "2025-11-17T15:52:22.754Z",
+    "is_superuser": false,
+    "username": "guidance2",
+    "first_name": "Jel",
+    "last_name": "Lyn",
+    "email": "guidance2@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T15:30:58.407Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$jEOZlKmn3zvLm4asb9MPuJ$jl6kO+4aP34Ty3p2hS2b2p1mvC9kz32yuzijaflawbU=",
+    "last_login": "2025-10-25T19:47:58.763Z",
+    "is_superuser": false,
+    "username": "discipline_office",
+    "first_name": "Anne",
+    "last_name": "Lim",
+    "email": "discipline@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T15:32:34.468Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$SdtAiPJtCMqVG7dc5hmRad$ylYOIrlBawhR8AEIWkRHun5NV+COxVanIa/pMCL6LI0=",
+    "last_login": "2025-10-25T15:40:00.897Z",
+    "is_superuser": false,
+    "username": "counselor",
+    "first_name": "Trishia",
+    "last_name": "Ranigo",
+    "email": "counselor@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T15:39:57.623Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EGzrGxmohPkt1m8CDD4h5w$rWJaZmsZKpMyg16AoPNhsE4HJkAPxhe8h1eEjCdTIjw=",
+    "last_login": "2025-10-25T16:31:48.971Z",
+    "is_superuser": false,
+    "username": "guidance_office",
+    "first_name": "Trishia",
+    "last_name": "Cruz",
+    "email": "santillan07@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T16:31:45.632Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$rRTM7vqL1fauIgajKlaPSP$zQO89H1pnWv2vdkVELCpHcPlmypQcPRVTJBXGYnQ0P0=",
+    "last_login": "2025-10-25T16:34:36.760Z",
+    "is_superuser": false,
+    "username": "hospital",
+    "first_name": "Jeline",
+    "last_name": "cruz",
+    "email": "annaaa@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T16:34:22.574Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$9kk9d8mdJ0fWDhBQ4LEbke$jjAzmU9TIIMQxflV17nDv1Jp0MftKWCaaeVkn4g2VYY=",
+    "last_login": "2025-10-25T19:52:43.810Z",
+    "is_superuser": false,
+    "username": "testteacher",
+    "first_name": "Test",
+    "last_name": "Teacher",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T16:43:04.312Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$Olij1bCt7YTNEprfAdNUS3$i3zkqYJ58iDolEPKF5ARCSEgBYOHcEc8wMD5yfvSieA=",
+    "last_login": "2025-10-25T22:33:07.759Z",
+    "is_superuser": false,
+    "username": "testprincipal",
+    "first_name": "Test",
+    "last_name": "Principal",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T16:43:28.715Z",
+    "role": "principal",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$1VSFZfeMrpjALMf399Uekj$s7uy0C76gfSTcSL0fSNtVFSRGWsJih5ANhsmDqOq8kc=",
+    "last_login": "2025-10-25T17:20:31.079Z",
+    "is_superuser": false,
+    "username": "Jasper",
+    "first_name": "Trishia",
+    "last_name": "Ranigo",
+    "email": "jddionson@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T17:20:27.888Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 11,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$wjc5qwN3chpZo0MWms5r6e$HAbwwoZwIAYJjWwzjPsHi/S5xHer/d88Ul4rBXJ0TnE=",
+    "last_login": "2025-10-25T19:18:40.800Z",
+    "is_superuser": false,
+    "username": "guidancecounselor",
+    "first_name": "Jeline",
+    "last_name": "Santillan",
+    "email": "guidancecounselor@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T19:18:37.654Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 12,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$rnfR31h8D9jq7lmRQaoVZW$giyUsv7wQlG5S20wvWfXf5VVhCk8QWTMhKLkA4Q8jNY=",
+    "last_login": "2025-10-25T22:06:39.290Z",
+    "is_superuser": false,
+    "username": "santillan",
+    "first_name": "jess",
+    "last_name": "dee",
+    "email": "jsantillan@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T22:05:29.303Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 13,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$4mswHmmkQP8Jj4vT9ZqmW3$lHFvU0CsdCcDW7JcWu/dALAyOa4/QDgV/ngzx3uWC4c=",
+    "last_login": "2025-11-30T13:25:18.478Z",
+    "is_superuser": false,
+    "username": "student",
+    "first_name": "student",
+    "last_name": "cruz",
+    "email": "student@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-26T14:28:34.629Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 14,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$5QOxMDJfPNvFrZq6Nxijv1$liFboFuccOFr83E7lEseGAuMB5pKeRtR+I+B5ljwo1o=",
+    "last_login": "2025-11-29T17:02:02.017Z",
+    "is_superuser": false,
+    "username": "teacher",
+    "first_name": "teacher",
+    "last_name": "cruz",
+    "email": "teacher@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-26T14:30:07.317Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 15,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$6EVrp3LHR9bOlh4eW3bKmH$Knd1ly7SQqwCl5sweSq5zapGMqzJZwWlTjkSRDzPmyM=",
+    "last_login": "2025-11-30T16:25:03.510Z",
+    "is_superuser": false,
+    "username": "discipline",
+    "first_name": "discipline",
+    "last_name": "cruz",
+    "email": "do@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-26T14:32:13.593Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 16,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dc69KBNiUxxb3CeogBMsBB$A7fPI7WXT8unajWx6GhE+UjfATTx+NHIsXZNZlouIJs=",
+    "last_login": "2025-11-29T16:43:32.205Z",
+    "is_superuser": false,
+    "username": "guidance",
+    "first_name": "guidance",
+    "last_name": "cruz",
+    "email": "guidance@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-26T14:33:27.766Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 17,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$183Cua0jYt7LrX9GBWqawb$cCJ6jKysTCvWvHUyKu1eo3dVbHobYDfLtOCX6mVW3go=",
+    "last_login": "2025-11-15T13:00:29.018Z",
+    "is_superuser": false,
+    "username": "principal",
+    "first_name": "principal",
+    "last_name": "cruz",
+    "email": "principal@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-26T14:34:58.179Z",
+    "role": "principal",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 18,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$6R6s97TBybl7GTHfBIdNkT$HLGH9B14NJz2xcVYz1bMFvjkZYCr/1xbRqOCFrtjXjA=",
+    "last_login": "2025-11-15T13:48:56.147Z",
+    "is_superuser": false,
+    "username": "counselor1",
+    "first_name": "Maria",
+    "last_name": "Santos",
+    "email": "counselor@school.edu",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:22.419Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 19,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$uRkBW8bJaxwlotEhGxkvRh$Wc5A+ZLZvBd3IppI+L1R/3d5BG/Emr1WeY4HjE6lcjE=",
+    "last_login": "2025-11-03T15:56:23.656Z",
+    "is_superuser": false,
+    "username": "student1",
+    "first_name": "Juan",
+    "last_name": "Dela Cruz",
+    "email": "student1@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:23.685Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "10",
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 20,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$AugGyNLKucrOPtdj41T8Ow$5YbdpcFDU4oAXTgJ+iQFKt5tXIaf1niKD/JsZp+hnHo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student2",
+    "first_name": "Maria",
+    "last_name": "Garcia",
+    "email": "student2@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:24.815Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "11",
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 21,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$TMgDOoDK1xp6OIbS1s1ytl$/ZeEgM1eIc/W3ko/zE7IuUGemOVvPzz6RhS2jULmpDs=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student3",
+    "first_name": "Pedro",
+    "last_name": "Rodriguez",
+    "email": "student3@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:25.903Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "9",
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 22,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$yTmQM6bMyYre62LfICFQGn$UbB2bqFtGFc8fbntMBzMJRF0faMnqik0aB1o9gGu8ks=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student4",
+    "first_name": "Ana",
+    "last_name": "Lopez",
+    "email": "student4@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:27.111Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "12",
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 23,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$jrki5O3RRr12p02jnZTPT2$NVQB91dMliHW5pnR43Dd+Dc9sMaCQ2Ex9fKlyx2VPZA=",
+    "last_login": "2025-11-03T14:48:42.142Z",
+    "is_superuser": false,
+    "username": "teacher1",
+    "first_name": "Roberto",
+    "last_name": "Martinez",
+    "email": "teacher@school.edu",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:28.245Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 24,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$QGeaQgUu2YqDuNPrk7D6lB$FcMLawcqtxwsT3jmszexmec+vDi51ruqATpHdnWweug=",
+    "last_login": "2025-11-26T04:27:40.677Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@school.edu",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:24:18.368Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 25,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$AmU3aw90HSTF1ieotxr3Ag$smC56wTgnCDqL+EqeqfCua7ILI97eepMueLmebjTjGE=",
+    "last_login": "2025-11-18T08:45:31.576Z",
+    "is_superuser": false,
+    "username": "santillan.dmlmhsstudent",
+    "first_name": "Student",
+    "last_name": "Santillan",
+    "email": "santillan.dmlmhsstudent@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T16:11:01.205Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 26,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$r1oMBOwNvmgT1WP1exfXBG$ZRk/GrQVRBhpXbQV20b1KEs3FdCLvfaf6pPa2bhvrwM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "counselor_test",
+    "first_name": "Maria",
+    "last_name": "Santos",
+    "email": "counselor@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:23:41.632Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 27,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$awkXoo6HiJ6S51BUWHh51D$cLa9gtZJDU+93aOg7dwlOjGmIs3Q6fvQE7ElE3jQd4g=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "do_test",
+    "first_name": "Juan",
+    "last_name": "Dela Cruz",
+    "email": "do@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:23:46.967Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 28,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$QUETbZs8VXRipAfHW7Lu6p$5xL8JpyqpJh+zqYzIDf16v0j7l6RDI0YHSf9AjBUNj4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher1_test",
+    "first_name": "Ana",
+    "last_name": "Reyes",
+    "email": "teacher1@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:23:51.567Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 29,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$s7JW9vLcoo7YIQ8sAA2s2x$9kOL1K8Yu0OBMTojO+aHvs7f0CxNayBKUH0wFDDRqeM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher2_test",
+    "first_name": "Pedro",
+    "last_name": "Garcia",
+    "email": "teacher2@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:23:56.377Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 30,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$F6emnUrc9pfZxtuJFRDl7x$SSuM7q5iFR37zhu2pOXrxwxppp2rI966XYlu3rwHkQ4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher3_test",
+    "first_name": "Linda",
+    "last_name": "Cruz",
+    "email": "teacher3@test.com",
+    "is_staff": false,
+    "is_active": false,
+    "date_joined": "2025-11-16T18:24:01.063Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 31,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$2SoUI1rgP2kx8XAaYbDLVS$xIA1FlCt/b5elBd9qwckCB2jGfVAq4yL11nFHwsOCAc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student1_test",
+    "first_name": "John",
+    "last_name": "Smith",
+    "email": "student1@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:24:08.863Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "7",
+    "section": "Section 1",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 32,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$MjLrVzsZYzRy5dQ7HUO3Oo$C7HSegbBZZsgZ+mXwVUQTHORx5dj+lnvvK3BxJJAat0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student2_test",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "student2@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:24:22.798Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "8",
+    "section": "Section 1",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 33,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$2GQVu3lnXsrMDU7uIN0tCG$byhFfEYTQcOYA0GQZbE3bAIJ4xVWxfGXDusw7C5nzDU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student3_test",
+    "first_name": "Mark",
+    "last_name": "Johnson",
+    "email": "student3@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:24:29.328Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "9",
+    "section": "Section 1",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 34,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$co8pHymDrxEB2OSRNVTkLk$zgxW6o7OSlSVsL98Wuw/RhXWDHDAzUuIbn0m75IlCHs=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student4_test",
+    "first_name": "Lisa",
+    "last_name": "Williams",
+    "email": "student4@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:24:38.437Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "10",
+    "section": "Section 1",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 35,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$taMrOnbU9Zza4xri56OfPi$9+b0Jg8YyWpdNmL4M9IAqquNHQri1DP8xhqhQ/iYAYw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student5_test",
+    "first_name": "Carlos",
+    "last_name": "Martinez",
+    "email": "student5@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:24:43.429Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "7",
+    "section": "Section 1",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 36,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$7RHTWkpRgIJPYjZZa6eo5G$ssOrX9qTXljbJLQFdxqc1iANR/Yhfp0i4vNqiSdYcxo=",
+    "last_login": "2025-11-17T17:07:56.155Z",
+    "is_superuser": false,
+    "username": "test_counselor",
+    "first_name": "Test",
+    "last_name": "Counselor",
+    "email": "counselor@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-17T16:43:08.808Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 37,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$HhiqC4DQEn9KT1u1Cu3Sod$X2snYjsiDm3BJSY/4TYPu91Nn26rpfBwEbLiAJrQ91g=",
+    "last_login": "2025-11-23T12:41:08.970Z",
+    "is_superuser": false,
+    "username": "test_do",
+    "first_name": "Test",
+    "last_name": "DO",
+    "email": "do@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-18T07:18:11.490Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 39,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$tBEwxI1zBKjerHMJ6bVi6H$8kBgp08+1Xe57kwnoRHwRFLsYIYjpZ+aDsfYY2B9Tuw=",
+    "last_login": "2025-11-24T06:36:42.206Z",
+    "is_superuser": false,
+    "username": "esp_teacher",
+    "first_name": "Maria",
+    "last_name": "Garcia",
+    "email": "esp.teacher@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-24T06:31:04.080Z",
+    "role": "esp_teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 40,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$hg9YUEiCikzhKmLOXBL4Fa$melaQCeaMCegMuWjlPfJTlSWAz3W4HnSnzVY50KySbI=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "do_admin",
+    "first_name": "Discipline",
+    "last_name": "Officer",
+    "email": "do@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-24T16:24:09.385Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 41,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$HAcNU0sDaPPXRRWoZ5xiuD$DWF5a9RszC+lPPqMQAWyGZA4jFrg4goQrRIc7bzWin8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "counselor_admin",
+    "first_name": "Guidance",
+    "last_name": "Counselor",
+    "email": "counselor@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-24T16:24:10.625Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 42,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$szqYSnuIN5RpV18moU3IiN$8oy0Po6OMjE8uyQbtOX1SF1GYZLYHIj9UcBhF7j/1Mo=",
+    "last_login": "2025-11-30T13:17:14.185Z",
+    "is_superuser": false,
+    "username": "trishiaranigo",
+    "first_name": "Trishia",
+    "last_name": "Ranigo",
+    "email": "trishiaesp@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-24T16:50:06.972Z",
+    "role": "esp_teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 43,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$G7ng3zUMdA0PJtsahUM1Of$aRxmf226bEkrk5PsfTSwvANPBhJIuhO2tU/de22PrQg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "juan.delacruz",
+    "first_name": "Juan",
+    "last_name": "Dela Cruz",
+    "email": "juan.delacruz@student.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-30T18:40:43.745Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 44,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$kMMjRL72bh6x0TeGuve0aE$lCnPOuR3U5jGd8tKysxaEuBl2jpYWwDa6QGJwERol3g=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "maria.santos",
+    "first_name": "Maria",
+    "last_name": "Santos",
+    "email": "maria.santos@student.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-30T18:40:47.177Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 45,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$tu1LiDDkHmHVNYe6jfNxBU$O3elfEle6Kp+FXQMXHQ1rbLr/IhoRZuxfDnYO6qvqDw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "do1",
+    "first_name": "Ana",
+    "last_name": "Garcia",
+    "email": "do1@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-30T18:51:03.096Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.curriculum",
+  "pk": 1,
+  "fields": {
+    "name": "Junior High School",
+    "description": "Grades 7-10"
+  }
+},
+{
+  "model": "incidents.curriculum",
+  "pk": 2,
+  "fields": {
+    "name": "Senior High School",
+    "description": "Grades 11-12"
+  }
+},
+{
+  "model": "incidents.curriculum",
+  "pk": 4,
+  "fields": {
+    "name": "K-12",
+    "description": "K-12 Basic Education Curriculum"
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 1,
+  "fields": {
+    "name": "STE",
+    "curriculum": 1
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 2,
+  "fields": {
+    "name": "SPA",
+    "curriculum": 1
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 3,
+  "fields": {
+    "name": "ICT",
+    "curriculum": 1
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 4,
+  "fields": {
+    "name": "RBEC",
+    "curriculum": 1
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 5,
+  "fields": {
+    "name": "STVEP",
+    "curriculum": 1
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 6,
+  "fields": {
+    "name": "STEM",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 7,
+  "fields": {
+    "name": "Arts & Design",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 8,
+  "fields": {
+    "name": "TVL",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 9,
+  "fields": {
+    "name": "ABM",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 10,
+  "fields": {
+    "name": "HUMSS",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 11,
+  "fields": {
+    "name": "GAS",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 13,
+  "fields": {
+    "name": "Junior High School",
+    "curriculum": 4
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 1,
+  "fields": {
+    "level": "7",
+    "track": 1
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 2,
+  "fields": {
+    "level": "8",
+    "track": 1
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 3,
+  "fields": {
+    "level": "9",
+    "track": 1
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 4,
+  "fields": {
+    "level": "10",
+    "track": 1
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 5,
+  "fields": {
+    "level": "7",
+    "track": 2
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 6,
+  "fields": {
+    "level": "8",
+    "track": 2
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 7,
+  "fields": {
+    "level": "9",
+    "track": 2
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 8,
+  "fields": {
+    "level": "10",
+    "track": 2
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 9,
+  "fields": {
+    "level": "7",
+    "track": 3
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 10,
+  "fields": {
+    "level": "8",
+    "track": 3
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 11,
+  "fields": {
+    "level": "9",
+    "track": 3
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 12,
+  "fields": {
+    "level": "10",
+    "track": 3
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 13,
+  "fields": {
+    "level": "7",
+    "track": 4
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 14,
+  "fields": {
+    "level": "8",
+    "track": 4
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 15,
+  "fields": {
+    "level": "9",
+    "track": 4
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 16,
+  "fields": {
+    "level": "10",
+    "track": 4
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 17,
+  "fields": {
+    "level": "7",
+    "track": 5
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 18,
+  "fields": {
+    "level": "8",
+    "track": 5
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 19,
+  "fields": {
+    "level": "9",
+    "track": 5
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 20,
+  "fields": {
+    "level": "10",
+    "track": 5
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 21,
+  "fields": {
+    "level": "11",
+    "track": 6
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 22,
+  "fields": {
+    "level": "12",
+    "track": 6
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 23,
+  "fields": {
+    "level": "11",
+    "track": 7
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 24,
+  "fields": {
+    "level": "12",
+    "track": 7
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 25,
+  "fields": {
+    "level": "11",
+    "track": 8
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 26,
+  "fields": {
+    "level": "12",
+    "track": 8
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 31,
+  "fields": {
+    "level": "11",
+    "track": 9
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 32,
+  "fields": {
+    "level": "12",
+    "track": 9
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 33,
+  "fields": {
+    "level": "Grade 7",
+    "track": 13
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 34,
+  "fields": {
+    "level": "Grade 8",
+    "track": 13
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 35,
+  "fields": {
+    "level": "Grade 9",
+    "track": 13
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 36,
+  "fields": {
+    "level": "Grade 10",
+    "track": 13
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 37,
+  "fields": {
+    "level": "Grade 11",
+    "track": 6
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 38,
+  "fields": {
+    "level": "Grade 11",
+    "track": 10
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 39,
+  "fields": {
+    "level": "Grade 12",
+    "track": 6
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 40,
+  "fields": {
+    "level": "Grade 12",
+    "track": 10
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 41,
+  "fields": {
+    "level": "Grade 11",
+    "track": 9
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 42,
+  "fields": {
+    "level": "Grade 12",
+    "track": 9
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 43,
+  "fields": {
+    "level": "Grade 11",
+    "track": 11
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 44,
+  "fields": {
+    "level": "Grade 12",
+    "track": 11
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 1,
+  "fields": {
+    "name": "Section 1",
+    "grade": 1,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 2,
+  "fields": {
+    "name": "Section 2",
+    "grade": 1,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 3,
+  "fields": {
+    "name": "Section 1",
+    "grade": 2,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 4,
+  "fields": {
+    "name": "Section 2",
+    "grade": 2,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 5,
+  "fields": {
+    "name": "Section 1",
+    "grade": 3,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 6,
+  "fields": {
+    "name": "Section 2",
+    "grade": 3,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 7,
+  "fields": {
+    "name": "Section 1",
+    "grade": 4,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 8,
+  "fields": {
+    "name": "Section 2",
+    "grade": 4,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 9,
+  "fields": {
+    "name": "Section 1",
+    "grade": 5,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 10,
+  "fields": {
+    "name": "Section 2",
+    "grade": 5,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 11,
+  "fields": {
+    "name": "Section 1",
+    "grade": 6,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 12,
+  "fields": {
+    "name": "Section 2",
+    "grade": 6,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 13,
+  "fields": {
+    "name": "Section 1",
+    "grade": 7,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 14,
+  "fields": {
+    "name": "Section 2",
+    "grade": 7,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 15,
+  "fields": {
+    "name": "Section 1",
+    "grade": 8,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 16,
+  "fields": {
+    "name": "Section 2",
+    "grade": 8,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 17,
+  "fields": {
+    "name": "Section 1",
+    "grade": 9,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 18,
+  "fields": {
+    "name": "Section 2",
+    "grade": 9,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 19,
+  "fields": {
+    "name": "Section 1",
+    "grade": 10,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 20,
+  "fields": {
+    "name": "Section 2",
+    "grade": 10,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 21,
+  "fields": {
+    "name": "Section 1",
+    "grade": 11,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 22,
+  "fields": {
+    "name": "Section 2",
+    "grade": 11,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 23,
+  "fields": {
+    "name": "Section 1",
+    "grade": 12,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 24,
+  "fields": {
+    "name": "Section 2",
+    "grade": 12,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 25,
+  "fields": {
+    "name": "Section 1",
+    "grade": 13,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 26,
+  "fields": {
+    "name": "Section 2",
+    "grade": 13,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 27,
+  "fields": {
+    "name": "Section 3",
+    "grade": 13,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 28,
+  "fields": {
+    "name": "Section 1",
+    "grade": 14,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 29,
+  "fields": {
+    "name": "Section 2",
+    "grade": 14,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 30,
+  "fields": {
+    "name": "Section 3",
+    "grade": 14,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 31,
+  "fields": {
+    "name": "Section 1",
+    "grade": 15,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 32,
+  "fields": {
+    "name": "Section 2",
+    "grade": 15,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 33,
+  "fields": {
+    "name": "Section 3",
+    "grade": 15,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 34,
+  "fields": {
+    "name": "Section 1",
+    "grade": 16,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 35,
+  "fields": {
+    "name": "Section 2",
+    "grade": 16,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 36,
+  "fields": {
+    "name": "Section 3",
+    "grade": 16,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 37,
+  "fields": {
+    "name": "Section 1",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 38,
+  "fields": {
+    "name": "Section 2",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 39,
+  "fields": {
+    "name": "Section 3",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 40,
+  "fields": {
+    "name": "Section 4",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 41,
+  "fields": {
+    "name": "Section 5",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 42,
+  "fields": {
+    "name": "Section 6",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 43,
+  "fields": {
+    "name": "Section 7",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 44,
+  "fields": {
+    "name": "Section 8",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 45,
+  "fields": {
+    "name": "Section 9",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 46,
+  "fields": {
+    "name": "Section 10",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 47,
+  "fields": {
+    "name": "Section 1",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 48,
+  "fields": {
+    "name": "Section 2",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 49,
+  "fields": {
+    "name": "Section 3",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 50,
+  "fields": {
+    "name": "Section 4",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 51,
+  "fields": {
+    "name": "Section 5",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 52,
+  "fields": {
+    "name": "Section 6",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 53,
+  "fields": {
+    "name": "Section 7",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 54,
+  "fields": {
+    "name": "Section 8",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 55,
+  "fields": {
+    "name": "Section 9",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 56,
+  "fields": {
+    "name": "Section 10",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 57,
+  "fields": {
+    "name": "Section 1",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 58,
+  "fields": {
+    "name": "Section 2",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 59,
+  "fields": {
+    "name": "Section 3",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 60,
+  "fields": {
+    "name": "Section 4",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 61,
+  "fields": {
+    "name": "Section 5",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 62,
+  "fields": {
+    "name": "Section 6",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 63,
+  "fields": {
+    "name": "Section 7",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 64,
+  "fields": {
+    "name": "Section 8",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 65,
+  "fields": {
+    "name": "Section 9",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 66,
+  "fields": {
+    "name": "Section 10",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 67,
+  "fields": {
+    "name": "Section 1",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 68,
+  "fields": {
+    "name": "Section 2",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 69,
+  "fields": {
+    "name": "Section 3",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 70,
+  "fields": {
+    "name": "Section 4",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 71,
+  "fields": {
+    "name": "Section 5",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 72,
+  "fields": {
+    "name": "Section 6",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 73,
+  "fields": {
+    "name": "Section 7",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 74,
+  "fields": {
+    "name": "Section 8",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 75,
+  "fields": {
+    "name": "Section 9",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 76,
+  "fields": {
+    "name": "Section 10",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 77,
+  "fields": {
+    "name": "STEM",
+    "grade": 21,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 78,
+  "fields": {
+    "name": "STEM",
+    "grade": 22,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 79,
+  "fields": {
+    "name": "Arts & Design",
+    "grade": 23,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 80,
+  "fields": {
+    "name": "Arts & Design",
+    "grade": 24,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 81,
+  "fields": {
+    "name": "TVL",
+    "grade": 25,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 82,
+  "fields": {
+    "name": "TVL",
+    "grade": 26,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 86,
+  "fields": {
+    "name": "Tesla",
+    "grade": 21,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 87,
+  "fields": {
+    "name": "Curie",
+    "grade": 21,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 88,
+  "fields": {
+    "name": "Section A",
+    "grade": 33,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 89,
+  "fields": {
+    "name": "Section B",
+    "grade": 33,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 90,
+  "fields": {
+    "name": "Section C",
+    "grade": 33,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 91,
+  "fields": {
+    "name": "Section A",
+    "grade": 34,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 92,
+  "fields": {
+    "name": "Section B",
+    "grade": 34,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 93,
+  "fields": {
+    "name": "Section C",
+    "grade": 34,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 94,
+  "fields": {
+    "name": "Section A",
+    "grade": 35,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 95,
+  "fields": {
+    "name": "Section B",
+    "grade": 35,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 96,
+  "fields": {
+    "name": "Section C",
+    "grade": 35,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 97,
+  "fields": {
+    "name": "Section A",
+    "grade": 36,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 98,
+  "fields": {
+    "name": "Section B",
+    "grade": 36,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 99,
+  "fields": {
+    "name": "Section C",
+    "grade": 36,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 100,
+  "fields": {
+    "name": "Section A",
+    "grade": 37,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 101,
+  "fields": {
+    "name": "Section B",
+    "grade": 37,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 102,
+  "fields": {
+    "name": "Section C",
+    "grade": 37,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 103,
+  "fields": {
+    "name": "Section A",
+    "grade": 38,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 104,
+  "fields": {
+    "name": "Section B",
+    "grade": 38,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 105,
+  "fields": {
+    "name": "Section C",
+    "grade": 38,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 106,
+  "fields": {
+    "name": "Section A",
+    "grade": 39,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 107,
+  "fields": {
+    "name": "Section B",
+    "grade": 39,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 108,
+  "fields": {
+    "name": "Section C",
+    "grade": 39,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 109,
+  "fields": {
+    "name": "Section A",
+    "grade": 40,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 110,
+  "fields": {
+    "name": "Section B",
+    "grade": 40,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 111,
+  "fields": {
+    "name": "Section C",
+    "grade": 40,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 112,
+  "fields": {
+    "name": "Section D",
+    "grade": 33,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 113,
+  "fields": {
+    "name": "Section D",
+    "grade": 34,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 114,
+  "fields": {
+    "name": "Section D",
+    "grade": 35,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 115,
+  "fields": {
+    "name": "Section D",
+    "grade": 36,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 116,
+  "fields": {
+    "name": "STEM A",
+    "grade": 37,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 117,
+  "fields": {
+    "name": "STEM B",
+    "grade": 37,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 118,
+  "fields": {
+    "name": "STEM A",
+    "grade": 39,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 119,
+  "fields": {
+    "name": "STEM B",
+    "grade": 39,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 120,
+  "fields": {
+    "name": "ABM A",
+    "grade": 41,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 121,
+  "fields": {
+    "name": "ABM B",
+    "grade": 41,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 122,
+  "fields": {
+    "name": "ABM A",
+    "grade": 42,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 123,
+  "fields": {
+    "name": "ABM B",
+    "grade": 42,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 124,
+  "fields": {
+    "name": "HUMSS A",
+    "grade": 38,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 125,
+  "fields": {
+    "name": "HUMSS B",
+    "grade": 38,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 126,
+  "fields": {
+    "name": "HUMSS A",
+    "grade": 40,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 127,
+  "fields": {
+    "name": "HUMSS B",
+    "grade": 40,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 128,
+  "fields": {
+    "name": "GAS A",
+    "grade": 43,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 129,
+  "fields": {
+    "name": "GAS B",
+    "grade": 43,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 130,
+  "fields": {
+    "name": "GAS A",
+    "grade": 44,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 131,
+  "fields": {
+    "name": "GAS B",
+    "grade": 44,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 1,
+  "fields": {
+    "teacher_name": "Mr. Juan Dela Cruz",
+    "curriculum": 1,
+    "track_code": "STE",
+    "grade_level": "7",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 2,
+  "fields": {
+    "teacher_name": "Ms. Maria Santos",
+    "curriculum": 1,
+    "track_code": "STE",
+    "grade_level": "7",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 3,
+  "fields": {
+    "teacher_name": "Mr. Jose Ramirez",
+    "curriculum": 1,
+    "track_code": "SPA",
+    "grade_level": "7",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 4,
+  "fields": {
+    "teacher_name": "Ms. Angelica Reyes",
+    "curriculum": 1,
+    "track_code": "SPA",
+    "grade_level": "7",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 5,
+  "fields": {
+    "teacher_name": "Mr. Mark Bautista",
+    "curriculum": 1,
+    "track_code": "ICT",
+    "grade_level": "7",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 6,
+  "fields": {
+    "teacher_name": "Ms. Teresa Gonzales",
+    "curriculum": 1,
+    "track_code": "ICT",
+    "grade_level": "7",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 7,
+  "fields": {
+    "teacher_name": "Mrs. Cristina Villanueva",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "7",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 8,
+  "fields": {
+    "teacher_name": "Mr. Daniel Fernandez",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "7",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 9,
+  "fields": {
+    "teacher_name": "Ms. Patricia Lopez",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "7",
+    "section_name": "Section 3"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 10,
+  "fields": {
+    "teacher_name": "Mr. Carlo Mendoza",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "7",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 11,
+  "fields": {
+    "teacher_name": "Ms. Andrea Gutierrez",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "7",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 12,
+  "fields": {
+    "teacher_name": "Mr. Roberto Flores",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "7",
+    "section_name": "Section 3"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 13,
+  "fields": {
+    "teacher_name": "Ms. Victoria Ramos",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "7",
+    "section_name": "Section 4"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 14,
+  "fields": {
+    "teacher_name": "Mr. Luis Navarro",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "7",
+    "section_name": "Section 5"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 15,
+  "fields": {
+    "teacher_name": "Ms. Michelle Castillo",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "7",
+    "section_name": "Section 6"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 16,
+  "fields": {
+    "teacher_name": "Mr. Richard Aquino",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "7",
+    "section_name": "Section 7"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 17,
+  "fields": {
+    "teacher_name": "Ms. Clarissa Dominguez",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "7",
+    "section_name": "Section 8"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 18,
+  "fields": {
+    "teacher_name": "Mr. Samuel Torres",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "7",
+    "section_name": "Section 9"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 19,
+  "fields": {
+    "teacher_name": "Ms. Katrina Ramos",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "7",
+    "section_name": "Section 10"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 20,
+  "fields": {
+    "teacher_name": "Mr. Emmanuel Santos",
+    "curriculum": 1,
+    "track_code": "STE",
+    "grade_level": "8",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 21,
+  "fields": {
+    "teacher_name": "Ms. Karen Morales",
+    "curriculum": 1,
+    "track_code": "STE",
+    "grade_level": "8",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 22,
+  "fields": {
+    "teacher_name": "Mr. Gabriel De Guzman",
+    "curriculum": 1,
+    "track_code": "SPA",
+    "grade_level": "8",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 23,
+  "fields": {
+    "teacher_name": "Ms. Rosalie Pineda",
+    "curriculum": 1,
+    "track_code": "SPA",
+    "grade_level": "8",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 24,
+  "fields": {
+    "teacher_name": "Mr. Victor Alvarado",
+    "curriculum": 1,
+    "track_code": "ICT",
+    "grade_level": "8",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 25,
+  "fields": {
+    "teacher_name": "Ms. Stephanie Mercado",
+    "curriculum": 1,
+    "track_code": "ICT",
+    "grade_level": "8",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 26,
+  "fields": {
+    "teacher_name": "Mr. Adrian Hernandez",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "8",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 27,
+  "fields": {
+    "teacher_name": "Ms. Bianca Salvador",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "8",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 28,
+  "fields": {
+    "teacher_name": "Mr. Christian Ortega",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "8",
+    "section_name": "Section 3"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 29,
+  "fields": {
+    "teacher_name": "Ms. Camille Estrada",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "8",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 30,
+  "fields": {
+    "teacher_name": "Mr. Patrick Villanueva",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "8",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 31,
+  "fields": {
+    "teacher_name": "Ms. Aileen Mendoza",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "8",
+    "section_name": "Section 3"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 32,
+  "fields": {
+    "teacher_name": "Mr. Raymond Javier",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "8",
+    "section_name": "Section 4"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 33,
+  "fields": {
+    "teacher_name": "Ms. Lourdes Castillo",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "8",
+    "section_name": "Section 5"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 34,
+  "fields": {
+    "teacher_name": "Mr. Francis Torres",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "8",
+    "section_name": "Section 6"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 35,
+  "fields": {
+    "teacher_name": "Ms. Katrina Ramos",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "8",
+    "section_name": "Section 7"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 36,
+  "fields": {
+    "teacher_name": "Mr. Edwin Marquez",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "8",
+    "section_name": "Section 8"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 37,
+  "fields": {
+    "teacher_name": "Ms. Jessica Bautista",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "8",
+    "section_name": "Section 9"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 38,
+  "fields": {
+    "teacher_name": "Mr. Jerome Cruz",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "8",
+    "section_name": "Section 10"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 39,
+  "fields": {
+    "teacher_name": "Mr. Ernesto Reyes",
+    "curriculum": 1,
+    "track_code": "STE",
+    "grade_level": "9",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 40,
+  "fields": {
+    "teacher_name": "Ms. Felicia Navarro",
+    "curriculum": 1,
+    "track_code": "STE",
+    "grade_level": "9",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 41,
+  "fields": {
+    "teacher_name": "Mr. Carlo Dominguez",
+    "curriculum": 1,
+    "track_code": "SPA",
+    "grade_level": "9",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 42,
+  "fields": {
+    "teacher_name": "Ms. Maricel Gutierrez",
+    "curriculum": 1,
+    "track_code": "SPA",
+    "grade_level": "9",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 43,
+  "fields": {
+    "teacher_name": "Mr. Arnold Castillo",
+    "curriculum": 1,
+    "track_code": "ICT",
+    "grade_level": "9",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 44,
+  "fields": {
+    "teacher_name": "Ms. Janelle Cruz",
+    "curriculum": 1,
+    "track_code": "ICT",
+    "grade_level": "9",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 45,
+  "fields": {
+    "teacher_name": "Mr. Nicolas Santos",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "9",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 46,
+  "fields": {
+    "teacher_name": "Ms. Rowena Aquino",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "9",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 47,
+  "fields": {
+    "teacher_name": "Mr. Paulo Hernandez",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "9",
+    "section_name": "Section 3"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 48,
+  "fields": {
+    "teacher_name": "Ms. Lorna Mendoza",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "9",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 49,
+  "fields": {
+    "teacher_name": "Mr. Benjamin Torres",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "9",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 50,
+  "fields": {
+    "teacher_name": "Ms. Clara Lopez",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "9",
+    "section_name": "Section 3"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 51,
+  "fields": {
+    "teacher_name": "Mr. Eric Bautista",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "9",
+    "section_name": "Section 4"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 52,
+  "fields": {
+    "teacher_name": "Ms. Danica Ramirez",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "9",
+    "section_name": "Section 5"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 53,
+  "fields": {
+    "teacher_name": "Mr. Julio Fernandez",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "9",
+    "section_name": "Section 6"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 54,
+  "fields": {
+    "teacher_name": "Ms. Ivy Manalo",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "9",
+    "section_name": "Section 7"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 55,
+  "fields": {
+    "teacher_name": "Mr. Joel Villanueva",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "9",
+    "section_name": "Section 8"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 56,
+  "fields": {
+    "teacher_name": "Ms. Arlene Ramos",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "9",
+    "section_name": "Section 9"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 57,
+  "fields": {
+    "teacher_name": "Mr. Lester Gonzales",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "9",
+    "section_name": "Section 10"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 58,
+  "fields": {
+    "teacher_name": "Mr. Harold Garcia",
+    "curriculum": 1,
+    "track_code": "STE",
+    "grade_level": "10",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 59,
+  "fields": {
+    "teacher_name": "Ms. Thea Santos",
+    "curriculum": 1,
+    "track_code": "STE",
+    "grade_level": "10",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 60,
+  "fields": {
+    "teacher_name": "Mr. Alvin Dela Rosa",
+    "curriculum": 1,
+    "track_code": "SPA",
+    "grade_level": "10",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 61,
+  "fields": {
+    "teacher_name": "Ms. Diana Navarro",
+    "curriculum": 1,
+    "track_code": "SPA",
+    "grade_level": "10",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 62,
+  "fields": {
+    "teacher_name": "Mr. Orlando Cruz",
+    "curriculum": 1,
+    "track_code": "ICT",
+    "grade_level": "10",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 63,
+  "fields": {
+    "teacher_name": "Ms. Melissa Javier",
+    "curriculum": 1,
+    "track_code": "ICT",
+    "grade_level": "10",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 64,
+  "fields": {
+    "teacher_name": "Mr. Gregorio Ramos",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "10",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 65,
+  "fields": {
+    "teacher_name": "Ms. Monica Flores",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "10",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 66,
+  "fields": {
+    "teacher_name": "Mr. Anthony Villanueva",
+    "curriculum": 1,
+    "track_code": "RBEC",
+    "grade_level": "10",
+    "section_name": "Section 3"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 67,
+  "fields": {
+    "teacher_name": "Ms. Rhodora Castillo",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "10",
+    "section_name": "Section 1"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 68,
+  "fields": {
+    "teacher_name": "Mr. Marvin Torres",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "10",
+    "section_name": "Section 2"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 69,
+  "fields": {
+    "teacher_name": "Ms. Sheila Gutierrez",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "10",
+    "section_name": "Section 3"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 70,
+  "fields": {
+    "teacher_name": "Mr. Fernando Cruz",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "10",
+    "section_name": "Section 4"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 71,
+  "fields": {
+    "teacher_name": "Ms. Beverly Ramirez",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "10",
+    "section_name": "Section 5"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 72,
+  "fields": {
+    "teacher_name": "Mr. Jonathan Santos",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "10",
+    "section_name": "Section 6"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 73,
+  "fields": {
+    "teacher_name": "Ms. Kristine Lopez",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "10",
+    "section_name": "Section 7"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 74,
+  "fields": {
+    "teacher_name": "Mr. Allan Dominguez",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "10",
+    "section_name": "Section 8"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 75,
+  "fields": {
+    "teacher_name": "Ms. Noriel Bautista",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "10",
+    "section_name": "Section 9"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 76,
+  "fields": {
+    "teacher_name": "Mr. Gilbert Mendoza",
+    "curriculum": 1,
+    "track_code": "STVEP",
+    "grade_level": "10",
+    "section_name": "Section 10"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 77,
+  "fields": {
+    "teacher_name": "Dr. Jennifer Garcia",
+    "curriculum": 2,
+    "track_code": "STEM",
+    "grade_level": "11",
+    "section_name": "STEM"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 78,
+  "fields": {
+    "teacher_name": "Ms. Liza Manalo",
+    "curriculum": 2,
+    "track_code": "ARTS",
+    "grade_level": "11",
+    "section_name": "Arts & Design"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 79,
+  "fields": {
+    "teacher_name": "Mr. Carlo Mendoza",
+    "curriculum": 2,
+    "track_code": "TVL-ICT",
+    "grade_level": "11",
+    "section_name": "TVL – ICT"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 80,
+  "fields": {
+    "teacher_name": "Mr. Roberto Flores",
+    "curriculum": 2,
+    "track_code": "TVL-SMAW",
+    "grade_level": "11",
+    "section_name": "TVL – SMAW"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 81,
+  "fields": {
+    "teacher_name": "Mr. Daniel Santiago",
+    "curriculum": 2,
+    "track_code": "TVL-EIM",
+    "grade_level": "11",
+    "section_name": "TVL – EIM"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 82,
+  "fields": {
+    "teacher_name": "Ms. Andrea Gutierrez",
+    "curriculum": 2,
+    "track_code": "TVL-DRESS",
+    "grade_level": "11",
+    "section_name": "TVL – Dressmaking"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 83,
+  "fields": {
+    "teacher_name": "Ms. Teresa Ramos",
+    "curriculum": 2,
+    "track_code": "TVL-FBS",
+    "grade_level": "11",
+    "section_name": "TVL – FBS"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 84,
+  "fields": {
+    "teacher_name": "Mr. Francis Javier",
+    "curriculum": 2,
+    "track_code": "TVL-BP",
+    "grade_level": "11",
+    "section_name": "TVL – Bread & Pastry"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 85,
+  "fields": {
+    "teacher_name": "Ms. Katrina Lopez",
+    "curriculum": 2,
+    "track_code": "TVL-CSS",
+    "grade_level": "11",
+    "section_name": "TVL – CSS"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 86,
+  "fields": {
+    "teacher_name": "Mr. Emmanuel Torres",
+    "curriculum": 2,
+    "track_code": "STEM",
+    "grade_level": "12",
+    "section_name": "STEM"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 87,
+  "fields": {
+    "teacher_name": "Ms. Angelica Cruz",
+    "curriculum": 2,
+    "track_code": "ARTS",
+    "grade_level": "12",
+    "section_name": "Arts & Design"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 88,
+  "fields": {
+    "teacher_name": "Mr. Mark Bautista",
+    "curriculum": 2,
+    "track_code": "TVL-ICT",
+    "grade_level": "12",
+    "section_name": "TVL – ICT"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 89,
+  "fields": {
+    "teacher_name": "Mr. Raymond Navarro",
+    "curriculum": 2,
+    "track_code": "TVL-SMAW",
+    "grade_level": "12",
+    "section_name": "TVL – SMAW"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 90,
+  "fields": {
+    "teacher_name": "Ms. Bianca Salvador",
+    "curriculum": 2,
+    "track_code": "TVL-EIM",
+    "grade_level": "12",
+    "section_name": "TVL – EIM"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 91,
+  "fields": {
+    "teacher_name": "Ms. Clarissa Dominguez",
+    "curriculum": 2,
+    "track_code": "TVL-DRESS",
+    "grade_level": "12",
+    "section_name": "TVL – Dressmaking"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 92,
+  "fields": {
+    "teacher_name": "Ms. Jessica Ramirez",
+    "curriculum": 2,
+    "track_code": "TVL-FBS",
+    "grade_level": "12",
+    "section_name": "TVL – FBS"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 93,
+  "fields": {
+    "teacher_name": "Mr. Adrian Hernandez",
+    "curriculum": 2,
+    "track_code": "TVL-BP",
+    "grade_level": "12",
+    "section_name": "TVL – Bread & Pastry"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 94,
+  "fields": {
+    "teacher_name": "Ms. Patricia Villanueva",
+    "curriculum": 2,
+    "track_code": "TVL-CSS",
+    "grade_level": "12",
+    "section_name": "TVL – CSS"
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 140,
+  "fields": {
+    "name": "Possession of deadly weapons",
+    "description": "Possession of deadly weapons (e.g., Indian pana, ice pick, pointed comb, knives, improvised weapons)",
+    "severity": "prohibited",
+    "legal_references": "DepEd Child Protection Policy — DepEd Order (DO) 40, s.2012; School Policy on contraband; RPC provisions on unlawful aggression may apply case-to-case."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 141,
+  "fields": {
+    "name": "Use/peddling/pushing of marijuana or prohibited drugs",
+    "description": "Use of / peddling / pushing of marijuana or any prohibited drugs",
+    "severity": "prohibited",
+    "legal_references": "RA 9165 (Comprehensive Dangerous Drugs Act of 2002) & DepEd's Anti-Drug policies; DO 40, s.2012 (protection/discipline procedures)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 142,
+  "fields": {
+    "name": "Assaulting teacher/school personnel or physical assault",
+    "description": "Assaulting a teacher or school personnel; participating in unsanctioned strikes/demonstrations; inflicting injury upon another student / physical assault",
+    "severity": "prohibited",
+    "legal_references": "RPC Art. 148 (Direct Assault) in relation to Art. 152 (teachers/personnel as persons in authority via Commonwealth Act 578); DO 40, s.2012 (violence, threats, due process). Peaceable assembly needs prior approval per School Policy."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 143,
+  "fields": {
+    "name": "Theft/shoplifting/stealing",
+    "description": "Theft / shoplifting / stealing (in-campus or off-campus)",
+    "severity": "prohibited",
+    "legal_references": "RPC Art. 308-310 (Theft); School Policy for administrative discipline."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 144,
+  "fields": {
+    "name": "Forging/tampering of school records",
+    "description": "Forging / tampering of school records; misrepresentation",
+    "severity": "prohibited",
+    "legal_references": "RPC Art. 171-172 (Falsification of documents); School Policy on academic records."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 145,
+  "fields": {
+    "name": "Gross indecency in conduct",
+    "description": "Gross indecency in conduct (PDA; acts of lasciviousness; exhibitionism) or perennial misbehavior",
+    "severity": "prohibited",
+    "legal_references": "School Policy / Code of Conduct; DO 40, s.2012 (protection from sexual harassment/abuse). Criminal acts, if any, fall under RPC (e.g., acts of lasciviousness)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 146,
+  "fields": {
+    "name": "Organization/membership in unsanctioned groups",
+    "description": "Organization/membership in any fraternity, sorority, gang, or any group not sanctioned by the school",
+    "severity": "prohibited",
+    "legal_references": "DO 7, s.2006 (Prohibition of fraternities/sororities in elementary & secondary schools); School Policy on student organizations."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 147,
+  "fields": {
+    "name": "Extortion/swindling",
+    "description": "Extortion / swindling",
+    "severity": "prohibited",
+    "legal_references": "RPC Art. 293-296 (Robbery with violence/intimidation); RPC Art. 315 (Estafa/Swindling); DO 40, s.2012 (bullying/harassment)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 148,
+  "fields": {
+    "name": "Bullying or peer abuse",
+    "description": "Bullying or peer abuse",
+    "severity": "prohibited",
+    "legal_references": "RA 10627 (Anti-Bullying Act of 2013); DO 55, s.2013 (IRR of RA 10627); DO 40, s.2012 (Child Protection Policy; Sec. 3.M definition of bullying)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 149,
+  "fields": {
+    "name": "Inflicting injury upon another student",
+    "description": "Inflicting injury upon another student/physical assault",
+    "severity": "prohibited",
+    "legal_references": "RPC Art. 262-266 (Physical Injuries); DO 40, s.2012 (Violence, threats); School Policy."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 150,
+  "fields": {
+    "name": "Vandalism/destruction of school property",
+    "description": "Vandalism / intentional destruction of school property",
+    "severity": "prohibited",
+    "legal_references": "RPC Art. 327 (Malicious Mischief); School Policy (restitution/discipline)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 151,
+  "fields": {
+    "name": "Destruction of nature",
+    "description": "Destruction of nature (plants/trees/animals used for education)",
+    "severity": "prohibited",
+    "legal_references": "School Policy; possible LGU Ordinance / environmental laws depending on context."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 152,
+  "fields": {
+    "name": "Littering/non-observance of waste management",
+    "description": "Littering/scattering pieces of papers/peelings/wrappers/plastics or non-observance of waste/garbage management",
+    "severity": "prohibited",
+    "legal_references": "RA 9003 (Ecological Solid Waste Management Act); School Policy; LGU Ordinance."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 153,
+  "fields": {
+    "name": "Cheating on classwork",
+    "description": "Cheating on classwork",
+    "severity": "prohibited",
+    "legal_references": "School Policy on Academic Integrity; DO 40, s.2012 (discipline due process)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 154,
+  "fields": {
+    "name": "Intentional spitting on walls and railings",
+    "description": "Intentional spitting on walls and railings of stairs",
+    "severity": "prohibited",
+    "legal_references": "School Policy (sanitation & conduct)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 155,
+  "fields": {
+    "name": "Smoking & vaping",
+    "description": "Smoking & vaping (in-campus & within the 20-meter perimeter radius outside the school)",
+    "severity": "prohibited",
+    "legal_references": "RA 9211 (Tobacco Regulation Act) & EO 26 (2017) (Smoke-Free Environments); RA 11900 (Vape Law, restricts sales/use by minors & in schools); School Policy (alcohol prohibition)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 156,
+  "fields": {
+    "name": "Taking/bringing intoxicating drinks or entering under influence",
+    "description": "Taking and/or bringing any intoxicating drinks on campus or entering the campus under the influence of alcohol",
+    "severity": "prohibited",
+    "legal_references": "School Policy; DO 40, s.2012 (safety and well-being provisions)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 157,
+  "fields": {
+    "name": "Any form of gambling",
+    "description": "Any form of gambling",
+    "severity": "prohibited",
+    "legal_references": "PD 1602 (Illegal gambling penalties); School Policy."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 158,
+  "fields": {
+    "name": "Insinuating trouble or fight",
+    "description": "Insinuating trouble or fight",
+    "severity": "prohibited",
+    "legal_references": "DO 40, s.2012 (violence/threats); School Policy."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 159,
+  "fields": {
+    "name": "Unsafe behavior on school premises",
+    "description": "Sitting on railings or arms of chairs, jumping and/or sliding on stairway railings in going down, hanging on/jumping over the windows/storeys of building",
+    "severity": "prohibited",
+    "legal_references": "School Safety Policy; DO 40, s.2012 (child protection & safety)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 160,
+  "fields": {
+    "name": "Making unnecessary noise in corridors",
+    "description": "Shouting or making unnecessary noise while passing along lobbies or corridors",
+    "severity": "prohibited",
+    "legal_references": "School Policy (order and discipline)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 161,
+  "fields": {
+    "name": "Making derogatory statements",
+    "description": "Making any derogatory statements against fellow student, teacher, school personnel, administrators and visitors",
+    "severity": "prohibited",
+    "legal_references": "DO 40, s.2012 (bullying—verbal abuse); RA 10627, if peer-to-peer; School Policy."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 162,
+  "fields": {
+    "name": "Climbing over perimeter fence",
+    "description": "Climbing over perimeter fence in going in or out of the school premises",
+    "severity": "prohibited",
+    "legal_references": "School Policy on safety; DO 40, s.2012 (hazardous conduct)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 163,
+  "fields": {
+    "name": "Truancy/habitual absenteeism/tardiness",
+    "description": "Truancy/habitual absenteeism/tardiness/cutting or skipping classes",
+    "severity": "prohibited",
+    "legal_references": "DO 8, s.2015 (Classroom Assessment—attendance expectations); School Policy."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 164,
+  "fields": {
+    "name": "Unauthorized use of personal gadgets in class",
+    "description": "Using/playing of personal gadgets while the class is going on (unless allowed by the teacher for educational purposes, and for emergency cases)",
+    "severity": "prohibited",
+    "legal_references": "School Policy on electronic device use; DO 40, s.2012 (classroom discipline)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 165,
+  "fields": {
+    "name": "Possession/showing of pornographic materials",
+    "description": "Possession and/or showing of pornographic materials (printed or digital)",
+    "severity": "prohibited",
+    "legal_references": "PD 969 / PD 960 (Obscenity Laws); RA 7610 (child protection—pornography); DO 40, s.2012; School Policy."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 166,
+  "fields": {
+    "name": "Bringing and igniting firecrackers",
+    "description": "Bringing and igniting fire crackers in the school premises",
+    "severity": "prohibited",
+    "legal_references": "RA 7183 (Regulation of Firecrackers); School Policy."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 167,
+  "fields": {
+    "name": "School I.D. violation",
+    "description": "School I.D. violation such as: tampering; wearing the ID without/or having different picture; wearing a different I.D. or different cord and color, wearing of I.D. with sticker or other accessories",
+    "severity": "prohibited",
+    "legal_references": "School Policy; DO 32, s.2003 (Student discipline guidelines—ID part of uniform compliance)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 168,
+  "fields": {
+    "name": "Hurling stones/materials over fence",
+    "description": "Hurling stones and/or any other materials over the perimeter fence",
+    "severity": "prohibited",
+    "legal_references": "RPC Art. 327 (Malicious Mischief); School Policy; DO 40, s.2012 (violent/risky conduct)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 169,
+  "fields": {
+    "name": "Prohibited games on campus",
+    "description": "Playing billiards online & offline games during school hours. Playing kick, badminton, and other ball games on campus is allowed with restrictions. However Games that may cause property or pose a risk to other learners are prohibited inside classroom, along corridors in hallways, near office, parking areas, pathways, and gardens. The designated venues for ballgames are the old covered court (OCC) in the oval field.",
+    "severity": "prohibited",
+    "legal_references": "School Policy on conduct and safety; DO 40, s.2012 (child protection & safe environment)."
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 170,
+  "fields": {
+    "name": "Improper haircut (male students)",
+    "description": "Maintain regular and clean haircuts for male student",
+    "severity": "school_policy",
+    "legal_references": "DepEd Order No. 46, s. 2008, item No.4, Clearly Stipulates that: \"4. Promoting physical hygiene and proper school decorum is part of the teaching-learning process in school, thus a student's attire and physical appearance should manifest learnings from this process.\""
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 171,
+  "fields": {
+    "name": "Excessive makeup/colored nail polish",
+    "description": "Wearing excessive makeup, colored nail polish and nail extensions",
+    "severity": "school_policy",
+    "legal_references": "DepEd Order No. 46, s. 2008, item No.4, Clearly Stipulates that: \"4. Promoting physical hygiene and proper school decorum is part of the teaching-learning process in school, thus a student's attire and physical appearance should manifest learnings from this process.\""
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 172,
+  "fields": {
+    "name": "Unnatural hair dyes",
+    "description": "Bright colored or unnatural hair dyes",
+    "severity": "school_policy",
+    "legal_references": "DepEd Order No. 46, s. 2008, item No.4, Clearly Stipulates that: \"4. Promoting physical hygiene and proper school decorum is part of the teaching-learning process in school, thus a student's attire and physical appearance should manifest learnings from this process.\""
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 173,
+  "fields": {
+    "name": "Unauthorized body modifications",
+    "description": "Wearing Tattoos, earring (male student) and multiple earrings (female student), unnecessary visible body piercing accessories, such as nose rings, lip rings, eyebrow rings and other similar items, while on campus",
+    "severity": "school_policy",
+    "legal_references": "DepEd Order No. 46, s. 2008, item No.4, Clearly Stipulates that: \"4. Promoting physical hygiene and proper school decorum is part of the teaching-learning process in school, thus a student's attire and physical appearance should manifest learnings from this process.\""
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 174,
+  "fields": {
+    "name": "Wearing caps inside classroom",
+    "description": "Wearing caps inside the classroom",
+    "severity": "school_policy",
+    "legal_references": "DepEd Order No. 46, s. 2008, item No.4, Clearly Stipulates that: \"4. Promoting physical hygiene and proper school decorum is part of the teaching-learning process in school, thus a student's attire and physical appearance should manifest learnings from this process.\""
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 175,
+  "fields": {
+    "name": "LGBTQA+ Non-compliance with uniform/hairstyle",
+    "description": "LGBTQA+ Non-compliance with the prescribed school uniform and hairstyle.",
+    "severity": "school_policy",
+    "legal_references": "DepEd Order No. 32, s. 2017, Gender-Responsive Basic Education Policy, IV.i clearly stipulates that: i. Gender expressions refers to the way in which a person acts to communicate gender within a given culture, for example in terms of clothing, communication patterns, and interest. A person's gender expressions may not be consistent with socially prescribed gender roles and may or may not reflect his or her gender identity"
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 176,
+  "fields": {
+    "name": "Assaulting teacher/school personnel",
+    "description": "Assaulting a teacher or school personnel; participating in unsanctioned strikes/demonstrations",
+    "severity": "prohibited",
+    "legal_references": "RPC Art. 148; Commonwealth Act 578; DepEd Order (DO) 40, s.2012"
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 177,
+  "fields": {
+    "name": "Fraternity/sorority/gang membership",
+    "description": "Organization/membership in any fraternity, sorority, gang, or any group not sanctioned by the school",
+    "severity": "prohibited",
+    "legal_references": "DO 7, s.2006"
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 178,
+  "fields": {
+    "name": "Inflicting injury upon another student/physical assault",
+    "description": "Inflicting injury upon another student/physical assault",
+    "severity": "prohibited",
+    "legal_references": "RPC Art. 262-266; DepEd Order (DO) 40, s.2012"
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 179,
+  "fields": {
+    "name": "Taking/bringing intoxicating drinks",
+    "description": "Taking and/or bringing any intoxicating drinks on campus or entering the campus under the influence of alcohol",
+    "severity": "prohibited",
+    "legal_references": "DepEd Order (DO) 40, s.2012"
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 180,
+  "fields": {
+    "name": "Making unnecessary noise",
+    "description": "Shouting or making unnecessary noise while passing along lobbies or corridors",
+    "severity": "prohibited",
+    "legal_references": ""
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 181,
+  "fields": {
+    "name": "Unauthorized use of personal gadgets",
+    "description": "Using/playing of personal gadgets while the class is going on (unless allowed by the teacher)",
+    "severity": "prohibited",
+    "legal_references": "DepEd Order (DO) 40, s.2012"
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 182,
+  "fields": {
+    "name": "Possession of pornographic materials",
+    "description": "Possession and/or showing of pornographic materials (printed or digital)",
+    "severity": "prohibited",
+    "legal_references": "PD 969 / PD 960; RA 7610; DepEd Order (DO) 40, s.2012"
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 183,
+  "fields": {
+    "name": "Bringing/igniting firecrackers",
+    "description": "Bringing and igniting fire crackers in the school premises",
+    "severity": "prohibited",
+    "legal_references": "RA 7183"
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 184,
+  "fields": {
+    "name": "Prohibited games/activities",
+    "description": "Playing billiards, online/offline games during school hours; ball games in prohibited areas",
+    "severity": "prohibited",
+    "legal_references": "DepEd Order (DO) 40, s.2012"
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 185,
+  "fields": {
+    "name": "Bright colored/unnatural hair dyes",
+    "description": "Bright colored or unnatural hair dyes",
+    "severity": "school_policy",
+    "legal_references": "DepEd Order No. 46, s. 2008"
+  }
+},
+{
+  "model": "incidents.incidenttype",
+  "pk": 186,
+  "fields": {
+    "name": "Wearing tattoos/unauthorized piercings",
+    "description": "Wearing tattoos, earring (male student), multiple earrings (female student), unnecessary visible body piercing accessories",
+    "severity": "school_policy",
+    "legal_references": "DepEd Order No. 46, s. 2008"
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 1,
+  "fields": {
+    "title": "Revised Guidelines on Learner Discipline",
+    "reference_number": "DepEd Order No. 49, s. 2011",
+    "description": "Guidelines for maintaining discipline among learners in basic education",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 2,
+  "fields": {
+    "title": "Anti-Bullying Act of 2013",
+    "reference_number": "RA 10627",
+    "description": "An act requiring all elementary and secondary schools to adopt policies to address bullying",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 3,
+  "fields": {
+    "title": "Special Protection of Children Against Abuse, Exploitation and Discrimination Act",
+    "reference_number": "RA 7610",
+    "description": "Provides special protection to children against abuse, exploitation and discrimination",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 4,
+  "fields": {
+    "title": "DepEd Child Protection Policy",
+    "reference_number": "DepEd Order No. 40, s. 2012",
+    "description": "Policy framework for child protection in schools",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 5,
+  "fields": {
+    "title": "DepEd Child Protection Policy",
+    "reference_number": "DepEd Order (DO) 40, s.2012",
+    "description": "Child Protection Policy",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 6,
+  "fields": {
+    "title": "Comprehensive Dangerous Drugs Act",
+    "reference_number": "RA 9165",
+    "description": "Comprehensive Dangerous Drugs Act of 2002",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 7,
+  "fields": {
+    "title": "Direct Assault",
+    "reference_number": "RPC Art. 148",
+    "description": "Direct Assault in relation to Art. 152",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 8,
+  "fields": {
+    "title": "Commonwealth Act on Persons in Authority",
+    "reference_number": "Commonwealth Act 578",
+    "description": "Teachers/personnel as persons in authority",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 9,
+  "fields": {
+    "title": "Theft",
+    "reference_number": "RPC Art. 308-310",
+    "description": "Theft provisions",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 10,
+  "fields": {
+    "title": "Falsification of Documents",
+    "reference_number": "RPC Art. 171-172",
+    "description": "Falsification of documents",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 11,
+  "fields": {
+    "title": "Prohibition of Fraternities/Sororities",
+    "reference_number": "DO 7, s.2006",
+    "description": "Prohibition of fraternities/sororities in elementary & secondary schools",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 12,
+  "fields": {
+    "title": "Robbery and Estafa",
+    "reference_number": "RPC Art. 293-296, 315",
+    "description": "Robbery with violence/intimidation and Estafa/Swindling",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 13,
+  "fields": {
+    "title": "IRR of Anti-Bullying Act",
+    "reference_number": "DO 55, s.2013",
+    "description": "Implementing Rules and Regulations of RA 10627",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 14,
+  "fields": {
+    "title": "Physical Injuries",
+    "reference_number": "RPC Art. 262-266",
+    "description": "Physical Injuries provisions",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 15,
+  "fields": {
+    "title": "Malicious Mischief",
+    "reference_number": "RPC Art. 327",
+    "description": "Malicious Mischief / Vandalism",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 16,
+  "fields": {
+    "title": "Ecological Solid Waste Management Act",
+    "reference_number": "RA 9003",
+    "description": "Ecological Solid Waste Management Act",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 17,
+  "fields": {
+    "title": "Tobacco Regulation Act",
+    "reference_number": "RA 9211",
+    "description": "Tobacco Regulation Act",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 18,
+  "fields": {
+    "title": "Smoke-Free Environments",
+    "reference_number": "EO 26 (2017)",
+    "description": "Smoke-Free Environments Executive Order",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 19,
+  "fields": {
+    "title": "Vape Law",
+    "reference_number": "RA 11900",
+    "description": "Vape Law, restricts sales/use by minors & in schools",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 20,
+  "fields": {
+    "title": "Illegal Gambling",
+    "reference_number": "PD 1602",
+    "description": "Illegal gambling penalties",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 21,
+  "fields": {
+    "title": "Obscenity Laws",
+    "reference_number": "PD 969 / PD 960",
+    "description": "Obscenity Laws",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 22,
+  "fields": {
+    "title": "Regulation of Firecrackers",
+    "reference_number": "RA 7183",
+    "description": "Regulation of Firecrackers and Other Pyrotechnic Devices",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 23,
+  "fields": {
+    "title": "Student Discipline Guidelines",
+    "reference_number": "DO 32, s.2003",
+    "description": "Student discipline guidelines including uniform compliance",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 24,
+  "fields": {
+    "title": "Classroom Assessment",
+    "reference_number": "DO 8, s.2015",
+    "description": "Classroom Assessment including attendance expectations",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 25,
+  "fields": {
+    "title": "Physical Hygiene and School Decorum",
+    "reference_number": "DepEd Order No. 46, s. 2008",
+    "description": "Promoting physical hygiene and proper school decorum",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.legalreference",
+  "pk": 26,
+  "fields": {
+    "title": "Gender-Responsive Basic Education Policy",
+    "reference_number": "DepEd Order No. 32, s. 2017",
+    "description": "Gender-Responsive Basic Education Policy",
+    "incident_types": []
+  }
+},
+{
+  "model": "incidents.incidentreport",
+  "pk": 41,
+  "fields": {
+    "case_id": "2025-0001",
+    "reporter": 13,
+    "reporter_first_name": "student",
+    "reporter_middle_name": "",
+    "reporter_last_name": "cruz",
+    "involved_students": "Jane Doe",
+    "student_gender": "",
+    "curriculum": 1,
+    "grade_level": "7",
+    "section_name": "Section 2 (SPA)",
+    "teacher_name": "Ms. Andrea Gutierrez",
+    "track": null,
+    "grade": null,
+    "section": null,
+    "teacher": null,
+    "incident_date": "2025-11-25",
+    "incident_time": "13:00:00",
+    "incident_type": 148,
+    "description": "[Bullying Type: Physical]\n\n",
+    "evidence": "",
+    "reported_student": 32,
+    "status": "evaluated",
+    "evidence_status": "clear",
+    "evidence_notes": "",
+    "created_at": "2025-11-26T05:00:31.946Z",
+    "updated_at": "2025-11-26T05:01:36.337Z"
+  }
+},
+{
+  "model": "incidents.incidentreport",
+  "pk": 42,
+  "fields": {
+    "case_id": "2025-0002",
+    "reporter": 13,
+    "reporter_first_name": "student",
+    "reporter_middle_name": "",
+    "reporter_last_name": "cruz",
+    "involved_students": "Jeline Santillan",
+    "student_gender": "",
+    "curriculum": 1,
+    "grade_level": "8",
+    "section_name": "Section 1 (STE)",
+    "teacher_name": "Ms. Camille Estrada",
+    "track": null,
+    "grade": null,
+    "section": null,
+    "teacher": null,
+    "incident_date": "2025-11-25",
+    "incident_time": "15:45:00",
+    "incident_type": 148,
+    "description": "[Bullying Type: Emotional]\n\n",
+    "evidence": "",
+    "reported_student": 1,
+    "status": "evaluated",
+    "evidence_status": "clear",
+    "evidence_notes": "",
+    "created_at": "2025-11-26T07:45:37.645Z",
+    "updated_at": "2025-11-26T07:49:05.604Z"
+  }
+},
+{
+  "model": "incidents.incidentreport",
+  "pk": 43,
+  "fields": {
+    "case_id": "2025-0003",
+    "reporter": 13,
+    "reporter_first_name": "student",
+    "reporter_middle_name": "",
+    "reporter_last_name": "cruz",
+    "involved_students": "Jane Doe",
+    "student_gender": "",
+    "curriculum": 1,
+    "grade_level": "7",
+    "section_name": "Section 2 (STVEP)",
+    "teacher_name": "Ms. Andrea Gutierrez",
+    "track": null,
+    "grade": null,
+    "section": null,
+    "teacher": null,
+    "incident_date": "2025-11-25",
+    "incident_time": "15:53:00",
+    "incident_type": 148,
+    "description": "[Bullying Type: Psychological]\n\nbullying",
+    "evidence": "",
+    "reported_student": 32,
+    "status": "under_review",
+    "evidence_status": "clear",
+    "evidence_notes": "",
+    "created_at": "2025-11-26T07:53:31.725Z",
+    "updated_at": "2025-11-27T18:40:32.551Z"
+  }
+},
+{
+  "model": "incidents.incidentreport",
+  "pk": 44,
+  "fields": {
+    "case_id": "2025-0004",
+    "reporter": 13,
+    "reporter_first_name": "student",
+    "reporter_middle_name": "",
+    "reporter_last_name": "cruz",
+    "involved_students": "Jane Doe",
+    "student_gender": "",
+    "curriculum": 1,
+    "grade_level": "7",
+    "section_name": "Section 1 (ICT)",
+    "teacher_name": "Mr. Carlo Mendoza",
+    "track": null,
+    "grade": null,
+    "section": null,
+    "teacher": null,
+    "incident_date": "2025-11-25",
+    "incident_time": "15:54:00",
+    "incident_type": 148,
+    "description": "[Bullying Type: Sexual]\n\nbullying",
+    "evidence": "",
+    "reported_student": 32,
+    "status": "evaluated",
+    "evidence_status": "clear",
+    "evidence_notes": "",
+    "created_at": "2025-11-26T07:55:15.453Z",
+    "updated_at": "2025-11-26T08:22:05.048Z"
+  }
+},
+{
+  "model": "incidents.incidentreport",
+  "pk": 45,
+  "fields": {
+    "case_id": "2025-0005",
+    "reporter": 13,
+    "reporter_first_name": "student",
+    "reporter_middle_name": "",
+    "reporter_last_name": "cruz",
+    "involved_students": "Jeline Santillan",
+    "student_gender": "",
+    "curriculum": 1,
+    "grade_level": "9",
+    "section_name": "Section 2 (STE)",
+    "teacher_name": "Mr. Benjamin Torres",
+    "track": null,
+    "grade": null,
+    "section": null,
+    "teacher": null,
+    "incident_date": "2025-11-27",
+    "incident_time": "15:56:00",
+    "incident_type": 166,
+    "description": "",
+    "evidence": "",
+    "reported_student": null,
+    "status": "pending",
+    "evidence_status": "pending",
+    "evidence_notes": "",
+    "created_at": "2025-11-28T07:56:44.497Z",
+    "updated_at": "2025-11-28T07:56:44.497Z"
+  }
+},
+{
+  "model": "incidents.incidentreport",
+  "pk": 46,
+  "fields": {
+    "case_id": "2025-0006",
+    "reporter": 13,
+    "reporter_first_name": "student",
+    "reporter_middle_name": "",
+    "reporter_last_name": "cruz",
+    "involved_students": "Jeline Santillan",
+    "student_gender": "",
+    "curriculum": 1,
+    "grade_level": "9",
+    "section_name": "Section 2 (STE)",
+    "teacher_name": "Mr. Benjamin Torres",
+    "track": null,
+    "grade": null,
+    "section": null,
+    "teacher": null,
+    "incident_date": "2025-11-27",
+    "incident_time": "15:56:00",
+    "incident_type": 166,
+    "description": "",
+    "evidence": "",
+    "reported_student": 1,
+    "status": "evaluated",
+    "evidence_status": "clear",
+    "evidence_notes": "",
+    "created_at": "2025-11-28T07:56:45.814Z",
+    "updated_at": "2025-11-28T07:58:33.367Z"
+  }
+},
+{
+  "model": "incidents.incidentreport",
+  "pk": 47,
+  "fields": {
+    "case_id": "2025-0007",
+    "reporter": 13,
+    "reporter_first_name": "student",
+    "reporter_middle_name": "",
+    "reporter_last_name": "cruz",
+    "involved_students": "",
+    "student_gender": "",
+    "curriculum": 1,
+    "grade_level": "8",
+    "section_name": "Section 1 (RBEC)",
+    "teacher_name": "Ms. Camille Estrada",
+    "track": null,
+    "grade": null,
+    "section": null,
+    "teacher": null,
+    "incident_date": "2025-11-26",
+    "incident_time": "16:46:00",
+    "incident_type": 148,
+    "description": "[Bullying Type: Physical]\n\n",
+    "evidence": "",
+    "reported_student": 1,
+    "status": "evaluated",
+    "evidence_status": "clear",
+    "evidence_notes": "",
+    "created_at": "2025-11-28T08:47:15.524Z",
+    "updated_at": "2025-11-28T08:49:42.668Z"
+  }
+},
+{
+  "model": "incidents.classification",
+  "pk": 35,
+  "fields": {
+    "report": 41,
+    "classified_by": 15,
+    "severity": "major",
+    "internal_notes": "",
+    "classified_at": "2025-11-26T05:01:05.976Z"
+  }
+},
+{
+  "model": "incidents.classification",
+  "pk": 36,
+  "fields": {
+    "report": 42,
+    "classified_by": 15,
+    "severity": "major",
+    "internal_notes": "",
+    "classified_at": "2025-11-26T07:46:12.761Z"
+  }
+},
+{
+  "model": "incidents.classification",
+  "pk": 37,
+  "fields": {
+    "report": 44,
+    "classified_by": 15,
+    "severity": "major",
+    "internal_notes": "",
+    "classified_at": "2025-11-26T07:57:23.349Z"
+  }
+},
+{
+  "model": "incidents.classification",
+  "pk": 38,
+  "fields": {
+    "report": 43,
+    "classified_by": 15,
+    "severity": "minor",
+    "internal_notes": "[2025-11-27 16:29] DO Evaluation by discipline cruz\nAction: Parent Conference\nStatus: Classified\nNotes: kjjjjjjjjjjj\n\n[2025-11-27 18:40] DO Evaluation by discipline cruz\nAction: Parent Conference\nStatus: Under Review\nNotes: BRING YOUR PARENTS",
+    "classified_at": "2025-11-26T08:27:19.299Z"
+  }
+},
+{
+  "model": "incidents.classification",
+  "pk": 39,
+  "fields": {
+    "report": 46,
+    "classified_by": 15,
+    "severity": "major",
+    "internal_notes": "",
+    "classified_at": "2025-11-28T07:57:50.515Z"
+  }
+},
+{
+  "model": "incidents.classification",
+  "pk": 40,
+  "fields": {
+    "report": 47,
+    "classified_by": 15,
+    "severity": "major",
+    "internal_notes": "",
+    "classified_at": "2025-11-28T08:48:53.499Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 371,
+  "fields": {
+    "user": 2,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0001 filed by student cruz. Requires fact-checking and classification.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:00:31.964Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 372,
+  "fields": {
+    "user": 4,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0001 filed by student cruz. Requires fact-checking and classification.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:00:31.972Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 373,
+  "fields": {
+    "user": 15,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0001 filed by student cruz. Requires fact-checking and classification.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:00:31.980Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 374,
+  "fields": {
+    "user": 27,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0001 filed by student cruz. Requires fact-checking and classification.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:00:31.981Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 375,
+  "fields": {
+    "user": 37,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0001 filed by student cruz. Requires fact-checking and classification.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:00:31.989Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 376,
+  "fields": {
+    "user": 40,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0001 filed by student cruz. Requires fact-checking and classification.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:00:31.997Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 377,
+  "fields": {
+    "user": 13,
+    "title": "Report Submitted Successfully",
+    "message": "Your incident report 2025-0001 has been submitted and is being reviewed by the Discipline Office.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:00:32.005Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 378,
+  "fields": {
+    "user": 3,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.009Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 379,
+  "fields": {
+    "user": 5,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.017Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 380,
+  "fields": {
+    "user": 6,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.017Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 381,
+  "fields": {
+    "user": 10,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.033Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 382,
+  "fields": {
+    "user": 11,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.033Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 383,
+  "fields": {
+    "user": 12,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.041Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 384,
+  "fields": {
+    "user": 16,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.049Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 385,
+  "fields": {
+    "user": 18,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.049Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 386,
+  "fields": {
+    "user": 24,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.065Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 387,
+  "fields": {
+    "user": 26,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.065Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 388,
+  "fields": {
+    "user": 36,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.073Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 389,
+  "fields": {
+    "user": 41,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0001 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.081Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 390,
+  "fields": {
+    "user": 32,
+    "title": "Counseling Session Required",
+    "message": "Your case 2025-0001 has been referred to the Guidance Counselor. A counseling session will be scheduled.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:06.089Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 391,
+  "fields": {
+    "user": 13,
+    "title": "Case Evaluated - VPF Assigned",
+    "message": "Case 2025-0001 has been evaluated. The student will undergo Values Reflective Formation (VPF) - 2nd Commission.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:36.359Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 392,
+  "fields": {
+    "user": 32,
+    "title": "VPF Case Assigned",
+    "message": "You have been assigned to Values Reflective Formation (VPF) for case 2025-0001. You will be notified when the session is scheduled.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:36.359Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 393,
+  "fields": {
+    "user": 39,
+    "title": "VPF Case Assigned to Teacher",
+    "message": "Case 2025-0001 for student Jane Doe has been assigned to Trishia Ranigo. Please schedule the VPF session.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:46.397Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 394,
+  "fields": {
+    "user": 42,
+    "title": "VPF Case Assigned to Teacher",
+    "message": "Case 2025-0001 for student Jane Doe has been assigned to Trishia Ranigo. Please schedule the VPF session.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:46.413Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 395,
+  "fields": {
+    "user": 32,
+    "title": "VPF Teacher Assigned",
+    "message": "Your VPF case (2025-0001) has been assigned to Trishia Ranigo. You will be notified when the session is scheduled.",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:01:46.413Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 396,
+  "fields": {
+    "user": 24,
+    "title": "VPF Status Updated - 2025-0001",
+    "message": "ESP Teacher Trishia Ranigo updated VPF case status to \"ongoing\" for Jane Doe.\n\nNotes: Ongoing Counseling",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T05:02:09.988Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 399,
+  "fields": {
+    "user": 2,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0002 filed by student cruz. Requires fact-checking and classification.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:45:37.662Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 400,
+  "fields": {
+    "user": 4,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0002 filed by student cruz. Requires fact-checking and classification.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:45:37.662Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 401,
+  "fields": {
+    "user": 15,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0002 filed by student cruz. Requires fact-checking and classification.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:45:37.662Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 402,
+  "fields": {
+    "user": 27,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0002 filed by student cruz. Requires fact-checking and classification.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:45:37.679Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 403,
+  "fields": {
+    "user": 37,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0002 filed by student cruz. Requires fact-checking and classification.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:45:37.679Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 404,
+  "fields": {
+    "user": 40,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0002 filed by student cruz. Requires fact-checking and classification.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:45:37.698Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 405,
+  "fields": {
+    "user": 13,
+    "title": "Report Submitted Successfully",
+    "message": "Your incident report 2025-0002 has been submitted and is being reviewed by the Discipline Office.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:45:37.698Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 406,
+  "fields": {
+    "user": 3,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.784Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 407,
+  "fields": {
+    "user": 5,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.794Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 408,
+  "fields": {
+    "user": 6,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.794Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 409,
+  "fields": {
+    "user": 10,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.794Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 410,
+  "fields": {
+    "user": 11,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.810Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 411,
+  "fields": {
+    "user": 12,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.816Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 412,
+  "fields": {
+    "user": 16,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.816Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 413,
+  "fields": {
+    "user": 18,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.827Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 414,
+  "fields": {
+    "user": 24,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.827Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 415,
+  "fields": {
+    "user": 26,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.827Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 416,
+  "fields": {
+    "user": 36,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.844Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 417,
+  "fields": {
+    "user": 41,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0002 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.844Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 418,
+  "fields": {
+    "user": 1,
+    "title": "Counseling Session Required",
+    "message": "Your case 2025-0002 has been referred to the Guidance Counselor. A counseling session will be scheduled.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:46:12.844Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 419,
+  "fields": {
+    "user": 13,
+    "title": "Case Evaluated - VPF Assigned",
+    "message": "Case 2025-0002 has been evaluated. The student will undergo Values Reflective Formation (VPF) - 2nd Commission.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:49:05.619Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 420,
+  "fields": {
+    "user": 1,
+    "title": "VPF Case Assigned",
+    "message": "You have been assigned to Values Reflective Formation (VPF) for case 2025-0002. You will be notified when the session is scheduled.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:49:05.636Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 421,
+  "fields": {
+    "user": 39,
+    "title": "VPF Case Assigned to Teacher",
+    "message": "Case 2025-0002 for student Jeline Santillan has been assigned to Trishia Ranigo. Please schedule the VPF session.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:49:17.986Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 422,
+  "fields": {
+    "user": 42,
+    "title": "VPF Case Assigned to Teacher",
+    "message": "Case 2025-0002 for student Jeline Santillan has been assigned to Trishia Ranigo. Please schedule the VPF session.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:49:17.986Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 423,
+  "fields": {
+    "user": 1,
+    "title": "VPF Teacher Assigned",
+    "message": "Your VPF case (2025-0002) has been assigned to Trishia Ranigo. You will be notified when the session is scheduled.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-26T07:49:17.986Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 424,
+  "fields": {
+    "user": 2,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0003 filed by student cruz. Requires fact-checking and classification.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T07:53:31.741Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 425,
+  "fields": {
+    "user": 4,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0003 filed by student cruz. Requires fact-checking and classification.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T07:53:31.741Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 426,
+  "fields": {
+    "user": 15,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0003 filed by student cruz. Requires fact-checking and classification.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T07:53:31.741Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 427,
+  "fields": {
+    "user": 27,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0003 filed by student cruz. Requires fact-checking and classification.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T07:53:31.757Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 428,
+  "fields": {
+    "user": 37,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0003 filed by student cruz. Requires fact-checking and classification.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T07:53:31.757Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 429,
+  "fields": {
+    "user": 40,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0003 filed by student cruz. Requires fact-checking and classification.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T07:53:31.773Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 430,
+  "fields": {
+    "user": 13,
+    "title": "Report Submitted Successfully",
+    "message": "Your incident report 2025-0003 has been submitted and is being reviewed by the Discipline Office.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T07:53:31.773Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 431,
+  "fields": {
+    "user": 2,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0004 filed by student cruz. Requires fact-checking and classification.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:55:15.453Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 432,
+  "fields": {
+    "user": 4,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0004 filed by student cruz. Requires fact-checking and classification.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:55:15.469Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 433,
+  "fields": {
+    "user": 15,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0004 filed by student cruz. Requires fact-checking and classification.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:55:15.469Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 434,
+  "fields": {
+    "user": 27,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0004 filed by student cruz. Requires fact-checking and classification.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:55:15.486Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 435,
+  "fields": {
+    "user": 37,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0004 filed by student cruz. Requires fact-checking and classification.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:55:15.486Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 436,
+  "fields": {
+    "user": 40,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0004 filed by student cruz. Requires fact-checking and classification.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:55:15.503Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 437,
+  "fields": {
+    "user": 13,
+    "title": "Report Submitted Successfully",
+    "message": "Your incident report 2025-0004 has been submitted and is being reviewed by the Discipline Office.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:55:15.503Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 438,
+  "fields": {
+    "user": 3,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.380Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 439,
+  "fields": {
+    "user": 5,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.380Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 440,
+  "fields": {
+    "user": 6,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.397Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 441,
+  "fields": {
+    "user": 10,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.397Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 442,
+  "fields": {
+    "user": 11,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.413Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 443,
+  "fields": {
+    "user": 12,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.413Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 444,
+  "fields": {
+    "user": 16,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.430Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 445,
+  "fields": {
+    "user": 18,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.430Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 446,
+  "fields": {
+    "user": 24,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.430Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 447,
+  "fields": {
+    "user": 26,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.447Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 448,
+  "fields": {
+    "user": 36,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.447Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 449,
+  "fields": {
+    "user": 41,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0004 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.463Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 450,
+  "fields": {
+    "user": 32,
+    "title": "Counseling Session Required",
+    "message": "Your case 2025-0004 has been referred to the Guidance Counselor. A counseling session will be scheduled.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T07:57:23.463Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 451,
+  "fields": {
+    "user": 24,
+    "title": "VPF Status Updated - 2025-0001",
+    "message": "ESP Teacher Trishia Ranigo updated VPF case status to \"completed\" for Jane Doe.\n\nNotes: jhuh",
+    "report": 41,
+    "is_read": false,
+    "created_at": "2025-11-26T08:20:48.865Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 452,
+  "fields": {
+    "user": 13,
+    "title": "Case Evaluated",
+    "message": "Case 2025-0004 has been evaluated. Intervention: Parent Conference with Adviser/Subject Teacher",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T08:22:05.062Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 453,
+  "fields": {
+    "user": 32,
+    "title": "Counseling Session Pending",
+    "message": "Your case 2025-0004 has been evaluated. You will be scheduled for a counseling session. Please wait for further notification.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T08:22:05.062Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 454,
+  "fields": {
+    "user": 32,
+    "title": "Counseling Session Scheduled",
+    "message": "Your counseling session for case 2025-0004 has been scheduled for November 27, 2025 at 04:23 PM. Location: TBA",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T08:23:29.126Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 455,
+  "fields": {
+    "user": 13,
+    "title": "Counseling Session Scheduled",
+    "message": "A counseling session for case 2025-0004 has been scheduled for November 27, 2025 at 04:23 PM.",
+    "report": 44,
+    "is_read": false,
+    "created_at": "2025-11-26T08:23:29.144Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 456,
+  "fields": {
+    "user": 2,
+    "title": "Case Assigned to DO",
+    "message": "Case 2025-0003 (Bullying or peer abuse) has been assigned to Discipline Office for handling.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T08:27:19.332Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 457,
+  "fields": {
+    "user": 4,
+    "title": "Case Assigned to DO",
+    "message": "Case 2025-0003 (Bullying or peer abuse) has been assigned to Discipline Office for handling.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T08:27:19.332Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 458,
+  "fields": {
+    "user": 27,
+    "title": "Case Assigned to DO",
+    "message": "Case 2025-0003 (Bullying or peer abuse) has been assigned to Discipline Office for handling.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T08:27:19.349Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 459,
+  "fields": {
+    "user": 37,
+    "title": "Case Assigned to DO",
+    "message": "Case 2025-0003 (Bullying or peer abuse) has been assigned to Discipline Office for handling.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T08:27:19.349Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 460,
+  "fields": {
+    "user": 40,
+    "title": "Case Assigned to DO",
+    "message": "Case 2025-0003 (Bullying or peer abuse) has been assigned to Discipline Office for handling.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T08:27:19.349Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 461,
+  "fields": {
+    "user": 32,
+    "title": "Case Under DO Review",
+    "message": "Your case 2025-0003 is being handled by the Discipline Office. You will be contacted for further action.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-26T08:27:19.366Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 462,
+  "fields": {
+    "user": 13,
+    "title": "DO Evaluation - Case 2025-0003",
+    "message": "The Discipline Office has evaluated case 2025-0003.\n\nAction Taken: Parent Conference\nStatus: Classified\n\nNotes: kjjjjjjjjjjj",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-27T16:29:59.985Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 463,
+  "fields": {
+    "user": 32,
+    "title": "Behavioral Concern Evaluation - Case 2025-0003",
+    "message": "The Discipline Office has evaluated your case 2025-0003.\n\nAction: Parent Conference\n\nA parent conference has been scheduled regarding your case. Your parent/guardian will be contacted by the Discipline Office.\n\nPlease check with the Discipline Office for further instructions.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-27T16:30:00.047Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 464,
+  "fields": {
+    "user": 13,
+    "title": "DO Evaluation - Case 2025-0003",
+    "message": "The Discipline Office has evaluated case 2025-0003.\n\nAction Taken: Parent Conference\nStatus: Under Review\n\nNotes: BRING YOUR PARENTS",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-27T18:40:32.583Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 465,
+  "fields": {
+    "user": 32,
+    "title": "Behavioral Concern Evaluation - Case 2025-0003",
+    "message": "The Discipline Office has evaluated your case 2025-0003.\n\nAction: Parent Conference\n\nA parent conference has been scheduled regarding your case. Your parent/guardian will be contacted by the Discipline Office.\n\nPlease check with the Discipline Office for further instructions.",
+    "report": 43,
+    "is_read": false,
+    "created_at": "2025-11-27T18:40:32.591Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 466,
+  "fields": {
+    "user": 2,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0005 filed by student cruz. Requires fact-checking and classification.",
+    "report": 45,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:45.542Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 467,
+  "fields": {
+    "user": 2,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0006 filed by student cruz. Requires fact-checking and classification.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:46.699Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 468,
+  "fields": {
+    "user": 4,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0006 filed by student cruz. Requires fact-checking and classification.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:46.739Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 469,
+  "fields": {
+    "user": 15,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0006 filed by student cruz. Requires fact-checking and classification.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:46.772Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 470,
+  "fields": {
+    "user": 27,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0006 filed by student cruz. Requires fact-checking and classification.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:46.797Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 471,
+  "fields": {
+    "user": 37,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0006 filed by student cruz. Requires fact-checking and classification.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:47.072Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 472,
+  "fields": {
+    "user": 40,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0006 filed by student cruz. Requires fact-checking and classification.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:47.855Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 473,
+  "fields": {
+    "user": 13,
+    "title": "Report Submitted Successfully",
+    "message": "Your incident report 2025-0006 has been submitted and is being reviewed by the Discipline Office.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:47.955Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 474,
+  "fields": {
+    "user": 4,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0005 filed by student cruz. Requires fact-checking and classification.",
+    "report": 45,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:46.663Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 475,
+  "fields": {
+    "user": 15,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0005 filed by student cruz. Requires fact-checking and classification.",
+    "report": 45,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:48.156Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 476,
+  "fields": {
+    "user": 27,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0005 filed by student cruz. Requires fact-checking and classification.",
+    "report": 45,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:48.188Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 477,
+  "fields": {
+    "user": 37,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0005 filed by student cruz. Requires fact-checking and classification.",
+    "report": 45,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:48.379Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 478,
+  "fields": {
+    "user": 40,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0005 filed by student cruz. Requires fact-checking and classification.",
+    "report": 45,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:48.941Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 479,
+  "fields": {
+    "user": 13,
+    "title": "Report Submitted Successfully",
+    "message": "Your incident report 2025-0005 has been submitted and is being reviewed by the Discipline Office.",
+    "report": 45,
+    "is_read": false,
+    "created_at": "2025-11-28T07:56:49.693Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 480,
+  "fields": {
+    "user": 3,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:50.575Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 481,
+  "fields": {
+    "user": 5,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:50.592Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 482,
+  "fields": {
+    "user": 6,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:50.608Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 483,
+  "fields": {
+    "user": 10,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:50.616Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 484,
+  "fields": {
+    "user": 11,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:50.671Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 485,
+  "fields": {
+    "user": 12,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:50.685Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 486,
+  "fields": {
+    "user": 16,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:50.694Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 487,
+  "fields": {
+    "user": 18,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:50.710Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 488,
+  "fields": {
+    "user": 24,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:50.718Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 489,
+  "fields": {
+    "user": 26,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:50.734Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 490,
+  "fields": {
+    "user": 36,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:51.265Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 491,
+  "fields": {
+    "user": 41,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0006 (Bringing and igniting firecrackers) has been referred to Guidance for counseling intervention.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:51.288Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 492,
+  "fields": {
+    "user": 1,
+    "title": "Counseling Session Required",
+    "message": "Your case 2025-0006 has been referred to the Guidance Counselor. A counseling session will be scheduled.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:57:51.303Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 493,
+  "fields": {
+    "user": 13,
+    "title": "Case Evaluated - VPF Assigned",
+    "message": "Case 2025-0006 has been evaluated. The student will undergo Values Reflective Formation (VPF) - 2nd Commission.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:58:33.792Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 494,
+  "fields": {
+    "user": 1,
+    "title": "VPF Case Assigned",
+    "message": "You have been assigned to Values Reflective Formation (VPF) for case 2025-0006. You will be notified when the session is scheduled.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:58:33.806Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 495,
+  "fields": {
+    "user": 39,
+    "title": "VPF Case Assigned to Teacher",
+    "message": "Case 2025-0006 for student Jeline Santillan has been assigned to Trishia Ranigo. Please schedule the VPF session.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:59:04.033Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 496,
+  "fields": {
+    "user": 42,
+    "title": "VPF Case Assigned to Teacher",
+    "message": "Case 2025-0006 for student Jeline Santillan has been assigned to Trishia Ranigo. Please schedule the VPF session.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:59:04.112Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 497,
+  "fields": {
+    "user": 1,
+    "title": "VPF Teacher Assigned",
+    "message": "Your VPF case (2025-0006) has been assigned to Trishia Ranigo. You will be notified when the session is scheduled.",
+    "report": 46,
+    "is_read": false,
+    "created_at": "2025-11-28T07:59:04.162Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 498,
+  "fields": {
+    "user": 1,
+    "title": "VPF Session Scheduled",
+    "message": "You have been scheduled for a Values Reflective Formation session on December 01, 2025 at 03:59 PM. Location: Guidance Room 2. Please attend on time.",
+    "report": 42,
+    "is_read": false,
+    "created_at": "2025-11-28T08:00:06.705Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 499,
+  "fields": {
+    "user": 2,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0007 filed by student cruz. Requires fact-checking and classification.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:47:37.249Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 500,
+  "fields": {
+    "user": 4,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0007 filed by student cruz. Requires fact-checking and classification.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:47:37.613Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 501,
+  "fields": {
+    "user": 15,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0007 filed by student cruz. Requires fact-checking and classification.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:47:37.639Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 502,
+  "fields": {
+    "user": 27,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0007 filed by student cruz. Requires fact-checking and classification.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:47:37.661Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 503,
+  "fields": {
+    "user": 37,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0007 filed by student cruz. Requires fact-checking and classification.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:47:37.689Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 504,
+  "fields": {
+    "user": 40,
+    "title": "New Incident Report Submitted",
+    "message": "New incident report 2025-0007 filed by student cruz. Requires fact-checking and classification.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:47:37.713Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 505,
+  "fields": {
+    "user": 13,
+    "title": "Report Submitted Successfully",
+    "message": "Your incident report 2025-0007 has been submitted and is being reviewed by the Discipline Office.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:47:37.776Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 506,
+  "fields": {
+    "user": 3,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.538Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 507,
+  "fields": {
+    "user": 5,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.546Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 508,
+  "fields": {
+    "user": 6,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.557Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 509,
+  "fields": {
+    "user": 10,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.571Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 510,
+  "fields": {
+    "user": 11,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.571Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 511,
+  "fields": {
+    "user": 12,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.588Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 512,
+  "fields": {
+    "user": 16,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.588Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 513,
+  "fields": {
+    "user": 18,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.605Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 514,
+  "fields": {
+    "user": 24,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.622Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 515,
+  "fields": {
+    "user": 26,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.647Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 516,
+  "fields": {
+    "user": 36,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.655Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 517,
+  "fields": {
+    "user": 41,
+    "title": "Case Referred for Counseling",
+    "message": "Case 2025-0007 (Bullying or peer abuse) has been referred to Guidance for counseling intervention.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.672Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 518,
+  "fields": {
+    "user": 1,
+    "title": "Counseling Session Required",
+    "message": "Your case 2025-0007 has been referred to the Guidance Counselor. A counseling session will be scheduled.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:48:53.689Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 519,
+  "fields": {
+    "user": 13,
+    "title": "Case Evaluated - VPF Assigned",
+    "message": "Case 2025-0007 has been evaluated. The student will undergo Values Reflective Formation (VPF) - 2nd Commission.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:49:42.702Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 520,
+  "fields": {
+    "user": 1,
+    "title": "VPF Case Assigned",
+    "message": "You have been assigned to Values Reflective Formation (VPF) for case 2025-0007. You will be notified when the session is scheduled.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:49:42.702Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 521,
+  "fields": {
+    "user": 39,
+    "title": "VPF Case Assigned to Teacher",
+    "message": "Case 2025-0007 for student Jeline Santillan has been assigned to Trishia Ranigo. Please schedule the VPF session.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:50:24.670Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 522,
+  "fields": {
+    "user": 42,
+    "title": "VPF Case Assigned to Teacher",
+    "message": "Case 2025-0007 for student Jeline Santillan has been assigned to Trishia Ranigo. Please schedule the VPF session.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:50:24.700Z"
+  }
+},
+{
+  "model": "incidents.notification",
+  "pk": 523,
+  "fields": {
+    "user": 1,
+    "title": "VPF Teacher Assigned",
+    "message": "Your VPF case (2025-0007) has been assigned to Trishia Ranigo. You will be notified when the session is scheduled.",
+    "report": 47,
+    "is_read": false,
+    "created_at": "2025-11-28T08:50:24.716Z"
+  }
+},
+{
+  "model": "incidents.violationhistory",
+  "pk": 6,
+  "fields": {
+    "student": 32,
+    "report": 41,
+    "violation_type": 148,
+    "severity": "major",
+    "date_occurred": "2025-11-25",
+    "status": "active",
+    "notes": "",
+    "created_at": "2025-11-26T05:01:06.001Z"
+  }
+},
+{
+  "model": "incidents.violationhistory",
+  "pk": 7,
+  "fields": {
+    "student": 1,
+    "report": 42,
+    "violation_type": 148,
+    "severity": "major",
+    "date_occurred": "2025-11-25",
+    "status": "active",
+    "notes": "",
+    "created_at": "2025-11-26T07:46:12.776Z"
+  }
+},
+{
+  "model": "incidents.violationhistory",
+  "pk": 8,
+  "fields": {
+    "student": 32,
+    "report": 44,
+    "violation_type": 148,
+    "severity": "major",
+    "date_occurred": "2025-11-25",
+    "status": "active",
+    "notes": "",
+    "created_at": "2025-11-26T07:57:23.363Z"
+  }
+},
+{
+  "model": "incidents.violationhistory",
+  "pk": 9,
+  "fields": {
+    "student": 32,
+    "report": 43,
+    "violation_type": 148,
+    "severity": "minor",
+    "date_occurred": "2025-11-25",
+    "status": "active",
+    "notes": "",
+    "created_at": "2025-11-26T08:27:19.315Z"
+  }
+},
+{
+  "model": "incidents.violationhistory",
+  "pk": 10,
+  "fields": {
+    "student": 1,
+    "report": 46,
+    "violation_type": 166,
+    "severity": "major",
+    "date_occurred": "2025-11-27",
+    "status": "active",
+    "notes": "",
+    "created_at": "2025-11-28T07:57:50.559Z"
+  }
+},
+{
+  "model": "incidents.violationhistory",
+  "pk": 11,
+  "fields": {
+    "student": 1,
+    "report": 47,
+    "violation_type": 148,
+    "severity": "major",
+    "date_occurred": "2025-11-26",
+    "status": "active",
+    "notes": "",
+    "created_at": "2025-11-28T08:48:53.523Z"
+  }
+},
+{
+  "model": "incidents.caseevaluation",
+  "pk": 18,
+  "fields": {
+    "report": 41,
+    "evaluated_by": 24,
+    "evaluation_notes": "Commission: 2nd, Intervention: Values Reflective Formation (VPF)",
+    "recommendation": "Values Reflective Formation (VPF)",
+    "verdict": "pending",
+    "verdict_notes": "",
+    "is_repeat_offender": false,
+    "evaluated_at": "2025-11-26T05:01:36.329Z",
+    "related_cases": []
+  }
+},
+{
+  "model": "incidents.caseevaluation",
+  "pk": 19,
+  "fields": {
+    "report": 42,
+    "evaluated_by": 24,
+    "evaluation_notes": "Commission: 2nd, Intervention: Values Reflective Formation (VPF)",
+    "recommendation": "Values Reflective Formation (VPF)",
+    "verdict": "pending",
+    "verdict_notes": "",
+    "is_repeat_offender": false,
+    "evaluated_at": "2025-11-26T07:49:05.604Z",
+    "related_cases": []
+  }
+},
+{
+  "model": "incidents.caseevaluation",
+  "pk": 20,
+  "fields": {
+    "report": 44,
+    "evaluated_by": 24,
+    "evaluation_notes": "Commission: 1st, Intervention: Parent Conference with Adviser/Subject Teacher",
+    "recommendation": "Parent Conference with Adviser/Subject Teacher",
+    "verdict": "pending",
+    "verdict_notes": "",
+    "is_repeat_offender": false,
+    "evaluated_at": "2025-11-26T08:22:05.048Z",
+    "related_cases": []
+  }
+},
+{
+  "model": "incidents.caseevaluation",
+  "pk": 21,
+  "fields": {
+    "report": 46,
+    "evaluated_by": 16,
+    "evaluation_notes": "Commission: 2nd, Intervention: Values Reflective Formation (VPF)",
+    "recommendation": "Values Reflective Formation (VPF)",
+    "verdict": "pending",
+    "verdict_notes": "",
+    "is_repeat_offender": false,
+    "evaluated_at": "2025-11-28T07:58:31.934Z",
+    "related_cases": []
+  }
+},
+{
+  "model": "incidents.caseevaluation",
+  "pk": 22,
+  "fields": {
+    "report": 47,
+    "evaluated_by": 16,
+    "evaluation_notes": "Commission: 2nd, Intervention: Values Reflective Formation (VPF)",
+    "recommendation": "Values Reflective Formation (VPF)",
+    "verdict": "pending",
+    "verdict_notes": "",
+    "is_repeat_offender": false,
+    "evaluated_at": "2025-11-28T08:49:42.652Z",
+    "related_cases": []
+  }
+},
+{
+  "model": "incidents.internalnote",
+  "pk": 2,
+  "fields": {
+    "report": 43,
+    "author": 15,
+    "note": "DO Evaluation - Parent Conference: kjjjjjjjjjjj",
+    "is_private": false,
+    "created_at": "2025-11-27T16:29:57.342Z"
+  }
+},
+{
+  "model": "incidents.internalnote",
+  "pk": 3,
+  "fields": {
+    "report": 43,
+    "author": 15,
+    "note": "DO Evaluation - Parent Conference: BRING YOUR PARENTS",
+    "is_private": false,
+    "created_at": "2025-11-27T18:40:32.567Z"
+  }
+},
+{
+  "model": "incidents.counselor",
+  "pk": 1,
+  "fields": {
+    "name": "Ms. Maria Santos",
+    "email": "maria.santos@school.edu",
+    "phone": "(02) 123-4567",
+    "specialization": "Academic Counseling",
+    "is_active": true,
+    "created_at": "2025-11-18T07:08:42.983Z",
+    "updated_at": "2025-11-18T07:08:42.983Z"
+  }
+},
+{
+  "model": "incidents.counselor",
+  "pk": 2,
+  "fields": {
+    "name": "Mr. John Reyes",
+    "email": "john.reyes@school.edu",
+    "phone": "(02) 234-5678",
+    "specialization": "Behavioral Counseling",
+    "is_active": true,
+    "created_at": "2025-11-18T07:08:43.014Z",
+    "updated_at": "2025-11-18T07:08:43.014Z"
+  }
+},
+{
+  "model": "incidents.counselor",
+  "pk": 3,
+  "fields": {
+    "name": "Ms. Ana Cruz",
+    "email": "ana.cruz@school.edu",
+    "phone": "(02) 345-6789",
+    "specialization": "Career Guidance",
+    "is_active": true,
+    "created_at": "2025-11-18T07:08:43.022Z",
+    "updated_at": "2025-11-18T07:08:43.022Z"
+  }
+},
+{
+  "model": "incidents.counselor",
+  "pk": 4,
+  "fields": {
+    "name": "Jeline",
+    "email": "santillan@gmail.com",
+    "phone": "09383656564",
+    "specialization": "Vpf",
+    "is_active": true,
+    "created_at": "2025-11-24T05:37:07.960Z",
+    "updated_at": "2025-11-24T05:37:07.960Z"
+  }
+},
+{
+  "model": "incidents.counselor",
+  "pk": 5,
+  "fields": {
+    "name": "Trishia Ranigo",
+    "email": "trishiaesp@gmail.com",
+    "phone": "",
+    "specialization": "Esp Teacher/Vpf Coordinator",
+    "is_active": true,
+    "created_at": "2025-11-24T16:50:15.422Z",
+    "updated_at": "2025-11-24T16:50:15.441Z"
+  }
+},
+{
+  "model": "incidents.vpfcase",
+  "pk": 5,
+  "fields": {
+    "report": 41,
+    "student": 32,
+    "assigned_by": 24,
+    "esp_teacher_assigned": 5,
+    "commission_level": "2nd",
+    "intervention": "Values Reflective Formation (VPF)",
+    "status": "completed",
+    "notes": "Commission: 2nd, Repeat Offender: False\n\n[2025-11-26 05:02] Status updated from 'pending' to 'ongoing' by Trishia Ranigo:\nOngoing Counseling\n\n[2025-11-26 08:20] Status updated from 'scheduled' to 'completed' by Trishia Ranigo:\njhuh",
+    "assigned_at": "2025-11-26T05:01:36.350Z",
+    "updated_at": "2025-11-26T08:20:48.849Z"
+  }
+},
+{
+  "model": "incidents.vpfcase",
+  "pk": 6,
+  "fields": {
+    "report": 42,
+    "student": 1,
+    "assigned_by": 24,
+    "esp_teacher_assigned": 5,
+    "commission_level": "2nd",
+    "intervention": "Values Reflective Formation (VPF)",
+    "status": "scheduled",
+    "notes": "Commission: 2nd, Repeat Offender: False",
+    "assigned_at": "2025-11-26T07:49:05.619Z",
+    "updated_at": "2025-11-28T08:00:06.665Z"
+  }
+},
+{
+  "model": "incidents.vpfcase",
+  "pk": 7,
+  "fields": {
+    "report": 46,
+    "student": 1,
+    "assigned_by": 16,
+    "esp_teacher_assigned": 5,
+    "commission_level": "2nd",
+    "intervention": "Values Reflective Formation (VPF)",
+    "status": "pending",
+    "notes": "Commission: 2nd, Repeat Offender: False",
+    "assigned_at": "2025-11-28T07:58:33.776Z",
+    "updated_at": "2025-11-28T07:59:03.997Z"
+  }
+},
+{
+  "model": "incidents.vpfcase",
+  "pk": 8,
+  "fields": {
+    "report": 47,
+    "student": 1,
+    "assigned_by": 16,
+    "esp_teacher_assigned": 5,
+    "commission_level": "2nd",
+    "intervention": "Values Reflective Formation (VPF)",
+    "status": "pending",
+    "notes": "Commission: 2nd, Repeat Offender: False",
+    "assigned_at": "2025-11-28T08:49:42.685Z",
+    "updated_at": "2025-11-28T08:50:24.600Z"
+  }
+},
+{
+  "model": "incidents.vpfschedule",
+  "pk": 4,
+  "fields": {
+    "vpf_case": 5,
+    "esp_teacher": 42,
+    "counselor_assigned": null,
+    "scheduled_date": "2025-11-27T15:08:00Z",
+    "location": "Room 302",
+    "notes": "",
+    "status": "scheduled",
+    "created_at": "2025-11-26T07:08:57.198Z",
+    "updated_at": "2025-11-26T07:08:57.198Z"
+  }
+},
+{
+  "model": "incidents.vpfschedule",
+  "pk": 5,
+  "fields": {
+    "vpf_case": 5,
+    "esp_teacher": 42,
+    "counselor_assigned": null,
+    "scheduled_date": "2025-11-27T15:08:00Z",
+    "location": "Room 302",
+    "notes": "",
+    "status": "scheduled",
+    "created_at": "2025-11-26T07:08:57.206Z",
+    "updated_at": "2025-11-26T07:08:57.206Z"
+  }
+},
+{
+  "model": "incidents.vpfschedule",
+  "pk": 6,
+  "fields": {
+    "vpf_case": 6,
+    "esp_teacher": 42,
+    "counselor_assigned": null,
+    "scheduled_date": "2025-12-01T15:59:00Z",
+    "location": "Guidance Room 2",
+    "notes": "",
+    "status": "scheduled",
+    "created_at": "2025-11-28T08:00:05.385Z",
+    "updated_at": "2025-11-28T08:00:05.385Z"
+  }
+},
+{
+  "model": "incidents.counselingschedule",
+  "pk": 2,
+  "fields": {
+    "evaluation": 20,
+    "counselor": 24,
+    "student": 32,
+    "scheduled_date": "2025-11-27T16:23:00Z",
+    "location": "",
+    "notes": "",
+    "status": "scheduled",
+    "created_at": "2025-11-26T08:23:29.126Z",
+    "updated_at": "2025-11-26T08:23:29.126Z"
+  }
+}
+]
