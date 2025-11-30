@@ -147,6 +147,8 @@ class IncidentReport(models.Model):
     incident_date = models.DateField()
     incident_time = models.TimeField()
     incident_type = models.ForeignKey(IncidentType, on_delete=models.SET_NULL, null=True)
+    bullying_type = models.CharField(max_length=50, blank=True, null=True, 
+                                    help_text="Type of bullying if incident_type is bullying")
     description = models.TextField(blank=True)
     evidence = models.FileField(upload_to='evidence/', null=True, blank=True)
     

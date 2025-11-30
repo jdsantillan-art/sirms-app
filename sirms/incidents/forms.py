@@ -161,6 +161,23 @@ class IncidentReportForm(NoNAValidationMixin, forms.ModelForm):
         }),
         empty_label="Select Type"
     )
+    bullying_type = forms.ChoiceField(
+        choices=[
+            ('', 'Select Bullying Type'),
+            ('Physical', 'Physical Bullying'),
+            ('Psychological', 'Psychological Bullying'),
+            ('Sexual', 'Sexual Bullying'),
+            ('Emotional', 'Emotional Bullying'),
+            ('Cyber', 'Cyber Bullying'),
+            ('Social', 'Social Bullying'),
+            ('Gender-based', 'Gender-based Bullying'),
+        ],
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'w-full px-2.5 py-1.5 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all outline-none',
+            'id': 'id_bullying_type'
+        })
+    )
     description = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={
@@ -184,7 +201,7 @@ class IncidentReportForm(NoNAValidationMixin, forms.ModelForm):
         fields = [
             'reporter_first_name', 'reporter_middle_name', 'reporter_last_name',
             'involved_students', 'student_gender', 'curriculum', 'grade_level', 'section_name', 'teacher_name',
-            'incident_date', 'incident_time', 'incident_type', 'description', 'evidence'
+            'incident_date', 'incident_time', 'incident_type', 'bullying_type', 'description', 'evidence'
         ]
     
     def __init__(self, *args, **kwargs):
