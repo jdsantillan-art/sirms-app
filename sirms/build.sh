@@ -6,3 +6,6 @@ pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
 python manage.py migrate
+
+# Load initial data if database is empty
+python manage.py loaddata initial_data.json --ignorenonexistent || echo "Data already loaded or file not found"

@@ -1,0 +1,2562 @@
+[
+{
+  "model": "incidents.curriculum",
+  "pk": 1,
+  "fields": {
+    "name": "Junior High School",
+    "description": "Grades 7-10"
+  }
+},
+{
+  "model": "incidents.curriculum",
+  "pk": 2,
+  "fields": {
+    "name": "Senior High School",
+    "description": "Grades 11-12"
+  }
+},
+{
+  "model": "incidents.curriculum",
+  "pk": 4,
+  "fields": {
+    "name": "K-12",
+    "description": "K-12 Basic Education Curriculum"
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 1,
+  "fields": {
+    "name": "STE",
+    "curriculum": 1
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 2,
+  "fields": {
+    "name": "SPA",
+    "curriculum": 1
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 3,
+  "fields": {
+    "name": "ICT",
+    "curriculum": 1
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 4,
+  "fields": {
+    "name": "RBEC",
+    "curriculum": 1
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 5,
+  "fields": {
+    "name": "STVEP",
+    "curriculum": 1
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 6,
+  "fields": {
+    "name": "STEM",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 7,
+  "fields": {
+    "name": "Arts & Design",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 8,
+  "fields": {
+    "name": "TVL",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 9,
+  "fields": {
+    "name": "ABM",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 10,
+  "fields": {
+    "name": "HUMSS",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 11,
+  "fields": {
+    "name": "GAS",
+    "curriculum": 2
+  }
+},
+{
+  "model": "incidents.track",
+  "pk": 13,
+  "fields": {
+    "name": "Junior High School",
+    "curriculum": 4
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 1,
+  "fields": {
+    "level": "7",
+    "track": 1
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 2,
+  "fields": {
+    "level": "8",
+    "track": 1
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 3,
+  "fields": {
+    "level": "9",
+    "track": 1
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 4,
+  "fields": {
+    "level": "10",
+    "track": 1
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 5,
+  "fields": {
+    "level": "7",
+    "track": 2
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 6,
+  "fields": {
+    "level": "8",
+    "track": 2
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 7,
+  "fields": {
+    "level": "9",
+    "track": 2
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 8,
+  "fields": {
+    "level": "10",
+    "track": 2
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 9,
+  "fields": {
+    "level": "7",
+    "track": 3
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 10,
+  "fields": {
+    "level": "8",
+    "track": 3
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 11,
+  "fields": {
+    "level": "9",
+    "track": 3
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 12,
+  "fields": {
+    "level": "10",
+    "track": 3
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 13,
+  "fields": {
+    "level": "7",
+    "track": 4
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 14,
+  "fields": {
+    "level": "8",
+    "track": 4
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 15,
+  "fields": {
+    "level": "9",
+    "track": 4
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 16,
+  "fields": {
+    "level": "10",
+    "track": 4
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 17,
+  "fields": {
+    "level": "7",
+    "track": 5
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 18,
+  "fields": {
+    "level": "8",
+    "track": 5
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 19,
+  "fields": {
+    "level": "9",
+    "track": 5
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 20,
+  "fields": {
+    "level": "10",
+    "track": 5
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 21,
+  "fields": {
+    "level": "11",
+    "track": 6
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 22,
+  "fields": {
+    "level": "12",
+    "track": 6
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 23,
+  "fields": {
+    "level": "11",
+    "track": 7
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 24,
+  "fields": {
+    "level": "12",
+    "track": 7
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 25,
+  "fields": {
+    "level": "11",
+    "track": 8
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 26,
+  "fields": {
+    "level": "12",
+    "track": 8
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 31,
+  "fields": {
+    "level": "11",
+    "track": 9
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 32,
+  "fields": {
+    "level": "12",
+    "track": 9
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 33,
+  "fields": {
+    "level": "Grade 7",
+    "track": 13
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 34,
+  "fields": {
+    "level": "Grade 8",
+    "track": 13
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 35,
+  "fields": {
+    "level": "Grade 9",
+    "track": 13
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 36,
+  "fields": {
+    "level": "Grade 10",
+    "track": 13
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 37,
+  "fields": {
+    "level": "Grade 11",
+    "track": 6
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 38,
+  "fields": {
+    "level": "Grade 11",
+    "track": 10
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 39,
+  "fields": {
+    "level": "Grade 12",
+    "track": 6
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 40,
+  "fields": {
+    "level": "Grade 12",
+    "track": 10
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 41,
+  "fields": {
+    "level": "Grade 11",
+    "track": 9
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 42,
+  "fields": {
+    "level": "Grade 12",
+    "track": 9
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 43,
+  "fields": {
+    "level": "Grade 11",
+    "track": 11
+  }
+},
+{
+  "model": "incidents.grade",
+  "pk": 44,
+  "fields": {
+    "level": "Grade 12",
+    "track": 11
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 1,
+  "fields": {
+    "name": "Section 1",
+    "grade": 1,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 2,
+  "fields": {
+    "name": "Section 2",
+    "grade": 1,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 3,
+  "fields": {
+    "name": "Section 1",
+    "grade": 2,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 4,
+  "fields": {
+    "name": "Section 2",
+    "grade": 2,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 5,
+  "fields": {
+    "name": "Section 1",
+    "grade": 3,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 6,
+  "fields": {
+    "name": "Section 2",
+    "grade": 3,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 7,
+  "fields": {
+    "name": "Section 1",
+    "grade": 4,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 8,
+  "fields": {
+    "name": "Section 2",
+    "grade": 4,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 9,
+  "fields": {
+    "name": "Section 1",
+    "grade": 5,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 10,
+  "fields": {
+    "name": "Section 2",
+    "grade": 5,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 11,
+  "fields": {
+    "name": "Section 1",
+    "grade": 6,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 12,
+  "fields": {
+    "name": "Section 2",
+    "grade": 6,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 13,
+  "fields": {
+    "name": "Section 1",
+    "grade": 7,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 14,
+  "fields": {
+    "name": "Section 2",
+    "grade": 7,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 15,
+  "fields": {
+    "name": "Section 1",
+    "grade": 8,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 16,
+  "fields": {
+    "name": "Section 2",
+    "grade": 8,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 17,
+  "fields": {
+    "name": "Section 1",
+    "grade": 9,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 18,
+  "fields": {
+    "name": "Section 2",
+    "grade": 9,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 19,
+  "fields": {
+    "name": "Section 1",
+    "grade": 10,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 20,
+  "fields": {
+    "name": "Section 2",
+    "grade": 10,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 21,
+  "fields": {
+    "name": "Section 1",
+    "grade": 11,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 22,
+  "fields": {
+    "name": "Section 2",
+    "grade": 11,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 23,
+  "fields": {
+    "name": "Section 1",
+    "grade": 12,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 24,
+  "fields": {
+    "name": "Section 2",
+    "grade": 12,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 25,
+  "fields": {
+    "name": "Section 1",
+    "grade": 13,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 26,
+  "fields": {
+    "name": "Section 2",
+    "grade": 13,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 27,
+  "fields": {
+    "name": "Section 3",
+    "grade": 13,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 28,
+  "fields": {
+    "name": "Section 1",
+    "grade": 14,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 29,
+  "fields": {
+    "name": "Section 2",
+    "grade": 14,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 30,
+  "fields": {
+    "name": "Section 3",
+    "grade": 14,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 31,
+  "fields": {
+    "name": "Section 1",
+    "grade": 15,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 32,
+  "fields": {
+    "name": "Section 2",
+    "grade": 15,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 33,
+  "fields": {
+    "name": "Section 3",
+    "grade": 15,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 34,
+  "fields": {
+    "name": "Section 1",
+    "grade": 16,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 35,
+  "fields": {
+    "name": "Section 2",
+    "grade": 16,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 36,
+  "fields": {
+    "name": "Section 3",
+    "grade": 16,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 37,
+  "fields": {
+    "name": "Section 1",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 38,
+  "fields": {
+    "name": "Section 2",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 39,
+  "fields": {
+    "name": "Section 3",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 40,
+  "fields": {
+    "name": "Section 4",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 41,
+  "fields": {
+    "name": "Section 5",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 42,
+  "fields": {
+    "name": "Section 6",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 43,
+  "fields": {
+    "name": "Section 7",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 44,
+  "fields": {
+    "name": "Section 8",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 45,
+  "fields": {
+    "name": "Section 9",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 46,
+  "fields": {
+    "name": "Section 10",
+    "grade": 17,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 47,
+  "fields": {
+    "name": "Section 1",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 48,
+  "fields": {
+    "name": "Section 2",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 49,
+  "fields": {
+    "name": "Section 3",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 50,
+  "fields": {
+    "name": "Section 4",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 51,
+  "fields": {
+    "name": "Section 5",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 52,
+  "fields": {
+    "name": "Section 6",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 53,
+  "fields": {
+    "name": "Section 7",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 54,
+  "fields": {
+    "name": "Section 8",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 55,
+  "fields": {
+    "name": "Section 9",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 56,
+  "fields": {
+    "name": "Section 10",
+    "grade": 18,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 57,
+  "fields": {
+    "name": "Section 1",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 58,
+  "fields": {
+    "name": "Section 2",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 59,
+  "fields": {
+    "name": "Section 3",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 60,
+  "fields": {
+    "name": "Section 4",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 61,
+  "fields": {
+    "name": "Section 5",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 62,
+  "fields": {
+    "name": "Section 6",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 63,
+  "fields": {
+    "name": "Section 7",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 64,
+  "fields": {
+    "name": "Section 8",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 65,
+  "fields": {
+    "name": "Section 9",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 66,
+  "fields": {
+    "name": "Section 10",
+    "grade": 19,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 67,
+  "fields": {
+    "name": "Section 1",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 68,
+  "fields": {
+    "name": "Section 2",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 69,
+  "fields": {
+    "name": "Section 3",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 70,
+  "fields": {
+    "name": "Section 4",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 71,
+  "fields": {
+    "name": "Section 5",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 72,
+  "fields": {
+    "name": "Section 6",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 73,
+  "fields": {
+    "name": "Section 7",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 74,
+  "fields": {
+    "name": "Section 8",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 75,
+  "fields": {
+    "name": "Section 9",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 76,
+  "fields": {
+    "name": "Section 10",
+    "grade": 20,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 77,
+  "fields": {
+    "name": "STEM",
+    "grade": 21,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 78,
+  "fields": {
+    "name": "STEM",
+    "grade": 22,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 79,
+  "fields": {
+    "name": "Arts & Design",
+    "grade": 23,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 80,
+  "fields": {
+    "name": "Arts & Design",
+    "grade": 24,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 81,
+  "fields": {
+    "name": "TVL",
+    "grade": 25,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 82,
+  "fields": {
+    "name": "TVL",
+    "grade": 26,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 86,
+  "fields": {
+    "name": "Tesla",
+    "grade": 21,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 87,
+  "fields": {
+    "name": "Curie",
+    "grade": 21,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 88,
+  "fields": {
+    "name": "Section A",
+    "grade": 33,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 89,
+  "fields": {
+    "name": "Section B",
+    "grade": 33,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 90,
+  "fields": {
+    "name": "Section C",
+    "grade": 33,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 91,
+  "fields": {
+    "name": "Section A",
+    "grade": 34,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 92,
+  "fields": {
+    "name": "Section B",
+    "grade": 34,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 93,
+  "fields": {
+    "name": "Section C",
+    "grade": 34,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 94,
+  "fields": {
+    "name": "Section A",
+    "grade": 35,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 95,
+  "fields": {
+    "name": "Section B",
+    "grade": 35,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 96,
+  "fields": {
+    "name": "Section C",
+    "grade": 35,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 97,
+  "fields": {
+    "name": "Section A",
+    "grade": 36,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 98,
+  "fields": {
+    "name": "Section B",
+    "grade": 36,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 99,
+  "fields": {
+    "name": "Section C",
+    "grade": 36,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 100,
+  "fields": {
+    "name": "Section A",
+    "grade": 37,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 101,
+  "fields": {
+    "name": "Section B",
+    "grade": 37,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 102,
+  "fields": {
+    "name": "Section C",
+    "grade": 37,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 103,
+  "fields": {
+    "name": "Section A",
+    "grade": 38,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 104,
+  "fields": {
+    "name": "Section B",
+    "grade": 38,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 105,
+  "fields": {
+    "name": "Section C",
+    "grade": 38,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 106,
+  "fields": {
+    "name": "Section A",
+    "grade": 39,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 107,
+  "fields": {
+    "name": "Section B",
+    "grade": 39,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 108,
+  "fields": {
+    "name": "Section C",
+    "grade": 39,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 109,
+  "fields": {
+    "name": "Section A",
+    "grade": 40,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 110,
+  "fields": {
+    "name": "Section B",
+    "grade": 40,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 111,
+  "fields": {
+    "name": "Section C",
+    "grade": 40,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 112,
+  "fields": {
+    "name": "Section D",
+    "grade": 33,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 113,
+  "fields": {
+    "name": "Section D",
+    "grade": 34,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 114,
+  "fields": {
+    "name": "Section D",
+    "grade": 35,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 115,
+  "fields": {
+    "name": "Section D",
+    "grade": 36,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 116,
+  "fields": {
+    "name": "STEM A",
+    "grade": 37,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 117,
+  "fields": {
+    "name": "STEM B",
+    "grade": 37,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 118,
+  "fields": {
+    "name": "STEM A",
+    "grade": 39,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 119,
+  "fields": {
+    "name": "STEM B",
+    "grade": 39,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 120,
+  "fields": {
+    "name": "ABM A",
+    "grade": 41,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 121,
+  "fields": {
+    "name": "ABM B",
+    "grade": 41,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 122,
+  "fields": {
+    "name": "ABM A",
+    "grade": 42,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 123,
+  "fields": {
+    "name": "ABM B",
+    "grade": 42,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 124,
+  "fields": {
+    "name": "HUMSS A",
+    "grade": 38,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 125,
+  "fields": {
+    "name": "HUMSS B",
+    "grade": 38,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 126,
+  "fields": {
+    "name": "HUMSS A",
+    "grade": 40,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 127,
+  "fields": {
+    "name": "HUMSS B",
+    "grade": 40,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 128,
+  "fields": {
+    "name": "GAS A",
+    "grade": 43,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 129,
+  "fields": {
+    "name": "GAS B",
+    "grade": 43,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 130,
+  "fields": {
+    "name": "GAS A",
+    "grade": 44,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.section",
+  "pk": 131,
+  "fields": {
+    "name": "GAS B",
+    "grade": 44,
+    "adviser": null
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$wTjpWD2BoLQc5JrJGGkR4R$14NcbLsN9YrUb36aQznpv9VV/dxr5RP5qX1Q84vOTvI=",
+    "last_login": "2025-10-25T22:33:33.904Z",
+    "is_superuser": false,
+    "username": "Jeline",
+    "first_name": "Jeline",
+    "last_name": "Santillan",
+    "email": "jdsantillandionson@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T14:37:21.697Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "8",
+    "section": "3",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$D4jJMfPTt6hfVvOwsFlzua$9DrQDL17CNxwcqu/jv3hdkac4LB7X12nW/n2wHDzDcg=",
+    "last_login": "2025-10-25T14:38:35.788Z",
+    "is_superuser": false,
+    "username": "ana",
+    "first_name": "Anna",
+    "last_name": "Cruz",
+    "email": "annaaa@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T14:38:34.291Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$KmszzWcYC6OvXYpSnGjFTb$/5r2T6OhYbYHst9IJdCihpz3lnQSvCJFAYehK4RFX0w=",
+    "last_login": "2025-11-17T15:52:22.754Z",
+    "is_superuser": false,
+    "username": "guidance2",
+    "first_name": "Jel",
+    "last_name": "Lyn",
+    "email": "guidance2@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T15:30:58.407Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$jEOZlKmn3zvLm4asb9MPuJ$jl6kO+4aP34Ty3p2hS2b2p1mvC9kz32yuzijaflawbU=",
+    "last_login": "2025-10-25T19:47:58.763Z",
+    "is_superuser": false,
+    "username": "discipline_office",
+    "first_name": "Anne",
+    "last_name": "Lim",
+    "email": "discipline@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T15:32:34.468Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$SdtAiPJtCMqVG7dc5hmRad$ylYOIrlBawhR8AEIWkRHun5NV+COxVanIa/pMCL6LI0=",
+    "last_login": "2025-10-25T15:40:00.897Z",
+    "is_superuser": false,
+    "username": "counselor",
+    "first_name": "Trishia",
+    "last_name": "Ranigo",
+    "email": "counselor@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T15:39:57.623Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EGzrGxmohPkt1m8CDD4h5w$rWJaZmsZKpMyg16AoPNhsE4HJkAPxhe8h1eEjCdTIjw=",
+    "last_login": "2025-10-25T16:31:48.971Z",
+    "is_superuser": false,
+    "username": "guidance_office",
+    "first_name": "Trishia",
+    "last_name": "Cruz",
+    "email": "santillan07@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T16:31:45.632Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$rRTM7vqL1fauIgajKlaPSP$zQO89H1pnWv2vdkVELCpHcPlmypQcPRVTJBXGYnQ0P0=",
+    "last_login": "2025-10-25T16:34:36.760Z",
+    "is_superuser": false,
+    "username": "hospital",
+    "first_name": "Jeline",
+    "last_name": "cruz",
+    "email": "annaaa@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T16:34:22.574Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$9kk9d8mdJ0fWDhBQ4LEbke$jjAzmU9TIIMQxflV17nDv1Jp0MftKWCaaeVkn4g2VYY=",
+    "last_login": "2025-10-25T19:52:43.810Z",
+    "is_superuser": false,
+    "username": "testteacher",
+    "first_name": "Test",
+    "last_name": "Teacher",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T16:43:04.312Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$Olij1bCt7YTNEprfAdNUS3$i3zkqYJ58iDolEPKF5ARCSEgBYOHcEc8wMD5yfvSieA=",
+    "last_login": "2025-10-25T22:33:07.759Z",
+    "is_superuser": false,
+    "username": "testprincipal",
+    "first_name": "Test",
+    "last_name": "Principal",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T16:43:28.715Z",
+    "role": "principal",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$1VSFZfeMrpjALMf399Uekj$s7uy0C76gfSTcSL0fSNtVFSRGWsJih5ANhsmDqOq8kc=",
+    "last_login": "2025-10-25T17:20:31.079Z",
+    "is_superuser": false,
+    "username": "Jasper",
+    "first_name": "Trishia",
+    "last_name": "Ranigo",
+    "email": "jddionson@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T17:20:27.888Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 11,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$wjc5qwN3chpZo0MWms5r6e$HAbwwoZwIAYJjWwzjPsHi/S5xHer/d88Ul4rBXJ0TnE=",
+    "last_login": "2025-10-25T19:18:40.800Z",
+    "is_superuser": false,
+    "username": "guidancecounselor",
+    "first_name": "Jeline",
+    "last_name": "Santillan",
+    "email": "guidancecounselor@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T19:18:37.654Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 12,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$rnfR31h8D9jq7lmRQaoVZW$giyUsv7wQlG5S20wvWfXf5VVhCk8QWTMhKLkA4Q8jNY=",
+    "last_login": "2025-10-25T22:06:39.290Z",
+    "is_superuser": false,
+    "username": "santillan",
+    "first_name": "jess",
+    "last_name": "dee",
+    "email": "jsantillan@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-25T22:05:29.303Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 13,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$4mswHmmkQP8Jj4vT9ZqmW3$lHFvU0CsdCcDW7JcWu/dALAyOa4/QDgV/ngzx3uWC4c=",
+    "last_login": "2025-11-30T13:25:18.478Z",
+    "is_superuser": false,
+    "username": "student",
+    "first_name": "student",
+    "last_name": "cruz",
+    "email": "student@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-26T14:28:34.629Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 14,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$5QOxMDJfPNvFrZq6Nxijv1$liFboFuccOFr83E7lEseGAuMB5pKeRtR+I+B5ljwo1o=",
+    "last_login": "2025-11-29T17:02:02.017Z",
+    "is_superuser": false,
+    "username": "teacher",
+    "first_name": "teacher",
+    "last_name": "cruz",
+    "email": "teacher@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-26T14:30:07.317Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 15,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$6EVrp3LHR9bOlh4eW3bKmH$Knd1ly7SQqwCl5sweSq5zapGMqzJZwWlTjkSRDzPmyM=",
+    "last_login": "2025-11-30T16:25:03.510Z",
+    "is_superuser": false,
+    "username": "discipline",
+    "first_name": "discipline",
+    "last_name": "cruz",
+    "email": "do@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-26T14:32:13.593Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 16,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dc69KBNiUxxb3CeogBMsBB$A7fPI7WXT8unajWx6GhE+UjfATTx+NHIsXZNZlouIJs=",
+    "last_login": "2025-11-29T16:43:32.205Z",
+    "is_superuser": false,
+    "username": "guidance",
+    "first_name": "guidance",
+    "last_name": "cruz",
+    "email": "guidance@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-26T14:33:27.766Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 17,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$183Cua0jYt7LrX9GBWqawb$cCJ6jKysTCvWvHUyKu1eo3dVbHobYDfLtOCX6mVW3go=",
+    "last_login": "2025-11-15T13:00:29.018Z",
+    "is_superuser": false,
+    "username": "principal",
+    "first_name": "principal",
+    "last_name": "cruz",
+    "email": "principal@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-10-26T14:34:58.179Z",
+    "role": "principal",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 18,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$6R6s97TBybl7GTHfBIdNkT$HLGH9B14NJz2xcVYz1bMFvjkZYCr/1xbRqOCFrtjXjA=",
+    "last_login": "2025-11-15T13:48:56.147Z",
+    "is_superuser": false,
+    "username": "counselor1",
+    "first_name": "Maria",
+    "last_name": "Santos",
+    "email": "counselor@school.edu",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:22.419Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 19,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$uRkBW8bJaxwlotEhGxkvRh$Wc5A+ZLZvBd3IppI+L1R/3d5BG/Emr1WeY4HjE6lcjE=",
+    "last_login": "2025-11-03T15:56:23.656Z",
+    "is_superuser": false,
+    "username": "student1",
+    "first_name": "Juan",
+    "last_name": "Dela Cruz",
+    "email": "student1@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:23.685Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "10",
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 20,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$AugGyNLKucrOPtdj41T8Ow$5YbdpcFDU4oAXTgJ+iQFKt5tXIaf1niKD/JsZp+hnHo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student2",
+    "first_name": "Maria",
+    "last_name": "Garcia",
+    "email": "student2@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:24.815Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "11",
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 21,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$TMgDOoDK1xp6OIbS1s1ytl$/ZeEgM1eIc/W3ko/zE7IuUGemOVvPzz6RhS2jULmpDs=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student3",
+    "first_name": "Pedro",
+    "last_name": "Rodriguez",
+    "email": "student3@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:25.903Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "9",
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 22,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$yTmQM6bMyYre62LfICFQGn$UbB2bqFtGFc8fbntMBzMJRF0faMnqik0aB1o9gGu8ks=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student4",
+    "first_name": "Ana",
+    "last_name": "Lopez",
+    "email": "student4@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:27.111Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "12",
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 23,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$jrki5O3RRr12p02jnZTPT2$NVQB91dMliHW5pnR43Dd+Dc9sMaCQ2Ex9fKlyx2VPZA=",
+    "last_login": "2025-11-03T14:48:42.142Z",
+    "is_superuser": false,
+    "username": "teacher1",
+    "first_name": "Roberto",
+    "last_name": "Martinez",
+    "email": "teacher@school.edu",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:23:28.245Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 24,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$QGeaQgUu2YqDuNPrk7D6lB$FcMLawcqtxwsT3jmszexmec+vDi51ruqATpHdnWweug=",
+    "last_login": "2025-11-26T04:27:40.677Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@school.edu",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-03T13:24:18.368Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 25,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$AmU3aw90HSTF1ieotxr3Ag$smC56wTgnCDqL+EqeqfCua7ILI97eepMueLmebjTjGE=",
+    "last_login": "2025-11-18T08:45:31.576Z",
+    "is_superuser": false,
+    "username": "santillan.dmlmhsstudent",
+    "first_name": "Student",
+    "last_name": "Santillan",
+    "email": "santillan.dmlmhsstudent@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T16:11:01.205Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 26,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$r1oMBOwNvmgT1WP1exfXBG$ZRk/GrQVRBhpXbQV20b1KEs3FdCLvfaf6pPa2bhvrwM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "counselor_test",
+    "first_name": "Maria",
+    "last_name": "Santos",
+    "email": "counselor@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:23:41.632Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 27,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$awkXoo6HiJ6S51BUWHh51D$cLa9gtZJDU+93aOg7dwlOjGmIs3Q6fvQE7ElE3jQd4g=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "do_test",
+    "first_name": "Juan",
+    "last_name": "Dela Cruz",
+    "email": "do@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:23:46.967Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 28,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$QUETbZs8VXRipAfHW7Lu6p$5xL8JpyqpJh+zqYzIDf16v0j7l6RDI0YHSf9AjBUNj4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher1_test",
+    "first_name": "Ana",
+    "last_name": "Reyes",
+    "email": "teacher1@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:23:51.567Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 29,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$s7JW9vLcoo7YIQ8sAA2s2x$9kOL1K8Yu0OBMTojO+aHvs7f0CxNayBKUH0wFDDRqeM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher2_test",
+    "first_name": "Pedro",
+    "last_name": "Garcia",
+    "email": "teacher2@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:23:56.377Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 30,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$F6emnUrc9pfZxtuJFRDl7x$SSuM7q5iFR37zhu2pOXrxwxppp2rI966XYlu3rwHkQ4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher3_test",
+    "first_name": "Linda",
+    "last_name": "Cruz",
+    "email": "teacher3@test.com",
+    "is_staff": false,
+    "is_active": false,
+    "date_joined": "2025-11-16T18:24:01.063Z",
+    "role": "teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 31,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$2SoUI1rgP2kx8XAaYbDLVS$xIA1FlCt/b5elBd9qwckCB2jGfVAq4yL11nFHwsOCAc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student1_test",
+    "first_name": "John",
+    "last_name": "Smith",
+    "email": "student1@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:24:08.863Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "7",
+    "section": "Section 1",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 32,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$MjLrVzsZYzRy5dQ7HUO3Oo$C7HSegbBZZsgZ+mXwVUQTHORx5dj+lnvvK3BxJJAat0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student2_test",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "student2@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:24:22.798Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "8",
+    "section": "Section 1",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 33,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$2GQVu3lnXsrMDU7uIN0tCG$byhFfEYTQcOYA0GQZbE3bAIJ4xVWxfGXDusw7C5nzDU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student3_test",
+    "first_name": "Mark",
+    "last_name": "Johnson",
+    "email": "student3@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:24:29.328Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "9",
+    "section": "Section 1",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 34,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$co8pHymDrxEB2OSRNVTkLk$zgxW6o7OSlSVsL98Wuw/RhXWDHDAzUuIbn0m75IlCHs=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student4_test",
+    "first_name": "Lisa",
+    "last_name": "Williams",
+    "email": "student4@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:24:38.437Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "10",
+    "section": "Section 1",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 35,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$taMrOnbU9Zza4xri56OfPi$9+b0Jg8YyWpdNmL4M9IAqquNHQri1DP8xhqhQ/iYAYw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student5_test",
+    "first_name": "Carlos",
+    "last_name": "Martinez",
+    "email": "student5@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-16T18:24:43.429Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": "7",
+    "section": "Section 1",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 36,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$7RHTWkpRgIJPYjZZa6eo5G$ssOrX9qTXljbJLQFdxqc1iANR/Yhfp0i4vNqiSdYcxo=",
+    "last_login": "2025-11-17T17:07:56.155Z",
+    "is_superuser": false,
+    "username": "test_counselor",
+    "first_name": "Test",
+    "last_name": "Counselor",
+    "email": "counselor@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-17T16:43:08.808Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 37,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$HhiqC4DQEn9KT1u1Cu3Sod$X2snYjsiDm3BJSY/4TYPu91Nn26rpfBwEbLiAJrQ91g=",
+    "last_login": "2025-11-23T12:41:08.970Z",
+    "is_superuser": false,
+    "username": "test_do",
+    "first_name": "Test",
+    "last_name": "DO",
+    "email": "do@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-18T07:18:11.490Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 39,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$tBEwxI1zBKjerHMJ6bVi6H$8kBgp08+1Xe57kwnoRHwRFLsYIYjpZ+aDsfYY2B9Tuw=",
+    "last_login": "2025-11-24T06:36:42.206Z",
+    "is_superuser": false,
+    "username": "esp_teacher",
+    "first_name": "Maria",
+    "last_name": "Garcia",
+    "email": "esp.teacher@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-24T06:31:04.080Z",
+    "role": "esp_teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 40,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$hg9YUEiCikzhKmLOXBL4Fa$melaQCeaMCegMuWjlPfJTlSWAz3W4HnSnzVY50KySbI=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "do_admin",
+    "first_name": "Discipline",
+    "last_name": "Officer",
+    "email": "do@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-24T16:24:09.385Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 41,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$HAcNU0sDaPPXRRWoZ5xiuD$DWF5a9RszC+lPPqMQAWyGZA4jFrg4goQrRIc7bzWin8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "counselor_admin",
+    "first_name": "Guidance",
+    "last_name": "Counselor",
+    "email": "counselor@school.edu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-24T16:24:10.625Z",
+    "role": "counselor",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 42,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$szqYSnuIN5RpV18moU3IiN$8oy0Po6OMjE8uyQbtOX1SF1GYZLYHIj9UcBhF7j/1Mo=",
+    "last_login": "2025-11-30T13:17:14.185Z",
+    "is_superuser": false,
+    "username": "trishiaranigo",
+    "first_name": "Trishia",
+    "last_name": "Ranigo",
+    "email": "trishiaesp@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-24T16:50:06.972Z",
+    "role": "esp_teacher",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 43,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$G7ng3zUMdA0PJtsahUM1Of$aRxmf226bEkrk5PsfTSwvANPBhJIuhO2tU/de22PrQg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "juan.delacruz",
+    "first_name": "Juan",
+    "last_name": "Dela Cruz",
+    "email": "juan.delacruz@student.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-30T18:40:43.745Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 44,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$kMMjRL72bh6x0TeGuve0aE$lCnPOuR3U5jGd8tKysxaEuBl2jpYWwDa6QGJwERol3g=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "maria.santos",
+    "first_name": "Maria",
+    "last_name": "Santos",
+    "email": "maria.santos@student.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-30T18:40:47.177Z",
+    "role": "student",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "incidents.customuser",
+  "pk": 45,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$tu1LiDDkHmHVNYe6jfNxBU$O3elfEle6Kp+FXQMXHQ1rbLr/IhoRZuxfDnYO6qvqDw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "do1",
+    "first_name": "Ana",
+    "last_name": "Garcia",
+    "email": "do1@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-30T18:51:03.096Z",
+    "role": "do",
+    "employee_id": null,
+    "grade_level": null,
+    "section": null,
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]
