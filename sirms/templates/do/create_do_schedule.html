@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Schedule Meeting - SIRMS{% endblock %}
+{% block page_title %}Schedule Meeting{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white rounded-lg shadow-sm border p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Schedule Parent Conference / Interview</h2>
+            <a href="{% url 'do_schedule' %}" class="text-gray-600 hover:text-gray-900">
+                <i class="fas fa-times text-xl"></i>
+            </a>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Messages -->
+            {% if messages %}
+            <div class="mb-4 space-y-2">
+                {% for message in messages %}
+                <div class="{% if message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-green-50 border border-green-200 text-green-700{% endif %} rounded-lg p-3 text-sm">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="space-y-4">
+                <!-- Schedule Type -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Meeting Type <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.schedule_type }}
+                </div>
+
+                <!-- Student Email -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Student Email (Optional)
+                    </label>
+                    {{ form.student_email }}
+                    <p class="text-xs text-gray-500 mt-1">
+                        <i class="fas fa-info-circle"></i>
+                        Enter student email to link this schedule to a specific student
+                    </p>
+                </div>
+
+                <!-- Date and Time -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Date & Time <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.scheduled_date }}
+                </div>
+
+                <!-- Location -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Location <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.location }}
+                </div>
+
+                <!-- Attendees -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Attendees
+                    </label>
+                    {{ form.attendees }}
+                    <p class="text-xs text-gray-500 mt-1">
+                        <i class="fas fa-users"></i>
+                        List who will attend (parents, guardians, teachers, etc.)
+                    </p>
+                </div>
+
+                <!-- Purpose -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Purpose <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.purpose }}
+                    <p class="text-xs text-gray-500 mt-1">
+                        <i class="fas fa-clipboard"></i>
+                        Describe the purpose of this meeting
+                    </p>
+                </div>
+
+                <!-- Notes -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Notes (Optional)
+                    </label>
+                    {{ form.notes }}
+                    <p class="text-xs text-gray-500 mt-1">
+                        <i class="fas fa-sticky-note"></i>
+                        Add any additional notes or outcomes after the meeting
+                    </p>
+                </div>
+
+                <!-- Status -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Status
+                    </label>
+                    {{ form.status }}
+                </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="flex justify-end space-x-3 mt-6 pt-4 border-t">
+                <a href="{% url 'do_schedule' %}" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                    Cancel
+                </a>
+                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Schedule Meeting</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

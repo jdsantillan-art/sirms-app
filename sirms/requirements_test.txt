@@ -1,0 +1,24 @@
+# Testing Requirements for SIRMS
+# Install with: pip install -r requirements_test.txt
+
+# Core testing framework
+pytest==7.4.3
+pytest-django==4.7.0
+
+# Test coverage
+pytest-cov==4.1.0
+
+# Mocking and fixtures
+pytest-mock==3.12.0
+
+# HTML reports
+pytest-html==4.1.1
+
+# Parallel test execution (optional)
+pytest-xdist==3.5.0
+
+# Better assertion messages
+pytest-clarity==1.0.1
+
+# Test ordering (optional)
+pytest-order==1.2.0

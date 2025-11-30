@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - SIRMS{% endblock %}
+
+{% block unauthenticated_content %}
+<div class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white/95 backdrop-blur-sm shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="flex items-center justify-center">
+                    <img src="{% static 'images/school-logo.jpg' %}" alt="School Logo"
+                        class="h-12 w-12 object-contain rounded-lg">
+                </div>
+                <h1
+                    class="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent flex items-center">
+                    SIRMS</h1>
+            </div>
+            <div class="space-x-6 flex items-center">
+                <a href="#home" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Home</a>
+                <a href="#contacts"
+                    class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Contact</a>
+                <a href="#address"
+                    class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Address</a>
+                <a href="{% url 'login' %}"
+                    class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 py-2.5 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all">Login</a>
+                <a href="{% url 'register' %}"
+                    class="border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white px-6 py-2.5 rounded-lg font-semibold transition-all">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with School Background -->
+    <div class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <!-- School Building Background Image - Properly Fitted -->
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style="background-image: url('{% static 'images/school-building4.jpg' %}'); background-size: cover; background-position: center;">
+        </div>
+
+        <!-- Dark Overlay for Better Text Readability -->
+        <div class="absolute inset-0 bg-gradient-to-b from-emerald-900/80 via-teal-900/75 to-emerald-900/85"></div>
+
+        <!-- Animated Overlay Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%">
+                <defs>
+                    <pattern id="hero-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                        <circle cx="30" cy="30" r="2" fill="white" />
+                        <circle cx="0" cy="0" r="1" fill="white" />
+                        <circle cx="60" cy="60" r="1" fill="white" />
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#hero-grid)" />
+            </svg>
+        </div>
+
+        <!-- Subtle Floating Shapes -->
+        <div class="absolute top-20 left-10 w-72 h-72 bg-white/5 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl animate-pulse"
+            style="animation-delay: 1s;"></div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 max-w-7xl mx-auto px-4 py-32 text-center">
+            <!-- Badge -->
+            <div
+                class="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 mb-8">
+                <i class="fas fa-shield-alt text-emerald-200 mr-2"></i>
+                <span class="text-white text-sm font-medium">Secure • Confidential • Compliant</span>
+            </div>
+
+            <!-- Main Heading -->
+            <h2 class="text-6xl md:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
+                School Incident Reporting<br />
+                <span class="bg-gradient-to-r from-emerald-200 to-cyan-200 bg-clip-text text-transparent">& Management
+                    System</span>
+            </h2>
+
+            <!-- Subheading -->
+            <p class="text-2xl text-emerald-100 mb-4 font-medium">Doña Montserrat Lopez Memorial High School</p>
+            <p class="text-xl text-white/90 mb-12 max-w-3xl mx-auto">
+                Ensuring Safe and Positive School Environment Through Transparent Incident Management
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex items-center justify-center space-x-4">
+                <a href="{% url 'register' %}"
+                    class="group bg-white hover:bg-emerald-50 text-emerald-600 px-10 py-4 rounded-xl font-bold text-lg shadow-2xl hover:shadow-emerald-500/50 transition-all transform hover:-translate-y-1 inline-flex items-center">
+                    <span>Get Started</span>
+                    <i class="fas fa-arrow-right ml-3 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+                <a href="#features"
+                    class="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-2 border-white/30 px-10 py-4 rounded-xl font-bold text-lg transition-all transform hover:-translate-y-1 inline-flex items-center">
+                    <i class="fas fa-play-circle mr-3"></i>
+                    <span>Learn More</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i class="fas fa-chevron-down text-white text-2xl opacity-50"></i>
+        </div>
+    </div>
+
+    <!-- Mission & Vision Section -->
+    <div id="features" class="bg-gray-50 py-16">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold text-gray-900 mb-2">Mission & Vision</h3>
+                <p class="text-gray-600">Doña Montserrat Lopez Memorial High School</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div
+                    class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all border-l-4 border-emerald-500">
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-emerald-100 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-bullseye text-emerald-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-900 mb-2">Mission</h4>
+                            <p class="text-gray-600 text-sm leading-relaxed">To provide the society with graduates who
+                                can do ordinary things extraordinarily and who can contribute to nation-building</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all border-l-4 border-cyan-500">
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-cyan-100 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-eye text-cyan-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-900 mb-2">Vision</h4>
+                            <p class="text-gray-600 text-sm leading-relaxed">The Doña Montserrat Lopez Memorial High
+                                School envisions to produce graduates who are responsible, committed honest and
+                                self-reliant.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="contacts" class="relative py-20 overflow-hidden">
+        <!-- Gradient Background matching hero -->
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-600 via-teal-700 to-cyan-800"></div>
+
+        <!-- Animated Pattern Overlay -->
+        <div class="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%">
+                <defs>
+                    <pattern id="contact-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                        <circle cx="30" cy="30" r="2" fill="white" />
+                        <circle cx="0" cy="0" r="1" fill="white" />
+                        <circle cx="60" cy="60" r="1" fill="white" />
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#contact-grid)" />
+            </svg>
+        </div>
+
+        <!-- Floating Shapes -->
+        <div class="absolute top-10 left-10 w-64 h-64 bg-white/5 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-10 right-10 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl animate-pulse"
+            style="animation-delay: 1s;"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
+            <div
+                class="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 mb-6">
+                <i class="fas fa-phone-alt text-emerald-200 mr-2"></i>
+                <span class="text-white text-sm font-medium">Get in Touch</span>
+            </div>
+
+            <h3 class="text-4xl font-bold text-white mb-8 drop-shadow-lg">Contact Us</h3>
+
+            <div class="flex flex-col items-center space-y-4">
+                <div
+                    class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-8 py-4 inline-flex items-center space-x-3">
+                    <i class="fas fa-phone text-emerald-200 text-xl"></i>
+                    <span class="text-white text-lg font-medium">(034) 495 0036</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="address" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-8">
+                <h3 class="text-3xl font-bold mb-4 text-green-700">Address</h3>
+                <p class="text-lg text-gray-700 mb-2">Doña Montserrat Lopez Memorial High School</p>
+                <p class="text-gray-600">Rizal St, Silay, Western Visayas, Philippines</p>
+            </div>
+
+            <!-- Google Map Embed -->
+            <div class="max-w-4xl mx-auto">
+                <div class="rounded-xl overflow-hidden shadow-lg border-4 border-emerald-100">
+                    <iframe
+                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=Doña+Montserrat+Lopez+Memorial+High+School,Rizal+St,Silay,Western+Visayas,Philippines&zoom=17"
+                        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                <div class="mt-4 text-center">
+                    <a href="https://www.google.com/maps/place/Doña+Montserrat+Lopez+Memorial+High+School,+Rizal+St,+Silay,+Western+Visayas"
+                        target="_blank"
+                        class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-semibold">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        Open in Google Maps
+                        <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock unauthenticated_content %}

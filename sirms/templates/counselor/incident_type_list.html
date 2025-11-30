@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page_title }} - SIRMS{% endblock %}
+{% block page_title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="{% if page_type == 'PA' %}bg-red-600{% else %}bg-blue-600{% endif %} p-2 rounded-lg">
+                <i class="fas {% if page_type == 'PA' %}fa-ban{% else %}fa-clipboard-list{% endif %} text-white text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">{{ page_title }}</h1>
+                <p class="text-sm text-gray-600">All reported {{ page_title|lower }} incidents</p>
+            </div>
+        </div>
+        <button onclick="history.back()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 text-sm">
+            ← Back
+        </button>
+    </div>
+
+    <!-- Statistics -->
+    <div class="grid grid-cols-4 gap-3 mb-4">
+        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+            <div class="text-xl font-bold {% if page_type == 'PA' %}text-red-600{% else %}text-blue-600{% endif %}">{{ total_count }}</div>
+            <div class="text-gray-600 text-xs">Total {{ page_type }}</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+            <div class="text-xl font-bold text-yellow-600">{{ pending_count }}</div>
+            <div class="text-gray-600 text-xs">Pending</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+            <div class="text-xl font-bold text-purple-600">{{ classified_count }}</div>
+            <div class="text-gray-600 text-xs">Classified</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+            <div class="text-xl font-bold text-green-600">{{ resolved_count }}</div>
+            <div class="text-gray-600 text-xs">Resolved</div>
+        </div>
+    </div>
+
+    <!-- Reports List -->
+    <div class="bg-white rounded-lg shadow-sm border">
+        <div class="p-4 border-b">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-lg font-bold text-gray-900">{{ page_title }} Reports ({{ total_count }})</h2>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="flex space-x-2">
+                <div class="flex-1">
+                    <input type="text" id="searchInput" placeholder="🔍 Search by Case ID, Student Name..."
+                        class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                        onkeyup="filterReports()">
+                </div>
+                <select id="filter-status" class="px-2 py-1 border border-gray-300 rounded text-sm"
+                    onchange="filterReports()">
+                    <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="under_review">Under Review</option>
+                    <option value="classified">Classified</option>
+                    <option value="evaluated">Evaluated</option>
+                    <option value="sanctioned">Sanctioned</option>
+                    <option value="resolved">Resolved</option>
+                    <option value="closed">Closed</option>
+                </select>
+                <select id="filter-grade" class="px-2 py-1 border border-gray-300 rounded text-sm"
+                    onchange="filterReports()">
+                    <option value="">All Grades</option>
+                    <option value="7">Grade 7</option>
+                    <option value="8">Grade 8</option>
+                    <option value="9">Grade 9</option>
+                    <option value="10">Grade 10</option>
+                    <option value="11">Grade 11</option>
+                    <option value="12">Grade 12</option>
+                </select>
+            </div>
+        </div>
+
+        {% if reports %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Case ID</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Student Name</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Incident Type</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Grade/Section</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Status</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Date</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="reports-table">
+                    {% for report in reports %}
+                    <tr class="hover:bg-gray-50 report-row"
+                        data-status="{{ report.status }}"
+                        data-grade="{{ report.grade_level }}"
+                        data-search="{{ report.case_id|lower }} {% if report.reported_student %}{{ report.reported_student.get_full_name|lower }}{% else %}{{ report.involved_students|lower }}{% endif %}">
+                        <td class="px-3 py-2">
+                            <div class="text-sm font-medium text-gray-900">{{ report.case_id }}</div>
+                        </td>
+                        <td class="px-3 py-2">
+                            <div class="text-sm font-medium text-gray-900">
+                                {% if report.reported_student %}
+                                {{ report.reported_student.get_full_name }}
+                                {% else %}
+                                <span class="text-gray-500">{{ report.involved_students|truncatewords:3|default:"Not specified" }}</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="px-3 py-2">
+                            {% if report.incident_type %}
+                            <div class="text-sm text-gray-900">{{ report.incident_type.name|truncatewords:5 }}</div>
+                            {% else %}
+                            <div class="text-sm text-gray-400">Not specified</div>
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2">
+                            <div class="text-sm text-gray-900">G{{ report.grade_level }} - {{ report.section_name|truncatewords:2 }}</div>
+                        </td>
+                        <td class="px-3 py-2">
+                            {% if report.status == 'pending' %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                            {% elif report.status == 'under_review' %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">Under Review</span>
+                            {% elif report.status == 'classified' %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">Classified</span>
+                            {% elif report.status == 'evaluated' %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Evaluated</span>
+                            {% elif report.status == 'sanctioned' %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Sanctioned</span>
+                            {% elif report.status == 'resolved' %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Resolved</span>
+                            {% elif report.status == 'closed' %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Closed</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2">
+                            <div class="text-sm text-gray-900">{{ report.incident_date|date:"M d, Y" }}</div>
+                        </td>
+                        <td class="px-3 py-2">
+                            <a href="{% url 'report_detail' report.case_id %}"
+                                class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-eye mr-1"></i>View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+            <div class="bg-gray-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas {% if page_type == 'PA' %}fa-ban{% else %}fa-clipboard-list{% endif %} text-gray-400 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">No {{ page_title }} Reports</h3>
+            <p class="text-gray-600">No {{ page_title|lower }} incidents have been reported yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function filterReports() {
+    const searchValue = document.getElementById('searchInput').value.toLowerCase();
+    const statusFilter = document.getElementById('filter-status').value;
+    const gradeFilter = document.getElementById('filter-grade').value;
+    const rows = document.querySelectorAll('.report-row');
+    
+    rows.forEach(row => {
+        const searchText = row.getAttribute('data-search');
+        const status = row.getAttribute('data-status');
+        const grade = row.getAttribute('data-grade');
+        
+        const searchMatch = !searchValue || searchText.includes(searchValue);
+        const statusMatch = !statusFilter || status === statusFilter;
+        const gradeMatch = !gradeFilter || grade === gradeFilter;
+        
+        if (searchMatch && statusMatch && gradeMatch) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

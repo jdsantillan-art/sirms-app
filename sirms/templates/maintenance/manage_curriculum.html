@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Curriculum - SIRMS{% endblock %}
+
+{% block page_title %}Manage Curriculum{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Curriculum Management</h2>
+        <p class="text-gray-600 mt-1">Manage curricula, tracks, grades, and sections</p>
+    </div>
+
+    <!-- Curricula Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Curricula</h3>
+            <button onclick="openAddCurriculumModal()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                <i class="fas fa-plus mr-2"></i>Add Curriculum
+            </button>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for curriculum in curricula %}
+                    <tr>
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ curriculum.name }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">{{ curriculum.description|default:"No description" }}</td>
+                        <td class="px-4 py-3 text-right text-sm">
+                            <button type="button" onclick="editCurriculum({{ curriculum.id }}, '{{ curriculum.name|escapejs }}', '{{ curriculum.description|escapejs }}')" 
+                                    class="text-blue-600 hover:text-blue-900 mr-3">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button type="button" onclick="deleteCurriculum({{ curriculum.id }}, '{{ curriculum.name|escapejs }}')" 
+                                    class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="px-4 py-8 text-center text-gray-500">No curricula found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tracks Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Tracks</h3>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Track Name</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Curriculum</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for track in tracks %}
+                    <tr>
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ track.name }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">{{ track.curriculum.name }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="px-4 py-8 text-center text-gray-500">No tracks found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add Curriculum Modal -->
+<div id="addCurriculumModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="p-6 border-b">
+            <h3 class="text-xl font-semibold">Add Curriculum</h3>
+        </div>
+        <form method="POST" class="p-6">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add_curriculum">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+                    <input type="text" name="name" required class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea name="description" rows="3" class="w-full px-4 py-2 border rounded-lg"></textarea>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+                <button type="button" onclick="closeAddCurriculumModal()" class="px-4 py-2 border rounded-lg">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openAddCurriculumModal() {
+    document.getElementById('addCurriculumModal').classList.remove('hidden');
+    document.getElementById('addCurriculumModal').classList.add('flex');
+}
+
+function closeAddCurriculumModal() {
+    document.getElementById('addCurriculumModal').classList.add('hidden');
+    document.getElementById('addCurriculumModal').classList.remove('flex');
+}
+
+function editCurriculum(id, name, description) {
+    // Implement edit functionality
+    alert('Edit functionality - ID: ' + id);
+}
+
+function deleteCurriculum(id, name) {
+    if (confirm('Delete curriculum "' + name + '"?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.innerHTML = `
+            {% csrf_token %}
+            <input type="hidden" name="action" value="delete_curriculum">
+            <input type="hidden" name="curriculum_id" value="${id}">
+        `;
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+</script>
+{% endblock %}

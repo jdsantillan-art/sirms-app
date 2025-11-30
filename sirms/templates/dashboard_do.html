@@ -1,0 +1,428 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Discipline Officer Dashboard - SIRMS{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+        box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1;
+        margin: 8px 0;
+    }
+    .stat-label {
+        font-size: 0.875rem;
+        color: #6B7280;
+        font-weight: 500;
+    }
+    .trend-up {
+        color: #10B981;
+    }
+    .trend-down {
+        color: #EF4444;
+    }
+    .chart-container {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+    .donut-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+    .donut-center-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .progress-ring {
+        position: relative;
+        width: 120px;
+        height: 120px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-6">
+    <div class="max-w-7xl mx-auto px-4">
+        
+        <!-- Header -->
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-900">Discipline Officer Dashboard</h1>
+            <p class="text-gray-600 mt-1">Welcome back, {{ user.get_full_name }}</p>
+        </div>
+
+        <!-- Top Stats Row -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+            <!-- Total Reports -->
+            <div class="stat-card">
+                <div class="stat-label">Total Reports</div>
+                <div class="stat-value text-blue-600">
+                    <span class="trend-up">↑</span> {{ total_reports|default:0 }}
+                </div>
+                <div class="text-xs text-gray-500 mt-2">All time</div>
+            </div>
+
+            <!-- Pending Classification -->
+            <div class="stat-card">
+                <div class="stat-label">Pending Review</div>
+                <div class="stat-value text-orange-600">
+                    <span class="trend-up">↑</span> {{ pending|default:0 }}
+                </div>
+                <div class="text-xs text-gray-500 mt-2">Needs action</div>
+            </div>
+
+            <!-- Classified Today -->
+            <div class="stat-card">
+                <div class="stat-label">Classified Today</div>
+                <div class="stat-value text-green-600">
+                    {{ classified|default:0 }}
+                </div>
+                <div class="text-xs text-gray-500 mt-2">Last 24 hours</div>
+            </div>
+
+            <!-- Minor Cases -->
+            <div class="stat-card">
+                <div class="stat-label">Minor Cases</div>
+                <div class="stat-value text-teal-600">
+                    {{ minor_cases_count|default:0 }}
+                </div>
+                <div class="text-xs text-gray-500 mt-2">Handled by DO</div>
+            </div>
+
+            <!-- Major Cases -->
+            <div class="stat-card">
+                <div class="stat-label">Major Cases</div>
+                <div class="stat-value text-purple-600">
+                    {{ major_cases_count|default:0 }}
+                </div>
+                <div class="text-xs text-gray-500 mt-2">Sent to counselor</div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            
+            <!-- Case Distribution Donut Chart -->
+            <div class="chart-container">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Case Distribution by Severity</h3>
+                <div class="relative" style="height: 300px;">
+                    <canvas id="caseDistributionChart"></canvas>
+                    <div class="donut-center">
+                        <div class="donut-center-value text-gray-900">100%</div>
+                        <div class="text-xs text-gray-500">Total Cases</div>
+                    </div>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-teal-500 mr-2"></div>
+                            <span class="text-sm text-gray-700">Minor Cases</span>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">{{ minor_cases_count|default:0 }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
+                            <span class="text-sm text-gray-700">Major Cases</span>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">{{ major_cases_count|default:0 }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
+                            <span class="text-sm text-gray-700">Pending</span>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-900">{{ pending|default:0 }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Classification Progress -->
+            <div class="chart-container">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Classification Progress</h3>
+                <div class="grid grid-cols-2 gap-4 mt-6">
+                    <!-- Classification Rate -->
+                    <div class="text-center">
+                        <div class="relative inline-block">
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle cx="60" cy="60" r="50" stroke="#E5E7EB" stroke-width="10" fill="none"/>
+                                <circle id="classificationProgress" cx="60" cy="60" r="50" stroke="#10B981" stroke-width="10" fill="none"
+                                    stroke-dasharray="314" stroke-dashoffset="0" 
+                                    transform="rotate(-90 60 60)" stroke-linecap="round"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-gray-900" id="classificationRate">0%</div>
+                                    <div class="text-xs text-gray-500">Classified</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-sm text-gray-600">Classification Rate</div>
+                    </div>
+
+                    <!-- Response Time -->
+                    <div class="text-center">
+                        <div class="relative inline-block">
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle cx="60" cy="60" r="50" stroke="#E5E7EB" stroke-width="10" fill="none"/>
+                                <circle id="responseProgress" cx="60" cy="60" r="50" stroke="#3B82F6" stroke-width="10" fill="none"
+                                    stroke-dasharray="314" stroke-dashoffset="78.5" 
+                                    transform="rotate(-90 60 60)" stroke-linecap="round"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-gray-900">2.4h</div>
+                                    <div class="text-xs text-gray-500">Avg Time</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-sm text-gray-600">Response Time</div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="mt-6 grid grid-cols-2 gap-4">
+                    <div class="bg-blue-50 rounded-lg p-3">
+                        <div class="text-xs text-blue-600 font-medium">Today's Target</div>
+                        <div class="text-2xl font-bold text-blue-700 mt-1">15</div>
+                    </div>
+                    <div class="bg-green-50 rounded-lg p-3">
+                        <div class="text-xs text-green-600 font-medium">Completed</div>
+                        <div class="text-2xl font-bold text-green-700 mt-1">{{ classified|default:0 }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Trend and Grade Distribution -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            
+            <!-- Monthly Trend -->
+            <div class="chart-container">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Monthly Incident Trend</h3>
+                <canvas id="monthlyTrendChart" height="250"></canvas>
+            </div>
+
+            <!-- Grade Distribution -->
+            <div class="chart-container">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Incidents by Grade Level</h3>
+                <canvas id="gradeDistributionChart" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Reports Table -->
+        <div class="chart-container">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Recent Reports</h3>
+                <a href="{% url 'all_reports' %}" class="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                    View All →
+                </a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Case ID</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Student</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for report in recent_reports %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ report.case_id }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ report.involved_students|truncatewords:3 }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ report.incident_type.name|truncatewords:3 }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">{{ report.incident_date }}</td>
+                            <td class="px-4 py-3">
+                                {% if report.status == 'pending' %}
+                                <span class="px-2 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-700">Pending</span>
+                                {% elif report.status == 'classified' %}
+                                <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">Classified</span>
+                                {% else %}
+                                <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">{{ report.status|title }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                <a href="{% url 'report_detail' report.case_id %}" class="text-blue-600 hover:text-blue-700 font-medium">
+                                    Review →
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="px-4 py-8 text-center text-gray-500">No recent reports</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+// Calculate classification rate
+const totalReports = {{ total_reports|default:0 }};
+const classified = {{ classified|default:0 }};
+const classificationRate = totalReports > 0 ? Math.round((classified / totalReports) * 100) : 0;
+
+// Update classification progress ring
+const classificationCircle = document.getElementById('classificationProgress');
+const classificationRateText = document.getElementById('classificationRate');
+const circumference = 314;
+const offset = circumference - (classificationRate / 100) * circumference;
+classificationCircle.style.strokeDashoffset = offset;
+classificationRateText.textContent = classificationRate + '%';
+
+// Case Distribution Donut Chart
+const caseDistCtx = document.getElementById('caseDistributionChart').getContext('2d');
+new Chart(caseDistCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Minor Cases', 'Major Cases', 'Pending'],
+        datasets: [{
+            data: [
+                {{ minor_cases_count|default:0 }},
+                {{ major_cases_count|default:0 }},
+                {{ pending|default:0 }}
+            ],
+            backgroundColor: ['#14B8A6', '#A855F7', '#F97316'],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '75%',
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12,
+                titleFont: { size: 14 },
+                bodyFont: { size: 13 }
+            }
+        }
+    }
+});
+
+// Monthly Trend Chart
+const trendData = {{ trend_data|safe }};
+const trendCtx = document.getElementById('monthlyTrendChart').getContext('2d');
+new Chart(trendCtx, {
+    type: 'line',
+    data: {
+        labels: trendData.map(d => d.month),
+        datasets: [{
+            label: 'Incidents',
+            data: trendData.map(d => d.reports),
+            borderColor: '#3B82F6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 4,
+            pointBackgroundColor: '#3B82F6',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.05)'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+
+// Grade Distribution Chart
+const gradeData = {{ grade_data|safe }};
+const gradeCtx = document.getElementById('gradeDistributionChart').getContext('2d');
+new Chart(gradeCtx, {
+    type: 'bar',
+    data: {
+        labels: gradeData.map(d => d.grade),
+        datasets: [{
+            label: 'Incidents',
+            data: gradeData.map(d => d.count),
+            backgroundColor: ['#EF4444', '#F97316', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6'],
+            borderRadius: 8,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.05)'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

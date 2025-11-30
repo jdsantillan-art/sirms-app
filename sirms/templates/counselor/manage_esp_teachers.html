@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage ESP Teacher/VPF - SIRMS{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-lg shadow-sm border">
+        <div class="p-6 border-b flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">Manage ESP Teacher/VPF</h2>
+                <p class="text-sm text-gray-600 mt-1">Add, edit, or remove ESP teachers for VPF assignments</p>
+            </div>
+            <button onclick="showAddModal()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                <i class="fas fa-plus mr-2"></i>Add ESP Teacher
+            </button>
+        </div>
+
+        {% if esp_teachers %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specialization</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for teacher in esp_teachers %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">{{ teacher.name }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-600">{{ teacher.email|default:"-" }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-600">{{ teacher.phone|default:"-" }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-600">{{ teacher.specialization|default:"-" }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if teacher.is_active %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                            {% else %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="showEditModal({{ teacher.id }}, '{{ teacher.name|escapejs }}', '{{ teacher.email|escapejs }}', '{{ teacher.phone|escapejs }}', '{{ teacher.specialization|escapejs }}', {{ teacher.is_active|lower }})" 
+                                class="text-blue-600 hover:text-blue-900 mr-3">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button onclick="deleteTeacher({{ teacher.id }}, '{{ teacher.name|escapejs }}')" 
+                                class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+            <i class="fas fa-user-tie text-gray-300 text-6xl mb-4"></i>
+            <p class="text-gray-500 text-lg">No ESP teachers added yet</p>
+            <p class="text-gray-400 text-sm mt-2">Click "Add ESP Teacher" to get started</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="teacherModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-2xl rounded-2xl bg-white">
+        <div class="mt-3">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900" id="modalTitle">Add ESP Teacher</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form method="post" id="teacherForm">
+                {% csrf_token %}
+                <input type="hidden" name="action" id="formAction" value="add">
+                <input type="hidden" name="teacher_id" id="teacherId">
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-800 mb-2">
+                            Name <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" name="name" id="teacherName" required
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500"
+                            placeholder="Enter teacher name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-gray-800 mb-2">
+                            Email
+                        </label>
+                        <input type="email" name="email" id="teacherEmail"
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500"
+                            placeholder="teacher@school.edu">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-gray-800 mb-2">
+                            Phone
+                        </label>
+                        <input type="text" name="phone" id="teacherPhone"
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500"
+                            placeholder="09XX XXX XXXX">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-gray-800 mb-2">
+                            Specialization
+                        </label>
+                        <input type="text" name="specialization" id="teacherSpecialization"
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500"
+                            placeholder="e.g., Values Formation, Behavioral Counseling">
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input type="checkbox" name="is_active" id="teacherActive" checked
+                            class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                        <label for="teacherActive" class="ml-2 text-sm text-gray-700">Active</label>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-2 mt-6 pt-4 border-t">
+                    <button type="button" onclick="closeModal()" 
+                        class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold">
+                        <i class="fas fa-save mr-1"></i><span id="submitButtonText">Add Teacher</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-2xl rounded-2xl bg-white">
+        <div class="mt-3">
+            <div class="text-center">
+                <i class="fas fa-exclamation-triangle text-red-500 text-5xl mb-4"></i>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Delete ESP Teacher</h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Are you sure you want to delete <span id="deleteTeacherName" class="font-semibold"></span>?
+                    This action cannot be undone.
+                </p>
+            </div>
+            
+            <form method="post" id="deleteForm">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="teacher_id" id="deleteTeacherId">
+                
+                <div class="flex justify-center space-x-2 mt-6">
+                    <button type="button" onclick="closeDeleteModal()" 
+                        class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-semibold">
+                        <i class="fas fa-trash mr-1"></i>Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function showAddModal() {
+    document.getElementById('modalTitle').textContent = 'Add ESP Teacher';
+    document.getElementById('submitButtonText').textContent = 'Add Teacher';
+    document.getElementById('formAction').value = 'add';
+    document.getElementById('teacherId').value = '';
+    document.getElementById('teacherForm').reset();
+    document.getElementById('teacherActive').checked = true;
+    document.getElementById('teacherModal').classList.remove('hidden');
+}
+
+function showEditModal(id, name, email, phone, specialization, isActive) {
+    document.getElementById('modalTitle').textContent = 'Edit ESP Teacher';
+    document.getElementById('submitButtonText').textContent = 'Update Teacher';
+    document.getElementById('formAction').value = 'edit';
+    document.getElementById('teacherId').value = id;
+    document.getElementById('teacherName').value = name;
+    document.getElementById('teacherEmail').value = email || '';
+    document.getElementById('teacherPhone').value = phone || '';
+    document.getElementById('teacherSpecialization').value = specialization || '';
+    document.getElementById('teacherActive').checked = isActive;
+    document.getElementById('teacherModal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('teacherModal').classList.add('hidden');
+    document.getElementById('teacherForm').reset();
+}
+
+function deleteTeacher(id, name) {
+    document.getElementById('deleteTeacherName').textContent = name;
+    document.getElementById('deleteTeacherId').value = id;
+    document.getElementById('deleteModal').classList.remove('hidden');
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+}
+
+// Close modals when clicking outside
+document.getElementById('teacherModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+document.getElementById('deleteModal').addEventListener('click', function(e) {
+    if (e.target === this) closeDeleteModal();
+});
+
+// Keyboard shortcut - ESC to close modals
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeModal();
+        closeDeleteModal();
+    }
+});
+</script>
+{% endblock %}

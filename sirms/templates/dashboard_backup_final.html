@@ -1,0 +1,727 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - SIRMS{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block extra_head %}
+<style>
+    .chart-container {
+        position: relative;
+        height: 200px;
+        width: 100%;
+        min-height: 200px;
+    }
+
+    .chart-container canvas {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .fade-in {
+        animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card-shadow {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Ultra compact dashboard */
+    .dashboard-compact {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    .analytics-card-compact {
+        padding: 0.5rem !important;
+        border-radius: 0.5rem !important;
+    }
+
+    .analytics-card-compact p:first-child {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+
+    .analytics-card-compact .counter {
+        font-size: 1.5rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .analytics-card-compact p:last-child {
+        font-size: 0.65rem !important;
+        margin-top: 0.25rem !important;
+    }
+
+    .analytics-card-compact i {
+        font-size: 1.125rem !important;
+    }
+
+    .chart-card-compact {
+        padding: 0.75rem !important;
+    }
+
+    .chart-card-compact h3 {
+        font-size: 0.875rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-4">
+    {% if user.role == 'student' or user.role == 'teacher' %}
+    
+    <!-- Compact Welcome -->
+    <div class="bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl p-4 mb-4 border border-emerald-100">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-br from-emerald-600 to-teal-700 p-2.5 rounded-xl">
+                    <i class="fas fa-shield-alt text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">Welcome, {{ user.get_full_name }}</h1>
+                    <p class="text-xs text-gray-500">Your safety is our priority</p>
+                </div>
+            </div>
+            <a href="{% url 'report_incident' %}" 
+               class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
+                <i class="fas fa-plus-circle mr-1.5"></i>Report Incident
+            </a>
+        </div>
+    </div>
+
+    <!-- How to Report - Ultra Compact -->
+    <div class="bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl p-4 mb-4 border border-emerald-100">
+        <h2 class="text-base font-bold text-gray-800 mb-2.5 flex items-center">
+            <i class="fas fa-clipboard-list text-emerald-600 mr-2 text-sm"></i>
+            How to Report an Incident
+        </h2>
+        <div class="grid grid-cols-5 gap-2">
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-2.5 text-center text-white shadow-md hover:shadow-lg transition-all">
+                    <div class="text-xl font-bold mb-0.5">1</div>
+                    <p class="text-xs">Click Report</p>
+                </div>
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-2.5 text-center text-white shadow-md hover:shadow-lg transition-all">
+                    <div class="text-xl font-bold mb-0.5">2</div>
+                    <p class="text-xs">Fill Details</p>
+                </div>
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-2.5 text-center text-white shadow-md hover:shadow-lg transition-all">
+                    <div class="text-xl font-bold mb-0.5">3</div>
+                    <p class="text-xs">Attach Files</p>
+                </div>
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-2.5 text-center text-white shadow-md hover:shadow-lg transition-all">
+                    <div class="text-xl font-bold mb-0.5">4</div>
+                    <p class="text-xs">Submit</p>
+                </div>
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-2.5 text-center text-white shadow-md hover:shadow-lg transition-all">
+                    <div class="text-xl font-bold mb-0.5">5</div>
+                    <p class="text-xs">Track Status</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Know Your Rights & School Policies -->
+        <div class="bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl p-4 mb-4 border border-emerald-100">
+            <h2 class="text-base font-bold text-gray-800 mb-2.5 flex items-center">
+                <i class="fas fa-balance-scale text-emerald-600 mr-2 text-sm"></i>
+                Know Your Rights & School Policies
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                <!-- Anti-Bullying Policy -->
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-3 text-white shadow-md hover:shadow-lg transition-all">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-shield-alt text-lg mr-2"></i>
+                        <h3 class="text-sm font-bold">Anti-Bullying</h3>
+                    </div>
+                    <p class="text-xs opacity-90 leading-relaxed">Zero tolerance policy. Report confidentially with protection from retaliation.</p>
+                </div>
+
+                <!-- Child Protection -->
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-3 text-white shadow-md hover:shadow-lg transition-all">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-child text-lg mr-2"></i>
+                        <h3 class="text-sm font-bold">Child Protection</h3>
+                    </div>
+                    <p class="text-xs opacity-90 leading-relaxed">Safe environment with DepEd compliance. Support services available.</p>
+                </div>
+
+                <!-- Discipline Guidelines -->
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-3 text-white shadow-md hover:shadow-lg transition-all">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-gavel text-lg mr-2"></i>
+                        <h3 class="text-sm font-bold">Discipline Guidelines</h3>
+                    </div>
+                    <p class="text-xs opacity-90 leading-relaxed">Fair process with right to be heard. Focus on rehabilitation.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guidance & Support Contacts -->
+        <div class="bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl p-4 border border-emerald-100">
+            <h2 class="text-base font-bold text-gray-800 mb-2.5 flex items-center">
+                <i class="fas fa-hands-helping text-emerald-600 mr-2 text-sm"></i>
+                Guidance & Support Contacts
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+                <!-- Guidance Counselor -->
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-3 text-white shadow-md hover:shadow-lg transition-all text-center">
+                    <i class="fas fa-user-tie text-2xl mb-1.5"></i>
+                    <h3 class="font-bold text-xs mb-1">Guidance Counselor</h3>
+                    <p class="text-xs opacity-90">Emotional support</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center justify-center text-emerald-700">
+                            <i class="fas fa-envelope mr-2"></i>
+                            <span>guidance@dmlmhs.edu.ph</span>
+                        </div>
+                        <div class="flex items-center justify-center text-emerald-700">
+                            <i class="fas fa-phone mr-2"></i>
+                            <span>(034) 495-0036 ext. 101</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discipline Officer -->
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-3 text-white shadow-md hover:shadow-lg transition-all text-center">
+                    <i class="fas fa-clipboard-check text-2xl mb-1.5"></i>
+                    <h3 class="font-bold text-xs mb-1">Discipline Officer</h3>
+                    <p class="text-xs opacity-90">Incident reports</p>
+                </div>
+
+                <!-- Principal's Office -->
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-3 text-white shadow-md hover:shadow-lg transition-all text-center">
+                    <i class="fas fa-user-graduate text-2xl mb-1.5"></i>
+                    <h3 class="font-bold text-xs mb-1">Principal's Office</h3>
+                    <p class="text-xs opacity-90">Serious concerns</p>
+                </div>
+
+                <!-- Emergency Hotline -->
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-3 text-white shadow-md hover:shadow-lg transition-all text-center">
+                    <i class="fas fa-phone-volume text-2xl mb-1.5"></i>
+                    <h3 class="font-bold text-xs mb-1">Emergency Hotline</h3>
+                    <p class="text-xs opacity-90">24/7 urgent help</p>
+                </div>
+                            <i class="fas fa-mobile-alt mr-2"></i>
+                            <span>0917-123-4567</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Resources -->
+        </div>
+    </div>
+    {% else %}
+    <!-- Analytics Dashboard -->
+    <div class="mb-3">
+        <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center space-x-2">
+                <select id="dateRange" class="border border-gray-300 rounded px-2 py-1 text-xs"
+                    onchange="updateCharts()">
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="yearly">Yearly</option>
+                </select>
+                <button onclick="toggleAutoRefresh()" id="autoRefreshBtn"
+                    class="bg-blue-100 text-blue-700 hover:bg-blue-200 px-2 py-1 rounded text-xs">
+                    Auto-Refresh: OFF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Counter Cards -->
+    {% if user.role == 'principal' %}
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3">
+        <a href="{% url 'all_reports' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-3 border-l-4 border-blue-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-600 text-sm font-medium">Total Reports</p>
+                        <p class="text-2xl font-bold text-blue-700 counter" data-target="{{ total_reports|default:0 }}">
+                            0</p>
+                        <p class="text-xs text-blue-500 mt-1">Click to view all</p>
+                    </div>
+                    <i class="fas fa-chart-line text-blue-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'all_reports' %}?status=resolved" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-3 border-l-4 border-green-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-600 text-sm font-medium">Resolved Cases</p>
+                        <p class="text-2xl font-bold text-green-700 counter"
+                            data-target="{{ resolution_rate|default:0 }}">0</p>
+                        <p class="text-xs text-green-500 mt-1">Click to view resolved</p>
+                    </div>
+                    <i class="fas fa-check-circle text-green-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'sanction_management' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-red-50 to-red-100 rounded-lg p-3 border-l-4 border-red-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-red-600 text-sm font-medium">Active Sanctions</p>
+                        <p class="text-2xl font-bold text-red-700 counter"
+                            data-target="{{ active_sanctions|default:0 }}">0</p>
+                        <p class="text-xs text-red-500 mt-1">Click to manage</p>
+                    </div>
+                    <i class="fas fa-gavel text-red-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'counseling_schedule' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-3 border-l-4 border-orange-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-orange-600 text-sm font-medium">Active Counseling</p>
+                        <p class="text-2xl font-bold text-orange-700 counter"
+                            data-target="{{ scheduled_sessions|default:0 }}">0</p>
+                        <p class="text-xs text-orange-500 mt-1">Click to view sessions</p>
+                    </div>
+                    <i class="fas fa-comments text-orange-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% elif user.role == 'counselor' %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-3">
+        <a href="{% url 'prohibited_acts' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-red-50 to-red-100 rounded-lg p-3 border-l-4 border-red-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-red-600 text-sm font-medium">Total Prohibited Acts</p>
+                        <p class="text-2xl font-bold text-red-700 counter"
+                            data-target="{{ total_prohibited_acts|default:0 }}">{{ total_prohibited_acts|default:0 }}
+                        </p>
+                        <p class="text-xs text-red-500 mt-1">Click to view PA reports</p>
+                    </div>
+                    <i class="fas fa-ban text-red-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'other_school_policies' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-3 border-l-4 border-blue-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-600 text-sm font-medium">Total OSP</p>
+                        <p class="text-2xl font-bold text-blue-700 counter" data-target="{{ total_osp|default:0 }}">0
+                        </p>
+                        <p class="text-xs text-blue-500 mt-1">Click to view OSP reports</p>
+                    </div>
+                    <i class="fas fa-clipboard-list text-blue-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'counselor_schedule' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-3 border-l-4 border-purple-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-600 text-sm font-medium">Scheduled Sessions</p>
+                        <p class="text-2xl font-bold text-purple-700 counter"
+                            data-target="{{ scheduled_sessions|default:0 }}">0</p>
+                        <p class="text-xs text-purple-500 mt-1">Click to view schedule</p>
+                    </div>
+                    <i class="fas fa-calendar-alt text-purple-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'completed_sessions' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-3 border-l-4 border-green-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-600 text-sm font-medium">Completed Sessions</p>
+                        <p class="text-2xl font-bold text-green-700 counter"
+                            data-target="{{ completed_sessions|default:0 }}">0</p>
+                        <p class="text-xs text-green-500 mt-1">Click to view completed</p>
+                    </div>
+                    <i class="fas fa-check-circle text-green-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'for_vpf' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-3 border-l-4 border-orange-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-orange-600 text-sm font-medium">Completed VPF</p>
+                        <p class="text-2xl font-bold text-orange-700 counter"
+                            data-target="{{ completed_vpf|default:0 }}">0</p>
+                        <p class="text-xs text-orange-500 mt-1">Click to view VPF</p>
+                    </div>
+                    <i class="fas fa-user-shield text-orange-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'for_vpf' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-teal-50 to-teal-100 rounded-lg p-3 border-l-4 border-teal-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-teal-600 text-sm font-medium">Total VPF Referrals</p>
+                        <p class="text-2xl font-bold text-teal-700 counter"
+                            data-target="{{ total_vpf_referrals|default:0 }}">0</p>
+                        <p class="text-xs text-teal-500 mt-1">Click to view all VPF</p>
+                    </div>
+                    <i class="fas fa-user-check text-teal-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% elif user.role == 'esp_teacher' %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-3">
+        <a href="{% url 'vpf_schedule' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-3 border-l-4 border-purple-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-600 text-sm font-medium">Scheduled Sessions</p>
+                        <p class="text-2xl font-bold text-purple-700 counter"
+                            data-target="{{ scheduled_vpf_sessions|default:0 }}">0</p>
+                        <p class="text-xs text-purple-500 mt-1">Click to manage VPF schedule</p>
+                    </div>
+                    <i class="fas fa-calendar-alt text-purple-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'vpf_cases' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-3 border-l-4 border-green-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-600 text-sm font-medium">Completed VPF</p>
+                        <p class="text-2xl font-bold text-green-700 counter"
+                            data-target="{{ completed_vpf|default:0 }}">0</p>
+                        <p class="text-xs text-green-500 mt-1">Click to view completed</p>
+                    </div>
+                    <i class="fas fa-check-circle text-green-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'vpf_cases' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-3 border-l-4 border-blue-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-600 text-sm font-medium">Total VPF Referrals</p>
+                        <p class="text-2xl font-bold text-blue-700 counter"
+                            data-target="{{ total_vpf_referrals|default:0 }}">0</p>
+                        <p class="text-xs text-blue-500 mt-1">Click to view all VPF</p>
+                    </div>
+                    <i class="fas fa-user-shield text-blue-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% elif user.role == 'do' %}
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3">
+        <a href="{% url 'all_reports' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-lg p-3 border-l-4 border-indigo-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-indigo-600 text-sm font-medium">Total Reports</p>
+                        <p class="text-2xl font-bold text-indigo-700 counter"
+                            data-target="{{ total_reports|default:0 }}">{{ total_reports|default:0 }}</p>
+                        <p class="text-xs text-indigo-500 mt-1">Click to view all</p>
+                    </div>
+                    <i class="fas fa-clipboard-list text-indigo-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'classify_violations' %}" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg p-3 border-l-4 border-yellow-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-yellow-600 text-sm font-medium">Pending</p>
+                        <p class="text-2xl font-bold text-yellow-700 counter" data-target="{{ pending|default:0 }}">{{
+                            pending|default:0 }}</p>
+                        <p class="text-xs text-yellow-500 mt-1">Click to classify</p>
+                    </div>
+                    <i class="fas fa-clock text-yellow-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'all_reports' %}?severity=minor" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-3 border-l-4 border-blue-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-600 text-sm font-medium">🏢 Handled by DO</p>
+                        <p class="text-2xl font-bold text-blue-700 counter"
+                            data-target="{{ minor_cases_count|default:0 }}">{{ minor_cases_count|default:0 }}</p>
+                        <p class="text-xs text-blue-500 mt-1">Cases managed by Discipline Office</p>
+                    </div>
+                    <i class="fas fa-building text-blue-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        <a href="{% url 'all_reports' %}?severity=major" class="block hover:scale-105 transition-transform">
+            <div
+                class="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-3 border-l-4 border-purple-500 cursor-pointer hover:shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-600 text-sm font-medium">🧠 Sent to Counselor</p>
+                        <p class="text-2xl font-bold text-purple-700 counter"
+                            data-target="{{ major_cases_count|default:0 }}">{{ major_cases_count|default:0 }}</p>
+                        <p class="text-xs text-purple-500 mt-1">Cases referred for counseling</p>
+                    </div>
+                    <i class="fas fa-user-md text-purple-700 text-xl"></i>
+                </div>
+            </div>
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Data Analytics Charts -->
+    {% if user.role == 'do' or user.role == 'counselor' %}
+    <div class="bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl p-4 mb-3 border border-emerald-100">
+        <div class="flex items-center justify-between mb-3">
+            <h2 class="text-base font-bold text-gray-800 flex items-center">
+                <i class="fas fa-chart-line text-emerald-600 mr-2 text-sm"></i>
+                Data Analytics
+            </h2>
+            <select id="timeFilter" class="border border-emerald-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-emerald-500">
+                <option value="monthly">Monthly</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="yearly">Yearly</option>
+            </select>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+            <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+                <h3 class="text-xs font-semibold text-gray-700 mb-2">Trend Cases</h3>
+                <canvas id="trendChart" height="150"></canvas>
+            </div>
+            
+            <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+                <h3 class="text-xs font-semibold text-gray-700 mb-2">Grade Most Reported</h3>
+                <canvas id="gradeChart" height="150"></canvas>
+            </div>
+            
+            <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+                <h3 class="text-xs font-semibold text-gray-700 mb-2">Month Most Reports</h3>
+                <canvas id="monthChart" height="150"></canvas>
+            </div>
+        </div>
+    </div>
+    {% elif user.role == 'esp_teacher' %}
+    <div class="bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl p-4 mb-3 border border-emerald-100">
+        <h2 class="text-base font-bold text-gray-800 mb-3 flex items-center">
+            <i class="fas fa-chart-pie text-emerald-600 mr-2 text-sm"></i>
+            VPF Analytics
+        </h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+                <h3 class="text-xs font-semibold text-gray-700 mb-2">VPF Status Distribution</h3>
+                <canvas id="statusChart" height="150"></canvas>
+            </div>
+            
+            <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+                <h3 class="text-xs font-semibold text-gray-700 mb-2">Referral Trend</h3>
+                <canvas id="referralChart" height="150"></canvas>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const userRole = '{{ user.role }}';
+    
+    if (userRole === 'do' || userRole === 'counselor' || userRole === 'esp_teacher') {
+        try {
+            const trendData = {{ trend_data|safe }};
+            const gradeData = {{ grade_data|safe }};
+            
+            if (userRole === 'do' || userRole === 'counselor') {
+                // Trend Chart
+                new Chart(document.getElementById('trendChart'), {
+                    type: 'line',
+                    data: {
+                        labels: trendData.map(d => d.month),
+                        datasets: [{
+                            label: 'Cases',
+                            data: trendData.map(d => d.reports),
+                            borderColor: 'rgb(16, 185, 129)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: { mode: 'index', intersect: false }
+                        },
+                        scales: { 
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            } 
+                        }
+                    }
+                });
+                
+                // Grade Chart
+                new Chart(document.getElementById('gradeChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: gradeData.map(d => d.grade),
+                        datasets: [{
+                            label: 'Reports',
+                            data: gradeData.map(d => d.count),
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                            borderColor: 'rgb(16, 185, 129)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { 
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            } 
+                        }
+                    }
+                });
+                
+                // Month Chart
+                new Chart(document.getElementById('monthChart'), {
+                    type: 'line',
+                    data: {
+                        labels: trendData.map(d => d.month),
+                        datasets: [{
+                            label: 'Reports',
+                            data: trendData.map(d => d.reports),
+                            borderColor: 'rgb(20, 184, 166)',
+                            backgroundColor: 'rgba(20, 184, 166, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: { mode: 'index', intersect: false }
+                        },
+                        scales: { 
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            } 
+                        }
+                    }
+                });
+            } else if (userRole === 'esp_teacher') {
+                // Status Donut
+                new Chart(document.getElementById('statusChart'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Completed', 'Pending', 'Ongoing'],
+                        datasets: [{
+                            data: [
+                                {{ completed_vpf|default:0 }},
+                                {{ pending_vpf|default:0 }},
+                                {{ ongoing_vpf|default:0 }}
+                            ],
+                            backgroundColor: [
+                                'rgba(34, 197, 94, 0.8)',
+                                'rgba(251, 146, 60, 0.8)',
+                                'rgba(59, 130, 246, 0.8)'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { padding: 10, font: { size: 10 } }
+                            }
+                        }
+                    }
+                });
+                
+                // Referral Trend
+                new Chart(document.getElementById('referralChart'), {
+                    type: 'line',
+                    data: {
+                        labels: trendData.map(d => d.month),
+                        datasets: [{
+                            label: 'Referrals',
+                            data: trendData.map(d => d.reports),
+                            borderColor: 'rgb(16, 185, 129)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: { mode: 'index', intersect: false }
+                        },
+                        scales: { 
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            } 
+                        }
+                    }
+                });
+            }
+            
+            console.log('✅ Charts loaded successfully');
+        } catch (error) {
+            console.error('Chart error:', error);
+        }
+    }
+});
+</script>
+{% endblock %}
+

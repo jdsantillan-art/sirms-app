@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+
+{% block title %}Referral Evaluation - SIRMS{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Compact Statistics -->
+    <div class="grid grid-cols-4 gap-3 mb-4">
+        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+            <div class="text-xl font-bold text-green-600">{{ cases|length }}</div>
+            <div class="text-gray-600 text-xs">Total Cases</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+            <div class="text-xl font-bold text-orange-600">{{ cases|length }}</div>
+            <div class="text-gray-600 text-xs">Pending</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+            <div class="text-xl font-bold text-blue-600">0</div>
+            <div class="text-gray-600 text-xs">Evaluated</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+            <div class="text-xl font-bold text-red-600">0</div>
+            <div class="text-gray-600 text-xs">Urgent</div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm border">
+        <div class="p-4 border-b">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-lg font-bold text-gray-900">Referral Evaluation</h2>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="flex space-x-2">
+                <div class="flex-1">
+                    <input type="text" id="searchInput" placeholder="🔍 Search by Name, Case ID..."
+                        class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                        onkeyup="filterCases()">
+                </div>
+                <select id="filter-grade" class="px-2 py-1 border border-gray-300 rounded text-sm"
+                    onchange="filterCases()">
+                    <option value="">All Grades</option>
+                    <option value="7">Grade 7</option>
+                    <option value="8">Grade 8</option>
+                    <option value="9">Grade 9</option>
+                    <option value="10">Grade 10</option>
+                    <option value="11">Grade 11</option>
+                    <option value="12">Grade 12</option>
+                </select>
+                <select id="filter-type" class="px-2 py-1 border border-gray-300 rounded text-sm"
+                    onchange="filterCases()">
+                    <option value="">All Types</option>
+                    {% for case in cases %}
+                    {% if case.incident_type %}
+                    <option value="{{ case.incident_type.name }}">{{ case.incident_type.name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        {% if cases %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Referral ID</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Student Name</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Incident</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Type</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Grade/Section</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Date</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="cases-table">
+                    {% for case in cases %}
+                    <tr class="hover:bg-gray-50 case-row"
+                        data-type="{% if case.incident_type %}{{ case.incident_type.name }}{% else %}Not specified{% endif %}"
+                        data-grade="{{ case.grade_level }}"
+                        data-student="{{ case.reported_student.get_full_name|lower }} {{ case.case_id|lower }}">
+                        <td class="px-3 py-2">
+                            <div class="text-sm font-medium text-gray-900">{{ case.case_id }}</div>
+                        </td>
+                        <td class="px-3 py-2">
+                            {% if case.reported_student %}
+                            <div class="text-sm font-medium text-gray-900">{{ case.reported_student.get_full_name }}</div>
+                            {% else %}
+                            <div class="text-sm font-medium text-red-600">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>No student assigned
+                            </div>
+                            <div class="text-xs text-gray-500">{{ case.involved_students|default:"Not specified" }}</div>
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2">
+                            {% if case.incident_type %}
+                            <div class="text-sm text-gray-900">{{ case.incident_type.name }}</div>
+                            {% else %}
+                            <div class="text-sm text-gray-400">Not specified</div>
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2">
+                            {% if case.incident_type %}
+                                {% if case.incident_type.severity == 'prohibited' %}
+                                <span class="text-xs px-1.5 py-0.5 bg-red-100 text-red-800 rounded font-semibold">PA</span>
+                                {% elif case.incident_type.severity == 'school_policy' %}
+                                <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded font-semibold">OSP</span>
+                                {% endif %}
+                            {% else %}
+                            <span class="text-xs text-gray-400">-</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2">
+                            <div class="text-sm text-gray-900">G{{ case.grade_level }} - {{ case.section_name }}</div>
+                        </td>
+                        <td class="px-3 py-2">
+                            <div class="text-sm text-gray-900">{{ case.incident_date|date:"M d, Y" }}</div>
+                        </td>
+                        <td class="px-3 py-2">
+                            <div class="flex space-x-2">
+                                <a href="{% url 'report_detail' case.case_id %}"
+                                    class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors">
+                                    <i class="fas fa-eye mr-1"></i>View
+                                </a>
+                                {% if case.reported_student %}
+                                <button onclick="showEvaluationForm('{{ case.id }}', '{{ case.case_id }}')"
+                                    class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700 transition-colors">
+                                    <i class="fas fa-clipboard-check mr-1"></i>Evaluate
+                                </button>
+                                {% else %}
+                                <button onclick="alert('Cannot evaluate: No student assigned to this case. Please contact the reporter to add student information.')"
+                                    class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-white bg-gray-400 rounded cursor-not-allowed">
+                                    <i class="fas fa-ban mr-1"></i>No Student
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-8">
+            <div class="text-gray-500">No cases awaiting evaluation</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Evaluation Form Modal -->
+<div id="evaluationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-2xl rounded-2xl bg-white">
+        <div class="mt-3">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900" id="evaluationModalTitle">Case Evaluation</h3>
+                <button onclick="closeEvaluationModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form method="post" id="evaluationForm">
+                {% csrf_token %}
+                <input type="hidden" name="report_id" id="evaluationReportId">
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-800 mb-2">
+                            Commission Level <span class="text-red-500">*</span>
+                        </label>
+                        <select name="commission" id="commissionSelect" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500" required onchange="updateInterventions()">
+                            <option value="">Select Commission</option>
+                            <option value="1st">1st Commission</option>
+                            <option value="2nd">2nd Commission</option>
+                            <option value="3rd">3rd Commission</option>
+                        </select>
+                    </div>
+                    
+                    <div id="interventionDiv" style="display: none;">
+                        <label class="block text-sm font-bold text-gray-800 mb-2">
+                            Intervention <span class="text-red-500">*</span>
+                        </label>
+                        <select name="intervention" id="interventionSelect" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500" required>
+                            <option value="">Select Intervention</option>
+                        </select>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <label class="block text-sm font-bold text-gray-800 mb-2">
+                            Status <span class="text-red-500">*</span>
+                        </label>
+                        <select name="status" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500" required>
+                            <option value="">Select Status</option>
+                            <option value="pending">📋 Pending</option>
+                            <option value="ongoing">🔄 Ongoing</option>
+                            <option value="complete">✅ Complete</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-gray-800 mb-2">
+                            Evaluation Notes
+                        </label>
+                        <textarea name="notes" rows="3" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500" placeholder="Enter evaluation notes (optional)..."></textarea>
+                        <p class="text-xs text-gray-500 mt-1">
+                            <i class="fas fa-bell mr-1"></i>Student and teacher will be notified
+                        </p>
+                    </div>
+                    
+                    <!-- Repeat Offender Display (Auto-detected) -->
+                    <div id="repeatOffenderBadge" class="hidden bg-red-50 p-3 rounded-lg border border-red-200">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-triangle text-red-600 mr-2"></i>
+                            <span class="text-sm font-semibold text-red-700">This student is a repeat offender</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-2 mt-6 pt-4 border-t">
+                    <button type="button" onclick="closeEvaluationModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold">
+                        Submit Evaluation
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+const interventions = {
+    '1st': [
+        'Parent Conference with Adviser/Subject Teacher',
+        'Counseling/Follow-up/Supervised Intervention'
+    ],
+    '2nd': [
+        'Parent Conference',
+        'Counseling/Follow-up/Supervised Intervention',
+        'Values Reflective Formation (VPF)'
+    ],
+    '3rd': [
+        'Parent Conference',
+        'Counseling/Follow-up/Supervised Intervention',
+        'Values Reflective Formation (VPF)'
+    ]
+};
+
+function updateInterventions() {
+    const commission = document.getElementById('commissionSelect').value;
+    const interventionDiv = document.getElementById('interventionDiv');
+    const interventionSelect = document.getElementById('interventionSelect');
+    
+    if (commission) {
+        interventionDiv.style.display = 'block';
+        interventionSelect.innerHTML = '<option value="">Select Intervention</option>';
+        
+        interventions[commission].forEach(intervention => {
+            const option = document.createElement('option');
+            option.value = intervention;
+            option.textContent = intervention;
+            interventionSelect.appendChild(option);
+        });
+    } else {
+        interventionDiv.style.display = 'none';
+        interventionSelect.innerHTML = '<option value="">Select Intervention</option>';
+    }
+}
+
+function showEvaluationForm(reportId, caseId) {
+    document.getElementById('evaluationModal').classList.remove('hidden');
+    document.getElementById('evaluationModalTitle').textContent = 'Evaluate Case ' + caseId;
+    document.getElementById('evaluationReportId').value = reportId;
+    // Reset form
+    document.getElementById('commissionSelect').value = '';
+    document.getElementById('interventionDiv').style.display = 'none';
+    
+    // Check if repeat offender (fetch from server)
+    fetch(`/api/check-repeat-offender/${reportId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.is_repeat) {
+                document.getElementById('repeatOffenderBadge').classList.remove('hidden');
+            } else {
+                document.getElementById('repeatOffenderBadge').classList.add('hidden');
+            }
+        })
+        .catch(() => {
+            document.getElementById('repeatOffenderBadge').classList.add('hidden');
+        });
+}
+
+function closeEvaluationModal() {
+    document.getElementById('evaluationModal').classList.add('hidden');
+    document.getElementById('evaluationForm').reset();
+}
+
+function filterCases() {
+    const searchValue = document.getElementById('searchInput').value.toLowerCase();
+    const gradeFilter = document.getElementById('filter-grade').value;
+    const typeFilter = document.getElementById('filter-type').value;
+    const rows = document.querySelectorAll('.case-row');
+    
+    rows.forEach(row => {
+        const type = row.getAttribute('data-type');
+        const grade = row.getAttribute('data-grade');
+        const student = row.getAttribute('data-student');
+        
+        const typeMatch = !typeFilter || type === typeFilter;
+        const gradeMatch = !gradeFilter || grade === gradeFilter;
+        const searchMatch = !searchValue || student.includes(searchValue);
+        
+        if (typeMatch && gradeMatch && searchMatch) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+// Close modal when clicking outside
+document.getElementById('evaluationModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeEvaluationModal();
+    }
+});
+
+// Keyboard shortcut - ESC to close modal
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeEvaluationModal();
+    }
+});
+</script>
+{% endblock %}

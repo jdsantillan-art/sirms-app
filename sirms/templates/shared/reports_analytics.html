@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports & Analytics - SIRMS{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl">
+    <h1 class="text-4xl font-bold text-green-700 mb-8">📊 Reports & Analytics</h1>
+    
+    <div class="card">
+        <h2 class="text-2xl font-bold text-green-700 mb-4">Generate Analytics Report</h2>
+        
+        <form method="post" class="mb-6">
+            {% csrf_token %}
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Start Date:</label>
+                    {{ form.date_range_start }}
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">End Date:</label>
+                    {{ form.date_range_end }}
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Report Type:</label>
+                    {{ form.report_type }}
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-primary">Generate Report</button>
+        </form>
+    </div>
+    
+    <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="card text-center">
+            <h3 class="text-gray-600 text-sm font-bold">Total Reports</h3>
+            <p class="text-3xl font-bold text-green-700">{{ total_reports|default:0 }}</p>
+        </div>
+        <div class="card text-center">
+            <h3 class="text-gray-600 text-sm font-bold">Minor Violations</h3>
+            <p class="text-3xl font-bold text-yellow-600">{{ minor_violations|default:0 }}</p>
+        </div>
+        <div class="card text-center">
+            <h3 class="text-gray-600 text-sm font-bold">Major Violations</h3>
+            <p class="text-3xl font-bold text-red-600">{{ major_violations|default:0 }}</p>
+        </div>
+        <div class="card text-center">
+            <h3 class="text-gray-600 text-sm font-bold">Resolved Cases</h3>
+            <p class="text-3xl font-bold text-blue-600">{{ resolved_cases|default:0 }}</p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h3 class="text-xl font-bold text-green-700 mb-4">Quick Actions</h3>
+        <div class="grid grid-cols-2 gap-4">
+            <a href="#" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <h4 class="font-bold text-gray-800">📈 Monthly Report</h4>
+                <p class="text-gray-600 text-sm">Generate current month analytics</p>
+            </a>
+            <a href="#" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <h4 class="font-bold text-gray-800">📊 Grade Level Analysis</h4>
+                <p class="text-gray-600 text-sm">Violations by grade level</p>
+            </a>
+            <a href="#" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <h4 class="font-bold text-gray-800">🔍 Trend Analysis</h4>
+                <p class="text-gray-600 text-sm">Violation trends over time</p>
+            </a>
+            <a href="#" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <h4 class="font-bold text-gray-800">📋 Export Data</h4>
+                <p class="text-gray-600 text-sm">Export to PDF/Excel</p>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

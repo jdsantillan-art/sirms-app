@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Violation History - SIRMS{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl">
+    <h1 class="text-4xl font-bold text-green-700 mb-8">📚 Violation History</h1>
+    
+    <div class="card">
+        <h2 class="text-2xl font-bold text-green-700 mb-4">Your Violation Records</h2>
+        
+        {% if history %}
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="text-left py-2">Date</th>
+                            <th class="text-left py-2">Case ID</th>
+                            <th class="text-left py-2">Violation Type</th>
+                            <th class="text-left py-2">Severity</th>
+                            <th class="text-left py-2">Status</th>
+                            <th class="text-left py-2">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in history %}
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-2">{{ record.date_occurred|date:"M d, Y" }}</td>
+                            <td class="py-2">
+                                <a href="{% url 'report_detail' record.report.case_id %}" class="text-green-700 font-bold">
+                                    {{ record.report.case_id }}
+                                </a>
+                            </td>
+                            <td class="py-2">{{ record.violation_type.name }}</td>
+                            <td class="py-2">
+                                <span class="px-2 py-1 rounded text-sm {% if record.severity == 'major' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                                    {{ record.get_severity_display }}
+                                </span>
+                            </td>
+                            <td class="py-2">
+                                <span class="px-2 py-1 rounded text-sm bg-blue-100 text-blue-800">
+                                    {{ record.status|title }}
+                                </span>
+                            </td>
+                            <td class="py-2">{{ record.notes|truncatewords:10 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-8">
+                <div class="text-gray-500 text-lg">No violation history found.</div>
+                <p class="text-gray-400 mt-2">Keep up the good behavior! 🌟</p>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="card mt-6">
+        <h3 class="text-xl font-bold text-green-700 mb-4">📊 Summary</h3>
+        <div class="grid grid-cols-3 gap-4">
+            <div class="text-center">
+                <div class="text-2xl font-bold text-blue-600">{{ history.count }}</div>
+                <div class="text-gray-600">Total Records</div>
+            </div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-yellow-600">{{ history|length }}</div>
+                <div class="text-gray-600">Minor Violations</div>
+            </div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-red-600">0</div>
+                <div class="text-gray-600">Major Violations</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

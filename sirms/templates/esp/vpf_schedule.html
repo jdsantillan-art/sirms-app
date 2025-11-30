@@ -1,0 +1,376 @@
+{% extends 'base.html' %}
+
+{% block title %}VPF Schedule - SIRMS{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="mb-4 flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">VPF Schedule Management</h1>
+            <p class="text-gray-600 text-sm">Schedule VPF sessions and manage appointments</p>
+        </div>
+        <div class="flex space-x-2">
+            <button onclick="showView('calendar')" id="calendarViewBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-semibold">
+                <i class="fas fa-calendar-alt mr-1"></i>Calendar View
+            </button>
+            <button onclick="showView('list')" id="listViewBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm font-semibold">
+                <i class="fas fa-list mr-1"></i>List View
+            </button>
+        </div>
+    </div>
+
+    <!-- Pending Cases to Schedule -->
+    {% if pending_vpf_cases %}
+    <div class="bg-white rounded-lg shadow-sm border mb-6">
+        <div class="p-4 border-b bg-yellow-50">
+            <h2 class="text-lg font-bold text-gray-900">Pending VPF Cases ({{ pending_vpf_cases|length }})</h2>
+            <p class="text-sm text-gray-600">These cases need to be scheduled</p>
+        </div>
+        <div class="p-4">
+            {% for vpf in pending_vpf_cases %}
+            <div class="border rounded-lg p-4 mb-3 hover:bg-gray-50">
+                <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-900">{{ vpf.student.get_full_name }}</h3>
+                        <p class="text-sm text-gray-600">Case: {{ vpf.report.case_id }} | {{ vpf.commission_level }} Commission</p>
+                        <p class="text-xs text-gray-500 mt-1">{{ vpf.intervention }}</p>
+                    </div>
+                    <button onclick="showScheduleModal('{{ vpf.id }}', '{{ vpf.student.get_full_name }}', '{{ vpf.report.case_id }}')"
+                        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-semibold">
+                        <i class="fas fa-calendar-plus mr-1"></i>Schedule Session
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Calendar View -->
+    <div id="calendarView" class="bg-white rounded-lg shadow-sm border mb-6">
+        <div class="p-4 border-b">
+            <div class="flex justify-between items-center">
+                <h2 class="text-lg font-bold text-gray-900">Schedule Calendar</h2>
+                <div class="flex space-x-2">
+                    <button onclick="changeMonth(-1)" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span id="currentMonth" class="px-4 py-1 font-semibold text-gray-900"></span>
+                    <button onclick="changeMonth(1)" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="p-4">
+            <div id="calendar" class="grid grid-cols-7 gap-2"></div>
+        </div>
+    </div>
+
+    <!-- List View -->
+    <div id="listView" class="bg-white rounded-lg shadow-sm border hidden">
+        <div class="p-4 border-b">
+            <h2 class="text-lg font-bold text-gray-900">Scheduled VPF Sessions</h2>
+        </div>
+
+        {% if schedules %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Student</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Referral ID</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Date & Time</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Location</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Notes</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for schedule in schedules %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-3 py-2">
+                            <div class="text-sm font-medium text-gray-900">{{ schedule.vpf_case.student.get_full_name }}</div>
+                        </td>
+                        <td class="px-3 py-2">
+                            <div class="text-sm text-gray-900">{{ schedule.vpf_case.report.case_id }}</div>
+                        </td>
+                        <td class="px-3 py-2">
+                            <div class="text-sm text-gray-900">{{ schedule.scheduled_date|date:"M d, Y" }}</div>
+                            <div class="text-xs text-gray-500">{{ schedule.scheduled_date|date:"h:i A" }}</div>
+                        </td>
+                        <td class="px-3 py-2">
+                            <div class="text-sm text-gray-900">{{ schedule.location|default:"TBA" }}</div>
+                        </td>
+                        <td class="px-3 py-2">
+                            {% if schedule.notes %}
+                            <button onclick="showNotesModal('{{ schedule.vpf_case.student.get_full_name|escapejs }}', '{{ schedule.notes|escapejs }}')" class="text-xs text-blue-600 hover:underline">
+                                <i class="fas fa-sticky-note mr-1"></i>View Notes
+                            </button>
+                            {% else %}
+                            <span class="text-xs text-gray-400">No notes</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-3 py-2">
+                            {% if schedule.status == 'scheduled' %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Scheduled</span>
+                            {% elif schedule.status == 'completed' %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                            {% elif schedule.status == 'missed' %}
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Missed</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-8">
+            <div class="text-gray-500">No scheduled sessions yet</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Schedule Modal -->
+<div id="scheduleModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-lg shadow-2xl rounded-2xl bg-white">
+        <div class="mt-3">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900" id="scheduleModalTitle">Schedule VPF Session</h3>
+                <button onclick="closeScheduleModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="vpf_case_id" id="vpfCaseId">
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-800 mb-2">
+                            Date & Time <span class="text-red-500">*</span>
+                        </label>
+                        <input type="datetime-local" name="scheduled_date" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-gray-800 mb-2">
+                            Location
+                        </label>
+                        <input type="text" name="location" placeholder="e.g., Guidance Office, Room 201" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-gray-800 mb-2">
+                            Notes
+                        </label>
+                        <textarea name="notes" rows="3" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500" placeholder="Additional notes..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-2 mt-6 pt-4 border-t">
+                    <button type="button" onclick="closeScheduleModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold">
+                        <i class="fas fa-calendar-check mr-1"></i>Schedule & Notify
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Notes Modal -->
+<div id="notesModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-2xl rounded-2xl bg-white">
+        <div class="mt-3">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900" id="notesModalTitle">Session Notes</h3>
+                <button onclick="closeNotesModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <p id="notesContent" class="text-sm text-gray-700 whitespace-pre-wrap"></p>
+            </div>
+            <div class="flex justify-end mt-4">
+                <button onclick="closeNotesModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Schedule data from Django
+const schedules = [
+    {% for schedule in schedules %}
+    {
+        date: new Date('{{ schedule.scheduled_date|date:"Y-m-d H:i:s" }}'),
+        student: '{{ schedule.vpf_case.student.get_full_name|escapejs }}',
+        caseId: '{{ schedule.vpf_case.report.case_id }}',
+        location: '{{ schedule.location|default:"TBA"|escapejs }}',
+        notes: '{{ schedule.notes|escapejs }}',
+        status: '{{ schedule.status }}'
+    },
+    {% endfor %}
+];
+
+let currentDate = new Date();
+
+function showScheduleModal(vpfCaseId, studentName, caseId) {
+    document.getElementById('scheduleModal').classList.remove('hidden');
+    document.getElementById('scheduleModalTitle').textContent = `Schedule VPF for ${studentName} (${caseId})`;
+    document.getElementById('vpfCaseId').value = vpfCaseId;
+}
+
+function closeScheduleModal() {
+    document.getElementById('scheduleModal').classList.add('hidden');
+}
+
+function showNotesModal(studentName, notes) {
+    document.getElementById('notesModal').classList.remove('hidden');
+    document.getElementById('notesModalTitle').textContent = `Notes - ${studentName}`;
+    document.getElementById('notesContent').textContent = notes || 'No notes available';
+}
+
+function closeNotesModal() {
+    document.getElementById('notesModal').classList.add('hidden');
+}
+
+function showView(view) {
+    const calendarView = document.getElementById('calendarView');
+    const listView = document.getElementById('listView');
+    const calendarBtn = document.getElementById('calendarViewBtn');
+    const listBtn = document.getElementById('listViewBtn');
+    
+    if (view === 'calendar') {
+        calendarView.classList.remove('hidden');
+        listView.classList.add('hidden');
+        calendarBtn.classList.remove('bg-gray-300', 'text-gray-700');
+        calendarBtn.classList.add('bg-blue-600', 'text-white');
+        listBtn.classList.remove('bg-blue-600', 'text-white');
+        listBtn.classList.add('bg-gray-300', 'text-gray-700');
+        renderCalendar();
+    } else {
+        calendarView.classList.add('hidden');
+        listView.classList.remove('hidden');
+        listBtn.classList.remove('bg-gray-300', 'text-gray-700');
+        listBtn.classList.add('bg-blue-600', 'text-white');
+        calendarBtn.classList.remove('bg-blue-600', 'text-white');
+        calendarBtn.classList.add('bg-gray-300', 'text-gray-700');
+    }
+}
+
+function changeMonth(delta) {
+    currentDate.setMonth(currentDate.getMonth() + delta);
+    renderCalendar();
+}
+
+function renderCalendar() {
+    const calendar = document.getElementById('calendar');
+    const monthDisplay = document.getElementById('currentMonth');
+    
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    monthDisplay.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    
+    // Clear calendar
+    calendar.innerHTML = '';
+    
+    // Day headers
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    days.forEach(day => {
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'text-center font-bold text-gray-700 text-sm py-2';
+        dayHeader.textContent = day;
+        calendar.appendChild(dayHeader);
+    });
+    
+    // Get first day of month and number of days
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    // Empty cells before first day
+    for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'border border-gray-200 p-2 bg-gray-50 min-h-[80px]';
+        calendar.appendChild(emptyCell);
+    }
+    
+    // Days of month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement('div');
+        dayCell.className = 'border border-gray-200 p-2 min-h-[80px] hover:bg-gray-50 cursor-pointer';
+        
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'font-semibold text-gray-700 text-sm mb-1';
+        dayNumber.textContent = day;
+        dayCell.appendChild(dayNumber);
+        
+        // Check for schedules on this day
+        const daySchedules = schedules.filter(s => {
+            const scheduleDate = new Date(s.date);
+            return scheduleDate.getDate() === day && 
+                   scheduleDate.getMonth() === month && 
+                   scheduleDate.getFullYear() === year;
+        });
+        
+        daySchedules.forEach(schedule => {
+            const scheduleDiv = document.createElement('div');
+            scheduleDiv.className = 'text-xs p-1 mb-1 rounded cursor-pointer';
+            
+            if (schedule.status === 'scheduled') {
+                scheduleDiv.className += ' bg-blue-100 text-blue-800';
+            } else if (schedule.status === 'completed') {
+                scheduleDiv.className += ' bg-green-100 text-green-800';
+            } else if (schedule.status === 'missed') {
+                scheduleDiv.className += ' bg-red-100 text-red-800';
+            }
+            
+            const time = schedule.date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            scheduleDiv.innerHTML = `<div class="font-semibold">${time}</div><div class="truncate">${schedule.student}</div>`;
+            scheduleDiv.title = `${schedule.student} - ${schedule.caseId}\n${schedule.location}\n${schedule.notes}`;
+            
+            scheduleDiv.onclick = () => {
+                if (schedule.notes) {
+                    showNotesModal(schedule.student, schedule.notes);
+                }
+            };
+            
+            dayCell.appendChild(scheduleDiv);
+        });
+        
+        calendar.appendChild(dayCell);
+    }
+}
+
+// Close modals when clicking outside
+document.getElementById('scheduleModal').addEventListener('click', function(e) {
+    if (e.target === this) closeScheduleModal();
+});
+
+document.getElementById('notesModal').addEventListener('click', function(e) {
+    if (e.target === this) closeNotesModal();
+});
+
+// ESC key to close
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeScheduleModal();
+        closeNotesModal();
+    }
+});
+
+// Initialize calendar on page load
+document.addEventListener('DOMContentLoaded', function() {
+    renderCalendar();
+});
+</script>
+{% endblock %}

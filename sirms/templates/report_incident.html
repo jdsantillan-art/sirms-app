@@ -1,0 +1,417 @@
+{% extends 'base.html' %}
+
+{% block title %}Report Incident - SIRMS{% endblock %}
+{% block page_title %}Report Incident{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-3">
+
+    <div class="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-2.5">
+            <div class="flex items-center justify-between text-white">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-shield-alt text-sm"></i>
+                    <span class="font-bold text-base">Report Incident</span>
+                </div>
+                <div class="text-xs opacity-90">* Required</div>
+            </div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" id="incident-form" class="p-4">
+            {% csrf_token %}
+
+            <!-- Success/Info Messages -->
+            {% if messages %}
+            <div class="mb-3 space-y-1.5">
+                {% for message in messages %}
+                <div class="{% if message.tags == 'error' %}bg-red-50/80 border border-red-200{% elif message.tags == 'success' %}bg-green-50/80 border border-green-200{% else %}bg-blue-50/80 border border-blue-200{% endif %} rounded-lg p-1.5 flex items-start space-x-1.5 shadow-sm">
+                    <div class="flex-shrink-0 mt-0.5">
+                        {% if message.tags == 'error' %}
+                        <i class="fas fa-exclamation-circle text-red-500 text-xs"></i>
+                        {% elif message.tags == 'success' %}
+                        <i class="fas fa-check-circle text-green-500 text-xs"></i>
+                        {% else %}
+                        <i class="fas fa-info-circle text-blue-500 text-xs"></i>
+                        {% endif %}
+                    </div>
+                    <p class="text-xs {% if message.tags == 'error' %}text-red-700{% elif message.tags == 'success' %}text-green-700{% else %}text-blue-700{% endif %} leading-tight flex-1">{{ message }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Error Messages -->
+            {% if form.errors or form.non_field_errors %}
+            <div class="mb-3 space-y-1.5">
+                {% if form.non_field_errors %}
+                <div class="bg-red-50/80 border border-red-200 rounded-lg p-1.5 flex items-start space-x-1.5 shadow-sm">
+                    <div class="flex-shrink-0 mt-0.5">
+                        <i class="fas fa-exclamation-circle text-red-500 text-xs"></i>
+                    </div>
+                    <div class="flex-1">
+                        {% for error in form.non_field_errors %}
+                        <p class="text-xs text-red-700 leading-tight">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% for field in form %}
+                    {% if field.errors %}
+                    <div class="bg-red-50/80 border border-red-200 rounded-lg p-1.5 flex items-start space-x-1.5 shadow-sm">
+                        <div class="flex-shrink-0 mt-0.5">
+                            <i class="fas fa-exclamation-circle text-red-500 text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs font-semibold text-red-700">{{ field.label }}:</p>
+                            {% for error in field.errors %}
+                            <p class="text-xs text-red-700 leading-tight">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Combined: Reporter & Academic Info -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-3 pb-3 border-b border-gray-200">
+                <!-- Reporter Information -->
+                <div>
+                    <div class="flex items-center space-x-1.5 mb-2">
+                        <div class="bg-emerald-100 p-1 rounded-lg">
+                            <i class="fas fa-user text-emerald-600 text-xs"></i>
+                        </div>
+                        <h2 class="text-sm font-bold text-gray-900">Reporter Info</h2>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="group">
+                                <label class="block text-xs font-semibold text-gray-700 mb-0.5">First Name <span class="text-red-500">*</span></label>
+                                {{ form.reporter_first_name }}
+                            </div>
+                            <div class="group">
+                                <label class="block text-xs font-semibold text-gray-700 mb-0.5">Last Name <span class="text-red-500">*</span></label>
+                                {{ form.reporter_last_name }}
+                            </div>
+                        </div>
+                        <div class="group">
+                            <label class="block text-xs font-semibold text-gray-700 mb-0.5">Middle Name</label>
+                            {{ form.reporter_middle_name }}
+                        </div>
+                        <div class="group">
+                            <label class="block text-xs font-semibold text-gray-700 mb-0.5">Gender</label>
+                            {{ form.student_gender }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Information -->
+                <div>
+                    <div class="flex items-center space-x-1.5 mb-2">
+                        <div class="bg-cyan-100 p-1 rounded-lg">
+                            <i class="fas fa-graduation-cap text-cyan-600 text-xs"></i>
+                        </div>
+                        <h2 class="text-sm font-bold text-gray-900">Academic Info</h2>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="group">
+                            <label class="block text-xs font-semibold text-gray-700 mb-0.5">Curriculum <span class="text-red-500">*</span></label>
+                            {{ form.curriculum }}
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="group">
+                                <label class="block text-xs font-semibold text-gray-700 mb-0.5">Grade Level</label>
+                                {{ form.grade_level }}
+                            </div>
+                            <div class="group">
+                                <label class="block text-xs font-semibold text-gray-700 mb-0.5">Section</label>
+                                {{ form.section_name }}
+                            </div>
+                        </div>
+                        <div class="group">
+                            <label class="block text-xs font-semibold text-gray-700 mb-0.5">Teacher</label>
+                            {{ form.teacher_name }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Involved Students -->
+            <div class="mb-3 pb-3 border-b border-gray-200">
+                <div class="flex items-center space-x-1.5 mb-2">
+                    <div class="bg-teal-100 p-1 rounded-lg">
+                        <i class="fas fa-users text-teal-600 text-xs"></i>
+                    </div>
+                    <h2 class="text-sm font-bold text-gray-900">Involved Students</h2>
+                </div>
+                <div class="group">
+                    <label class="block text-xs font-semibold text-gray-700 mb-0.5">Names or IDs</label>
+                    {{ form.involved_students }}
+                </div>
+            </div>
+
+            <!-- Incident Details -->
+            <div class="mb-3">
+                <div class="flex items-center space-x-1.5 mb-2">
+                    <div class="bg-red-100 p-1 rounded-lg">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-xs"></i>
+                    </div>
+                    <h2 class="text-sm font-bold text-gray-900">Incident Details</h2>
+                </div>
+                <div class="space-y-2">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        <div class="group">
+                            <label class="block text-xs font-semibold text-gray-700 mb-0.5">Date <span class="text-red-500">*</span></label>
+                            {{ form.incident_date }}
+                        </div>
+                        <div class="group">
+                            <label class="block text-xs font-semibold text-gray-700 mb-0.5">Time <span class="text-red-500">*</span></label>
+                            {{ form.incident_time }}
+                        </div>
+                        <div class="group">
+                            <label class="block text-xs font-semibold text-gray-700 mb-0.5">Violation Type <span class="text-red-500">*</span></label>
+                            <select name="incident_type" id="id_incident_type" class="w-full px-2.5 py-1.5 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all outline-none" required>
+                                <option value="">Select Violation Type</option>
+                                <optgroup label="🚫 Prohibited Acts" class="font-bold text-red-700">
+                                    {% for incident_type in incident_types %}
+                                        {% if incident_type.severity == 'prohibited' %}
+                                        <option value="{{ incident_type.id }}">{{ incident_type.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </optgroup>
+                                <optgroup label="📋 Other School Policies" class="font-bold text-blue-700">
+                                    {% for incident_type in incident_types %}
+                                        {% if incident_type.severity == 'school_policy' %}
+                                        <option value="{{ incident_type.id }}">{{ incident_type.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Bullying Type (conditional) -->
+                    <div id="bullying-type-div" class="group" style="display: none;">
+                        <label class="block text-xs font-semibold text-gray-700 mb-0.5">
+                            Bullying Type <span class="text-red-500">*</span>
+                        </label>
+                        <select name="bullying_type" id="id_bullying_type" class="w-full px-2.5 py-1.5 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all outline-none">
+                            <option value="">Select Bullying Type</option>
+                            <option value="Physical">Physical Bullying</option>
+                            <option value="Psychological">Psychological Bullying</option>
+                            <option value="Sexual">Sexual Bullying</option>
+                            <option value="Emotional">Emotional Bullying</option>
+                            <option value="Cyber">Cyber Bullying</option>
+                            <option value="Social">Social Bullying</option>
+                            <option value="Gender-based">Gender-based Bullying</option>
+                        </select>
+                        <p class="text-xs text-gray-500 mt-0.5">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Please specify the type of bullying
+                        </p>
+                    </div>
+
+                    <!-- Legal References Display -->
+                    <div id="legal-references"
+                        class="p-2 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg"
+                        style="display: none;">
+                        <div class="flex items-start space-x-1.5">
+                            <i class="fas fa-balance-scale text-blue-600 text-xs mt-0.5"></i>
+                            <div>
+                                <h3 class="font-bold text-blue-900 mb-1 text-xs">Legal References</h3>
+                                <div id="legal-references-content" class="text-xs text-blue-800"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group">
+                        <label class="block text-xs font-semibold text-gray-700 mb-0.5">Description</label>
+                        {{ form.description }}
+                    </div>
+                    <div class="group">
+                        <label class="block text-xs font-semibold text-gray-700 mb-0.5">Evidence (Optional)</label>
+                        {{ form.evidence }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+                <p class="text-xs text-gray-600 flex items-center">
+                    <i class="fas fa-lock mr-1 text-emerald-600"></i>
+                    Confidential
+                </p>
+                <button type="submit"
+                    class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold px-5 py-2 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-2 text-sm">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Submit Report</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const curriculumSelect = document.getElementById('id_curriculum');
+        const gradeLevelSelect = document.getElementById('id_grade_level');
+        const sectionNameSelect = document.getElementById('id_section_name');
+        const teacherNameInput = document.getElementById('id_teacher_name');
+        const incidentTypeSelect = document.getElementById('id_incident_type');
+        const legalReferencesDiv = document.getElementById('legal-references');
+        const legalReferencesContent = document.getElementById('legal-references-content');
+
+        // Incident type data with legal references
+        const incidentTypes = {
+        {% for incident_type in incident_types %}
+        '{{ incident_type.id }}': {
+            'name': '{{ incident_type.name|escapejs }}',
+                'legal_references': '{{ incident_type.legal_references|escapejs }}'
+        },
+        {% endfor %}
+    };
+
+    // Show legal references and bullying type when incident type is selected
+    incidentTypeSelect.addEventListener('change', function () {
+        const selectedId = this.value;
+        const bullyingTypeDiv = document.getElementById('bullying-type-div');
+        const bullyingTypeSelect = document.getElementById('id_bullying_type');
+        
+        if (selectedId && incidentTypes[selectedId]) {
+            const incidentName = incidentTypes[selectedId].name.toLowerCase();
+            
+            // Show legal references
+            legalReferencesContent.innerHTML = incidentTypes[selectedId].legal_references;
+            legalReferencesDiv.style.display = 'block';
+            
+            // Show bullying type dropdown if "bullying" is in the incident name
+            if (incidentName.includes('bullying')) {
+                bullyingTypeDiv.style.display = 'block';
+                bullyingTypeSelect.required = true;
+            } else {
+                bullyingTypeDiv.style.display = 'none';
+                bullyingTypeSelect.required = false;
+                bullyingTypeSelect.value = '';
+            }
+        } else {
+            legalReferencesDiv.style.display = 'none';
+            bullyingTypeDiv.style.display = 'none';
+            bullyingTypeSelect.required = false;
+            bullyingTypeSelect.value = '';
+        }
+    });
+
+    // Teacher assignment data - organized by curriculum type
+    const teacherAssignments = {
+        {% for teacher in teacher_assignments %}
+    '{{ teacher.grade_level }}_{{ teacher.section_name }}': '{{ teacher.teacher_name }}',
+        {% endfor %}
+    };
+
+    // Define sections for each curriculum and grade
+    const curriculumStructure = {
+        'Junior High School': {
+            '7': ['Section 1 (STE)', 'Section 2 (STE)', 'Section 1 (SPA)', 'Section 2 (SPA)',
+                'Section 1 (ICT)', 'Section 2 (ICT)', 'Section 1 (RBEC)', 'Section 2 (RBEC)', 'Section 3 (RBEC)',
+                'Section 1 (STVEP)', 'Section 2 (STVEP)', 'Section 3 (STVEP)', 'Section 4 (STVEP)', 'Section 5 (STVEP)',
+                'Section 6 (STVEP)', 'Section 7 (STVEP)', 'Section 8 (STVEP)', 'Section 9 (STVEP)', 'Section 10 (STVEP)'],
+            '8': ['Section 1 (STE)', 'Section 2 (STE)', 'Section 1 (SPA)', 'Section 2 (SPA)',
+                'Section 1 (ICT)', 'Section 2 (ICT)', 'Section 1 (RBEC)', 'Section 2 (RBEC)', 'Section 3 (RBEC)',
+                'Section 1 (STVEP)', 'Section 2 (STVEP)', 'Section 3 (STVEP)', 'Section 4 (STVEP)', 'Section 5 (STVEP)',
+                'Section 6 (STVEP)', 'Section 7 (STVEP)', 'Section 8 (STVEP)', 'Section 9 (STVEP)', 'Section 10 (STVEP)'],
+            '9': ['Section 1 (STE)', 'Section 2 (STE)', 'Section 1 (SPA)', 'Section 2 (SPA)',
+                'Section 1 (ICT)', 'Section 2 (ICT)', 'Section 1 (RBEC)', 'Section 2 (RBEC)', 'Section 3 (RBEC)',
+                'Section 1 (STVEP)', 'Section 2 (STVEP)', 'Section 3 (STVEP)', 'Section 4 (STVEP)', 'Section 5 (STVEP)',
+                'Section 6 (STVEP)', 'Section 7 (STVEP)', 'Section 8 (STVEP)', 'Section 9 (STVEP)', 'Section 10 (STVEP)'],
+            '10': ['Section 1 (STE)', 'Section 2 (STE)', 'Section 1 (SPA)', 'Section 2 (SPA)',
+                'Section 1 (ICT)', 'Section 2 (ICT)', 'Section 1 (RBEC)', 'Section 2 (RBEC)', 'Section 3 (RBEC)',
+                'Section 1 (STVEP)', 'Section 2 (STVEP)', 'Section 3 (STVEP)', 'Section 4 (STVEP)', 'Section 5 (STVEP)',
+                'Section 6 (STVEP)', 'Section 7 (STVEP)', 'Section 8 (STVEP)', 'Section 9 (STVEP)', 'Section 10 (STVEP)']
+        },
+        'Senior High School': {
+            '11': ['STEM', 'Arts & Design', 'TVL – ICT', 'TVL – SMAW', 'TVL – EIM', 'TVL – Dressmaking', 'TVL – FBS', 'TVL – Bread & Pastry', 'TVL – CSS'],
+            '12': ['STEM', 'Arts & Design', 'TVL – ICT', 'TVL – SMAW', 'TVL – EIM', 'TVL – Dressmaking', 'TVL – FBS', 'TVL – Bread & Pastry', 'TVL – CSS']
+        }
+    };
+
+    // Initialize dropdowns with empty options
+    gradeLevelSelect.innerHTML = '<option value="">Select Grade Level</option>';
+    sectionNameSelect.innerHTML = '<option value="">Select Section</option>';
+
+    // Update grade levels when curriculum is selected
+    curriculumSelect.addEventListener('change', function () {
+        const selectedCurriculum = this.options[this.selectedIndex].text;
+        gradeLevelSelect.innerHTML = '<option value="">Select Grade Level</option>';
+        sectionNameSelect.innerHTML = '<option value="">Select Section</option>';
+        teacherNameInput.value = '';
+
+        if (selectedCurriculum === 'Junior High School') {
+            ['7', '8', '9', '10'].forEach(grade => {
+                const option = document.createElement('option');
+                option.value = grade;
+                option.text = `Grade ${grade}`;
+                gradeLevelSelect.appendChild(option);
+            });
+        } else if (selectedCurriculum === 'Senior High School') {
+            ['11', '12'].forEach(grade => {
+                const option = document.createElement('option');
+                option.value = grade;
+                option.text = `Grade ${grade}`;
+                gradeLevelSelect.appendChild(option);
+            });
+        }
+    });
+
+    // Update sections when grade level is selected
+    gradeLevelSelect.addEventListener('change', function () {
+        const selectedCurriculum = curriculumSelect.options[curriculumSelect.selectedIndex].text;
+        const selectedGrade = this.value;
+
+        sectionNameSelect.innerHTML = '<option value="">Select Section</option>';
+        teacherNameInput.value = '';
+
+        if (selectedCurriculum && selectedGrade && curriculumStructure[selectedCurriculum] && curriculumStructure[selectedCurriculum][selectedGrade]) {
+            curriculumStructure[selectedCurriculum][selectedGrade].forEach(section => {
+                const option = document.createElement('option');
+                option.value = section;
+                option.text = section;
+                sectionNameSelect.appendChild(option);
+            });
+        }
+    });
+
+    // Update teacher when section is selected
+    sectionNameSelect.addEventListener('change', function () {
+        const gradeLevel = gradeLevelSelect.value;
+        const sectionName = this.value;
+
+        if (gradeLevel && sectionName) {
+            let lookupKey = `${gradeLevel}_${sectionName}`;
+
+            // Check if teacher exists for this combination
+            const teacherName = teacherAssignments[lookupKey];
+            if (teacherName) {
+                teacherNameInput.value = teacherName;
+            } else {
+                // If not found, try to find by extracting track code for JHS
+                if (sectionName.includes('(') && sectionName.includes(')')) {
+                    const trackCode = sectionName.match(/\(([^)]+)\)/)[1];
+                    const sectionNumber = sectionName.split(' ')[1];
+                    const altKey = `${gradeLevel}_Section ${sectionNumber}`;
+                    const altTeacher = teacherAssignments[altKey];
+                    if (altTeacher) {
+                        teacherNameInput.value = altTeacher;
+                    } else {
+                        teacherNameInput.value = 'Teacher not assigned';
+                    }
+                } else {
+                    teacherNameInput.value = 'Teacher not assigned';
+                }
+            }
+        }
+    });
+});
+</script>
+
+{% endblock %}

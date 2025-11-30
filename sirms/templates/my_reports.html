@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}My Reports - SIRMS{% endblock %}
+{% block page_title %}My Reports{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-3">
+    <!-- Compact Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+        <h1 class="text-2xl font-bold text-green-700">📋 My Reports</h1>
+        <div class="flex gap-2">
+            <select id="status-filter" class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg bg-white"
+                onchange="filterReports()">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="under_review">Under Review</option>
+                <option value="classified">Classified</option>
+                <option value="evaluated">Evaluated</option>
+                <option value="resolved">Resolved</option>
+            </select>
+            <a href="{% url 'report_incident' %}" class="bg-green-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors whitespace-nowrap">
+                + New Report
+            </a>
+        </div>
+    </div>
+
+    <!-- Reports Container with Fixed Height -->
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+        <div class="p-4 border-b border-gray-200 bg-gray-50">
+            <div class="flex items-center justify-between">
+                <h2 class="text-sm font-semibold text-gray-700">
+                    {% if user.role == 'student' %}Reports About You{% else %}Reports You Filed{% endif %}
+                </h2>
+                <span class="text-xs text-gray-500">{{ reports|length }} total</span>
+            </div>
+        </div>
+
+        {% if reports %}
+        <!-- Compact Table View with Scroll -->
+        <div class="overflow-x-auto">
+            <div class="max-h-[calc(100vh-280px)] overflow-y-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 sticky top-0 z-10">
+                        <tr class="border-b border-gray-200">
+                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Case ID</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Student</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Incident Type</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Date</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                            <th class="px-4 py-2 text-center text-xs font-semibold text-gray-600 uppercase">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for report in reports %}
+                        <tr class="hover:bg-gray-50 transition-colors report-item" data-status="{{ report.status }}">
+                            <td class="px-4 py-3">
+                                <span class="text-sm font-semibold text-gray-800">{{ report.case_id }}</span>
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="text-sm text-gray-700">
+                                    {% if report.reported_student %}
+                                    {{ report.reported_student.get_full_name }}
+                                    {% else %}
+                                    {{ report.involved_students|truncatewords:3|default:"Not specified" }}
+                                    {% endif %}
+                                </div>
+                                <div class="text-xs text-gray-500">Grade {{ report.grade_level }} - {{ report.section_name }}</div>
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="text-sm text-gray-700">{{ report.incident_type.name|truncatewords:5 }}</div>
+                                <div class="text-xs text-gray-500">
+                                    {% if report.incident_type.severity == 'prohibited' %}
+                                    <span class="text-red-600">Prohibited Act</span>
+                                    {% else %}
+                                    <span class="text-amber-600">School Policy</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="text-sm text-gray-700">{{ report.incident_date|date:"M d, Y" }}</div>
+                                <div class="text-xs text-gray-500">{{ report.incident_time|time:"g:i A" }}</div>
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap
+                                    {% if report.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                    {% elif report.status == 'under_review' %}bg-blue-100 text-blue-800
+                                    {% elif report.status == 'classified' %}bg-purple-100 text-purple-800
+                                    {% elif report.status == 'evaluated' %}bg-indigo-100 text-indigo-800
+                                    {% elif report.status == 'resolved' %}bg-green-100 text-green-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {{ report.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                                <a href="{% url 'report_detail' report.case_id %}"
+                                    class="inline-flex items-center gap-1 bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-green-700 transition-colors">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-16">
+            <div class="text-gray-400 mb-2">
+                <i class="fas fa-inbox text-5xl"></i>
+            </div>
+            <div class="text-gray-600 font-medium mb-1">No reports found</div>
+            <p class="text-sm text-gray-500 mb-4">You haven't {% if user.role == 'student' %}been involved in{% else %}submitted{% endif %} any incident reports yet.</p>
+            {% if user.role == 'teacher' %}
+            <a href="{% url 'report_incident' %}" class="inline-block bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+                Report an Incident
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function filterReports() {
+        const statusFilter = document.getElementById('status-filter').value;
+        const reportItems = document.querySelectorAll('.report-item');
+
+        reportItems.forEach(item => {
+            const itemStatus = item.getAttribute('data-status');
+            if (!statusFilter || itemStatus === statusFilter) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+</script>
+{% endblock %}
