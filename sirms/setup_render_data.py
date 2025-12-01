@@ -10,7 +10,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sirms_project.settings')
 django.setup()
 
-from incidents.models import CustomUser, Curriculum, Track, Grade, Section, IncidentType, LegalReference
+from incidents.models import CustomUser, Curriculum, Track, Grade, Section, IncidentType, LegalReference, TeacherAssignment
 
 def setup_all_data():
     """Run all setup functions"""
@@ -47,6 +47,17 @@ def setup_all_data():
         import traceback
         traceback.print_exc()
     
+    # Import and run load_teacher_assignments
+    print("\n📦 Step 3: Loading teacher assignments...")
+    try:
+        from load_teacher_assignments import create_teacher_assignments
+        create_teacher_assignments()
+        print("✅ Teacher assignments loaded successfully")
+    except Exception as e:
+        print(f"⚠️  Teacher assignments error: {e}")
+        import traceback
+        traceback.print_exc()
+    
     print("\n" + "="*80)
     print("✅ RENDER DATABASE SETUP COMPLETE!")
     print("="*80)
@@ -57,12 +68,18 @@ def setup_all_data():
     print(f"   Curriculums: {Curriculum.objects.count()}")
     print(f"   Violations: {IncidentType.objects.count()}")
     print(f"   Legal References: {LegalReference.objects.count()}")
+    print(f"   Teacher Assignments: {TeacherAssignment.objects.count()}")
     
     if IncidentType.objects.count() < 47:
         print(f"\n⚠️  WARNING: Expected 47 violations, found {IncidentType.objects.count()}")
         print("   Data may not have loaded correctly!")
     else:
         print(f"\n🎉 SUCCESS: All {IncidentType.objects.count()} violations loaded!")
+    
+    if TeacherAssignment.objects.count() < 32:
+        print(f"⚠️  WARNING: Expected 32 teacher assignments, found {TeacherAssignment.objects.count()}")
+    else:
+        print(f"🎉 SUCCESS: All {TeacherAssignment.objects.count()} teacher assignments loaded!")
     print()
 
 if __name__ == '__main__':

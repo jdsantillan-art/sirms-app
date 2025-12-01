@@ -510,7 +510,7 @@
   "pk": 24,
   "fields": {
     "password": "pbkdf2_sha256$600000$QGeaQgUu2YqDuNPrk7D6lB$FcMLawcqtxwsT3jmszexmec+vDi51ruqATpHdnWweug=",
-    "last_login": "2025-11-26T04:27:40.677Z",
+    "last_login": "2025-12-01T03:42:31.297Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "",
@@ -3591,6 +3591,358 @@
     "track_code": "TVL-CSS",
     "grade_level": "12",
     "section_name": "TVL – CSS"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 98,
+  "fields": {
+    "teacher_name": "Ms. Maria Santos",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "7",
+    "section_name": "Section A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 99,
+  "fields": {
+    "teacher_name": "Mr. Juan Dela Cruz",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "7",
+    "section_name": "Section B"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 100,
+  "fields": {
+    "teacher_name": "Ms. Ana Garcia",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "7",
+    "section_name": "Section C"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 101,
+  "fields": {
+    "teacher_name": "Mr. Pedro Reyes",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "7",
+    "section_name": "Section D"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 102,
+  "fields": {
+    "teacher_name": "Ms. Rosa Martinez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "8",
+    "section_name": "Section A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 103,
+  "fields": {
+    "teacher_name": "Mr. Carlos Lopez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "8",
+    "section_name": "Section B"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 104,
+  "fields": {
+    "teacher_name": "Ms. Linda Torres",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "8",
+    "section_name": "Section C"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 105,
+  "fields": {
+    "teacher_name": "Mr. Miguel Ramos",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "8",
+    "section_name": "Section D"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 106,
+  "fields": {
+    "teacher_name": "Ms. Sofia Fernandez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "9",
+    "section_name": "Section A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 107,
+  "fields": {
+    "teacher_name": "Mr. Diego Morales",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "9",
+    "section_name": "Section B"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 108,
+  "fields": {
+    "teacher_name": "Ms. Carmen Diaz",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "9",
+    "section_name": "Section C"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 109,
+  "fields": {
+    "teacher_name": "Mr. Rafael Cruz",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "9",
+    "section_name": "Section D"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 110,
+  "fields": {
+    "teacher_name": "Ms. Isabel Gomez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "10",
+    "section_name": "Section A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 111,
+  "fields": {
+    "teacher_name": "Mr. Antonio Silva",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "10",
+    "section_name": "Section B"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 112,
+  "fields": {
+    "teacher_name": "Ms. Patricia Mendoza",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "10",
+    "section_name": "Section C"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 113,
+  "fields": {
+    "teacher_name": "Mr. Roberto Castillo",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "10",
+    "section_name": "Section D"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 114,
+  "fields": {
+    "teacher_name": "Ms. Dr. Elena Rodriguez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "11",
+    "section_name": "STEM A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 115,
+  "fields": {
+    "teacher_name": "Mr. Dr. Jose Hernandez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "11",
+    "section_name": "STEM B"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 116,
+  "fields": {
+    "teacher_name": "Ms. Dr. Gloria Sanchez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "12",
+    "section_name": "STEM A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 117,
+  "fields": {
+    "teacher_name": "Mr. Dr. Luis Ramirez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "12",
+    "section_name": "STEM B"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 118,
+  "fields": {
+    "teacher_name": "Ms. Angela Flores",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "11",
+    "section_name": "ABM A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 119,
+  "fields": {
+    "teacher_name": "Mr. Ricardo Vargas",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "11",
+    "section_name": "ABM B"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 120,
+  "fields": {
+    "teacher_name": "Ms. Teresa Ortiz",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "12",
+    "section_name": "ABM A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 121,
+  "fields": {
+    "teacher_name": "Mr. Fernando Castro",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "12",
+    "section_name": "ABM B"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 122,
+  "fields": {
+    "teacher_name": "Ms. Beatriz Navarro",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "11",
+    "section_name": "HUMSS A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 123,
+  "fields": {
+    "teacher_name": "Mr. Alejandro Ruiz",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "11",
+    "section_name": "HUMSS B"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 124,
+  "fields": {
+    "teacher_name": "Ms. Cristina Jimenez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "12",
+    "section_name": "HUMSS A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 125,
+  "fields": {
+    "teacher_name": "Mr. Eduardo Moreno",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "12",
+    "section_name": "HUMSS B"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 126,
+  "fields": {
+    "teacher_name": "Ms. Margarita Romero",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "11",
+    "section_name": "GAS A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 127,
+  "fields": {
+    "teacher_name": "Mr. Francisco Gutierrez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "11",
+    "section_name": "GAS B"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 128,
+  "fields": {
+    "teacher_name": "Ms. Victoria Alvarez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "12",
+    "section_name": "GAS A"
+  }
+},
+{
+  "model": "incidents.teacherassignment",
+  "pk": 129,
+  "fields": {
+    "teacher_name": "Mr. Sergio Mendez",
+    "curriculum": null,
+    "track_code": "",
+    "grade_level": "12",
+    "section_name": "GAS B"
   }
 },
 {
