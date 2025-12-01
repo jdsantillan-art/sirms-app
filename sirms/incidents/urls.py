@@ -30,6 +30,7 @@ urlpatterns = [
     path('counseling-schedule/', views.counseling_schedule, name='counseling_schedule'),
     path('sanction/<str:case_id>/', views.create_sanction, name='create_sanction'),
     path('notifications/', views.notifications, name='notifications'),
+    path('schedule-notification/<int:notification_id>/', views.schedule_notification_detail, name='schedule_notification_detail'),
     path('account-settings/', views.account_settings, name='account_settings'),
     
     # API endpoints for dynamic dropdowns

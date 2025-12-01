@@ -1064,6 +1064,23 @@ def notifications(request):
     return render(request, 'notifications.html', {'notifications': notifications})
 
 @login_required
+def schedule_notification_detail(request, notification_id):
+    """View for schedule notification details only (not full report)"""
+    notification = get_object_or_404(Notification, id=notification_id, user=request.user)
+    
+    # Mark as read
+    if not notification.is_read:
+        notification.is_read = True
+        notification.save()
+    
+    context = {
+        'notification': notification,
+        'is_schedule_notification': True
+    }
+    
+    return render(request, 'schedule_notification_detail.html', context)
+
+@login_required
 def account_settings(request):
     if request.method == 'POST':
         request.user.email = request.POST.get('email')
