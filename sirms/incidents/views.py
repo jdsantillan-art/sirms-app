@@ -499,23 +499,46 @@ def analytics_dashboard(request):
     user = request.user
     context = {'user_role': user.role}
     
-    # Get analytics data for charts
-    end_date = timezone.now()
-    start_date = end_date - timedelta(days=365)
+    # Get current date and determine school year (June to May)
+    current_date = timezone.now()
+    current_month = current_date.month
     
-    # Generate analytics data
+    # School year starts in June
+    if current_month >= 6:  # June onwards - current school year
+        school_year_start = current_date.replace(month=6, day=1)
+    else:  # Before June - previous school year
+        school_year_start = current_date.replace(year=current_date.year - 1, month=6, day=1)
+    
+    # Generate trend data for school year months (June to May)
+    school_months = ['June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May']
     trend_data = []
-    for i in range(12):
-        month_start = start_date + timedelta(days=30*i)
-        month_end = month_start + timedelta(days=30)
+    
+    for i, month_name in enumerate(school_months):
+        # Calculate the actual month number
+        month_num = (6 + i) if (6 + i) <= 12 else (6 + i - 12)
+        year_offset = 0 if (6 + i) <= 12 else 1
+        
+        month_start = school_year_start.replace(month=month_num, day=1)
+        if year_offset == 1:
+            month_start = month_start.replace(year=month_start.year + 1)
+        
+        # Get last day of month
+        if month_num == 12:
+            month_end = month_start.replace(day=31)
+        else:
+            next_month = month_start.replace(month=month_num + 1) if month_num < 12 else month_start.replace(year=month_start.year + 1, month=1)
+            month_end = next_month - timedelta(days=1)
+        
         month_reports = IncidentReport.objects.filter(
             created_at__range=[month_start, month_end]
         ).count()
+        
         trend_data.append({
-            'month': month_start.strftime('%b'),
+            'month': month_name,
             'reports': month_reports
         })
     
+    # Grade data - for Reports by Grade Level
     grade_data = []
     for grade in range(7, 13):
         count = IncidentReport.objects.filter(grade_level=str(grade)).count()
@@ -524,37 +547,50 @@ def analytics_dashboard(request):
             'count': count
         })
     
-    violation_types = IncidentType.objects.annotate(
-        count=Count('incidentreport')
-    ).values('name', 'count')
+    # Violation type data - Prohibited Acts vs Other School Policies (for PIE CHART)
+    prohibited_count = IncidentReport.objects.filter(
+        incident_type__severity='prohibited'
+    ).count()
     
-    violation_type_data = []
-    for vtype in violation_types:
-        if vtype['count'] > 0:
-            violation_type_data.append({
-                'name': vtype['name'],
-                'value': vtype['count']
-            })
+    school_policy_count = IncidentReport.objects.filter(
+        incident_type__severity='school_policy'
+    ).count()
     
+    violation_type_data = [
+        {'name': 'Prohibited Acts', 'value': prohibited_count},
+        {'name': 'Other School Policies', 'value': school_policy_count}
+    ]
+    
+    # Stacked data for Major vs Minor (kept for compatibility)
     stacked_data = []
-    for i in range(12):
-        month_start = start_date + timedelta(days=30*i)
-        month_end = month_start + timedelta(days=30)
+    for i, month_name in enumerate(school_months):
+        month_num = (6 + i) if (6 + i) <= 12 else (6 + i - 12)
+        year_offset = 0 if (6 + i) <= 12 else 1
         
-        prohibited_count = IncidentReport.objects.filter(
+        month_start = school_year_start.replace(month=month_num, day=1)
+        if year_offset == 1:
+            month_start = month_start.replace(year=month_start.year + 1)
+        
+        if month_num == 12:
+            month_end = month_start.replace(day=31)
+        else:
+            next_month = month_start.replace(month=month_num + 1) if month_num < 12 else month_start.replace(year=month_start.year + 1, month=1)
+            month_end = next_month - timedelta(days=1)
+        
+        prohibited_count_month = IncidentReport.objects.filter(
             created_at__range=[month_start, month_end],
             incident_type__severity='prohibited'
         ).count()
         
-        school_policy_count = IncidentReport.objects.filter(
+        school_policy_count_month = IncidentReport.objects.filter(
             created_at__range=[month_start, month_end],
             incident_type__severity='school_policy'
         ).count()
         
         stacked_data.append({
-            'month': month_start.strftime('%b'),
-            'prohibited': prohibited_count,
-            'school_policy': school_policy_count
+            'month': month_name,
+            'major': prohibited_count_month,
+            'minor': school_policy_count_month
         })
     
     # Add analytics data to context

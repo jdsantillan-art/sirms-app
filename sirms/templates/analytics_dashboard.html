@@ -205,10 +205,10 @@
 
     <!-- Analytics Charts Grid -->
     <div class="space-y-4 mb-6">
-        <!-- Top Row: Trend Chart (Full Width) -->
+        <!-- Top Row: Case Trend Analysis - LINE GRAPH (Full Width) -->
         <div class="bg-white rounded-xl p-5 card-shadow fade-in">
             <h3 class="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                <span class="text-green-600">📈</span> Violation Trend Over Time
+                <span class="text-green-600">📈</span> Case Trend Analysis (School Year)
             </h3>
             <div class="chart-container">
                 <canvas id="trendChart"></canvas>
@@ -217,20 +217,20 @@
 
         <!-- Second Row: Two Charts Side by Side -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <!-- Pie Chart - Violation Type Distribution -->
+            <!-- Pie Chart - Prohibited Acts vs Other School Policies -->
             <div class="bg-white rounded-xl p-5 card-shadow fade-in">
                 <h3 class="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                    <span class="text-purple-600">🥧</span> Violation Type Distribution
+                    <span class="text-red-600">🥧</span> Prohibited Acts vs Other School Policies
                 </h3>
                 <div class="chart-container-small">
                     <canvas id="pieChart"></canvas>
                 </div>
             </div>
 
-            <!-- Bar Chart - Grade Level Most Reported -->
+            <!-- Bar Chart - Reports by Grade Level -->
             <div class="bg-white rounded-xl p-5 card-shadow fade-in">
                 <h3 class="text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                    <span class="text-blue-600">📊</span> Grade Level Reports
+                    <span class="text-blue-600">📊</span> Reports by Grade Level
                 </h3>
                 <div class="chart-container-small">
                     <canvas id="gradeChart"></canvas>
@@ -308,22 +308,25 @@
 
     // Initialize charts when page loads
     document.addEventListener('DOMContentLoaded', function () {
-        // Trend Line Chart
+        // Case Trend Analysis - LINE GRAPH (School Year: June to May)
         const trendCtx = document.getElementById('trendChart').getContext('2d');
         new Chart(trendCtx, {
             type: 'line',
             data: {
                 labels: trendData.map(d => d.month),
                 datasets: [{
-                    label: 'Violation Reports',
+                    label: 'Number of Reported Incidents',
                     data: trendData.map(d => d.reports),
                     borderColor: '#2E8B57',
                     backgroundColor: 'rgba(46, 139, 87, 0.1)',
-                    borderWidth: 2,
+                    borderWidth: 3,
                     fill: true,
                     tension: 0.4,
-                    pointRadius: 3,
-                    pointHoverRadius: 5
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#2E8B57',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
                 }]
             },
             options: {
@@ -331,12 +334,35 @@
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: false
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Case Trend Analysis (School Year)',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Reported Incidents',
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        },
                         grid: {
                             color: '#f0f0f0'
                         },
@@ -347,6 +373,14 @@
                         }
                     },
                     x: {
+                        title: {
+                            display: true,
+                            text: 'Month of the School Year',
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        },
                         grid: {
                             color: '#f0f0f0'
                         },
@@ -360,8 +394,11 @@
             }
         });
 
-        // Grade Bar Chart
+        // Reports by Grade Level - Bar Chart with EVEN Y-axis (2, 4, 6, 8...)
         const gradeCtx = document.getElementById('gradeChart').getContext('2d');
+        const maxGradeCount = Math.max(...gradeData.map(d => d.count));
+        const yAxisMax = Math.ceil(maxGradeCount / 2) * 2 + 2; // Round up to next even number + 2
+        
         new Chart(gradeCtx, {
             type: 'bar',
             data: {
@@ -385,10 +422,12 @@
                 scales: {
                     y: {
                         beginAtZero: true,
+                        max: yAxisMax,
                         grid: {
                             color: '#f0f0f0'
                         },
                         ticks: {
+                            stepSize: 2, // Force even numbers: 0, 2, 4, 6, 8...
                             font: {
                                 size: 10
                             }
@@ -408,16 +447,16 @@
             }
         });
 
-        // Violation Type Pie Chart
+        // Prohibited Acts vs Other School Policies - PIE CHART
         const pieCtx = document.getElementById('pieChart').getContext('2d');
         new Chart(pieCtx, {
-            type: 'doughnut',
+            type: 'pie',
             data: {
                 labels: violationTypeData.map(d => d.name),
                 datasets: [{
                     data: violationTypeData.map(d => d.value),
-                    backgroundColor: ['#8B5CF6', '#EC4899', '#F59E0B', '#10B981', '#3B82F6', '#6366F1'],
-                    borderWidth: 2,
+                    backgroundColor: ['#DC2626', '#3B82F6'], // Red for Prohibited, Blue for OSP
+                    borderWidth: 3,
                     borderColor: '#fff'
                 }]
             },
@@ -428,10 +467,30 @@
                     legend: {
                         position: 'bottom',
                         labels: {
-                            boxWidth: 12,
-                            padding: 8,
+                            boxWidth: 15,
+                            padding: 10,
                             font: {
-                                size: 10
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Prohibited Acts vs Other School Policies',
+                        font: {
+                            size: 13,
+                            weight: 'bold'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return `${label}: ${value} (${percentage}%)`;
                             }
                         }
                     }
