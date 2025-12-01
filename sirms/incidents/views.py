@@ -715,12 +715,10 @@ def report_incident(request):
             
             # Handle bullying type if provided
             bullying_type = request.POST.get('bullying_type', '')
-            description = form.cleaned_data['description']
             if bullying_type:
-                # Prepend bullying type to description
-                report.description = f"[Bullying Type: {bullying_type}]\n\n{description}"
-            else:
-                report.description = description
+                report.bullying_type = bullying_type
+            
+            report.description = form.cleaned_data['description']
             
             report.evidence = form.cleaned_data['evidence']
             
