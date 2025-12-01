@@ -2308,74 +2308,77 @@ def case_evaluation(request):
         commission = request.POST.get('commission')
         intervention = request.POST.get('intervention')
         status = request.POST.get('status')
-        notes = request.POST.get('notes', '')  # Optional field
-        is_repeat = request.POST.get('is_repeat_offender') == 'on'
+        notes = request.POST.get('notes', '')
         
-        report = get_object_or_404(IncidentReport, id=report_id)
+        try:
+            report = IncidentReport.objects.get(id=report_id)
+        except IncidentReport.DoesNotExist:
+            messages.error(request, 'Report not found.')
+            return redirect('case_evaluation')
         
-        # Check if report has a student (required for VPF cases)
-        if 'VPF' in intervention and not report.reported_student:
-            messages.error(request, f'Cannot evaluate case {report.case_id}: No student associated with this report. Please assign a student first.')
+        # Check if report has a student
+        if not report.reported_student:
+            messages.error(request, f'Cannot evaluate case {report.case_id}: No student associated with this report.')
             return redirect('case_evaluation')
         
         # Check if evaluation already exists
-        from .models import CaseEvaluation, VPFCase
-        try:
-            existing_evaluation = CaseEvaluation.objects.get(report=report)
+        if hasattr(report, 'evaluation'):
             messages.error(request, f'Case {report.case_id} has already been evaluated.')
             return redirect('case_evaluation')
-        except CaseEvaluation.DoesNotExist:
-            pass  # No evaluation exists, continue
+        
+        # Determine recommendation based on intervention
+        recommendation = 'counseling'  # default
+        if intervention and 'VPF' in intervention:
+            recommendation = 'monitoring'
         
         # Create evaluation
-        evaluation = CaseEvaluation.objects.create(
-            report=report,
-            evaluated_by=request.user,
-            recommendation=intervention if intervention else 'counseling',
-            verdict='pending',  # Default verdict since it's not in the form
-            is_repeat_offender=is_repeat,
-            evaluation_notes=notes if notes else f"Commission: {commission}, Intervention: {intervention}"
-        )
-        
-        # Update report status
-        report.status = 'evaluated'
-        report.save()
-        
-        # If VPF selected, create VPF case
-        if 'VPF' in intervention or 'Values Reflective Formation' in intervention:
-            vpf_case = VPFCase.objects.create(
+        try:
+            evaluation = CaseEvaluation.objects.create(
                 report=report,
-                student=report.reported_student,
-                assigned_by=request.user,
-                commission_level=commission,
-                intervention=intervention,
-                status='pending',
-                notes=f"Commission: {commission}, Repeat Offender: {is_repeat}"
+                evaluated_by=request.user,
+                recommendation=recommendation,
+                verdict='pending',
+                is_repeat_offender=False,
+                evaluation_notes=f"Commission: {commission}\nIntervention: {intervention}\nStatus: {status}\n{notes}"
             )
             
-            # Notify the reporter (teacher who filed the report)
-            if report.reporter:
-                Notification.objects.create(
-                    user=report.reporter,
-                    title='Case Evaluated - VPF Assigned',
-                    message=f'Case {report.case_id} has been evaluated. The student will undergo Values Reflective Formation (VPF) - {commission} Commission.',
-                    report=report
+            # Update report status
+            report.status = 'evaluated'
+            report.save()
+            
+            # If VPF selected, create VPF case
+            if intervention and ('VPF' in intervention or 'Values Reflective Formation' in intervention):
+                VPFCase.objects.create(
+                    report=report,
+                    student=report.reported_student,
+                    assigned_by=request.user,
+                    commission_level=commission,
+                    intervention=intervention,
+                    status='pending',
+                    notes=f"Commission: {commission}\nIntervention: {intervention}"
                 )
-            
-            # Notify the student
-            Notification.objects.create(
-                user=report.reported_student,
-                title='VPF Case Assigned',
-                message=f'You have been assigned to Values Reflective Formation (VPF) for case {report.case_id}. You will be notified when the session is scheduled.',
-                report=report
-            )
-            
-            messages.success(request, f'Evaluation completed. VPF case created for {report.reported_student.get_full_name()}. Notifications sent to reporter and student.')
-            return redirect('case_evaluation')
-        else:
-            # Non-VPF intervention - Redirect to counseling schedule page
-            if report.reported_student:
-                # Notify reporter
+                
+                # Notify the reporter
+                if report.reporter:
+                    Notification.objects.create(
+                        user=report.reporter,
+                        title='Case Evaluated - VPF Assigned',
+                        message=f'Case {report.case_id} has been evaluated. The student will undergo Values Reflective Formation (VPF) - {commission}.',
+                        report=report
+                    )
+                
+                # Notify the student
+                if report.reported_student:
+                    Notification.objects.create(
+                        user=report.reported_student,
+                        title='VPF Case Assigned',
+                        message=f'You have been assigned to Values Reflective Formation (VPF) for case {report.case_id}.',
+                        report=report
+                    )
+                
+                messages.success(request, f'✅ Evaluation completed. VPF case created for {report.reported_student.get_full_name()}.')
+            else:
+                # Non-VPF intervention
                 if report.reporter:
                     Notification.objects.create(
                         user=report.reporter,
@@ -2384,42 +2387,32 @@ def case_evaluation(request):
                         report=report
                     )
                 
-                # Notify the student
-                Notification.objects.create(
-                    user=report.reported_student,
-                    title='Counseling Session Pending',
-                    message=f'Your case {report.case_id} has been evaluated. You will be scheduled for a counseling session. Please wait for further notification.',
-                    report=report
-                )
+                if report.reported_student:
+                    Notification.objects.create(
+                        user=report.reported_student,
+                        title='Counseling Session Pending',
+                        message=f'Your case {report.case_id} has been evaluated. You will be scheduled for counseling.',
+                        report=report
+                    )
                 
-                messages.success(request, f'Evaluation completed for {report.reported_student.get_full_name()}. Please schedule the counseling session.')
-                # Redirect to counseling schedule page with evaluation ID
-                return redirect(f'/counselor-schedule/?evaluation_id={evaluation.id}')
-            else:
-                messages.error(request, 'Cannot schedule counseling: No student assigned to this case.')
-                return redirect('case_evaluation')
+                messages.success(request, f'✅ Evaluation completed for {report.reported_student.get_full_name()}.')
+            
+            return redirect('case_evaluation')
+            
+        except Exception as e:
+            messages.error(request, f'Error creating evaluation: {str(e)}')
+            return redirect('case_evaluation')
     
-    # Get cases ready for evaluation
+    # Get cases ready for evaluation (not yet evaluated)
     cases_for_evaluation = IncidentReport.objects.filter(
-        classification__severity='major',
-        status='classified',
-        evaluation__isnull=True
-    )
+        evaluation__isnull=True,
+        reported_student__isnull=False
+    ).exclude(
+        status__in=['closed', 'resolved']
+    ).order_by('-created_at')
     
-    # Check if a specific case is pre-selected
-    selected_case_id = request.GET.get('case_id')
-    selected_case = None
-    if selected_case_id:
-        try:
-            selected_case = cases_for_evaluation.get(id=selected_case_id)
-        except IncidentReport.DoesNotExist:
-            pass
-    
-    form = CaseEvaluationForm()
     return render(request, 'counselor/case_evaluation.html', {
         'cases': cases_for_evaluation,
-        'selected_case': selected_case,
-        'form': form
     })
 
 @login_required
