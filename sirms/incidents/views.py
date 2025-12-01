@@ -1505,23 +1505,33 @@ def behavior_concerns(request):
             
             elif action == 'update_status':
                 new_status = request.POST.get('status')
-                evaluation_action = request.POST.get('evaluation_action', '')
-                notes = request.POST.get('notes', '')
                 
-                if not notes or not evaluation_action:
-                    messages.error(request, 'Please provide evaluation action and notes.')
+                if not new_status:
+                    messages.error(request, 'Please select a status.')
+                    return redirect('behavior_concerns')
+                
+                # Check if case is already completed (locked)
+                if report.status == 'resolved':
+                    messages.error(request, 'This case is already completed and cannot be edited.')
                     return redirect('behavior_concerns')
                 
                 # Update report status
                 old_status = report.status
                 report.status = new_status
                 
-                # Add evaluation notes to classification with timestamp
+                # Status display names
+                status_names = {
+                    'classified': 'Pending',
+                    'under_review': 'Ongoing',
+                    'resolved': 'Completed'
+                }
+                
+                # Add status update to classification notes
                 if hasattr(report, 'classification'):
                     current_notes = report.classification.internal_notes or ''
                     timestamp = timezone.now().strftime('%Y-%m-%d %H:%M')
-                    status_display = report.get_status_display()
-                    updated_notes = f"{current_notes}\n\n[{timestamp}] DO Evaluation by {request.user.get_full_name()}\nAction: {evaluation_action}\nStatus: {status_display}\nNotes: {notes}".strip()
+                    status_display = status_names.get(new_status, report.get_status_display())
+                    updated_notes = f"{current_notes}\n\n[{timestamp}] Status Updated by {request.user.get_full_name()}\nNew Status: {status_display}".strip()
                     report.classification.internal_notes = updated_notes
                     report.classification.save()
                 
@@ -1531,36 +1541,49 @@ def behavior_concerns(request):
                 InternalNote.objects.create(
                     report=report,
                     author=request.user,
-                    note=f"DO Evaluation - {evaluation_action}: {notes}",
+                    note=f"Case status updated to: {status_names.get(new_status, new_status)}",
                     is_private=False
                 )
                 
-                # Create detailed notification message
-                action_messages = {
-                    'Intake Interview': 'The Discipline Office has scheduled an intake interview regarding your case. Please report to the DO office as instructed.',
-                    'Investigate': 'The Discipline Office is investigating your case. You may be called for questioning or clarification.',
-                    'Parent Conference': 'A parent conference has been scheduled regarding your case. Your parent/guardian will be contacted by the Discipline Office.'
-                }
-                action_msg = action_messages.get(evaluation_action, 'The Discipline Office is taking action on your case.')
-                
-                # Notify reporter about evaluation
-                Notification.objects.create(
-                    user=report.reporter,
-                    title=f'DO Evaluation - Case {report.case_id}',
-                    message=f'The Discipline Office has evaluated case {report.case_id}.\n\nAction Taken: {evaluation_action}\nStatus: {report.get_status_display()}\n\nNotes: {notes}',
-                    report=report
-                )
-                
-                # Notify student (violator) about evaluation
+                # Notify student (if exists)
                 if report.reported_student:
-                    Notification.objects.create(
-                        user=report.reported_student,
-                        title=f'Behavioral Concern Evaluation - Case {report.case_id}',
-                        message=f'The Discipline Office has evaluated your case {report.case_id}.\n\nAction: {evaluation_action}\n\n{action_msg}\n\nPlease check with the Discipline Office for further instructions.',
+                    status_messages = {
+                        'classified': 'Your case is pending review by the Discipline Office.',
+                        'under_review': 'Your case is currently being handled by the Discipline Office. You may be contacted for further information.',
+                        'resolved': 'Your case has been completed and resolved by the Discipline Office. No further action is required at this time.'
+                    }
+                    
                         report=report
                     )
                 
-                messages.success(request, f'Case {report.case_id} evaluated with action "{evaluation_action}". Student and reporter have been notified.')
+                # Notify adviser/teacher (if student has one)
+                if report.reported_student and report.reported_student.section:
+                    # Find the adviser for this student's section
+                    from .models import TeacherAssignment
+                    adviser_assignments = TeacherAssignment.objects.filter(
+                        section=report.reported_student.section,
+                        is_adviser=True
+                    ).select_related('teacher')
+                    
+                    for assignment in adviser_assignments:
+                        if assignment.teacher:
+                            Notification.objects.create(
+                                user=assignment.teacher,
+                                title=f'Student Case Update - {report.case_id}',
+                                message=f'Your advisee {report.reported_student.get_full_name()} has a case status update.\n\nCase: {report.case_id}\nNew Status: {status_names.get(new_status)}\n\n{status_messages.get(new_status, "")}',
+                                report=report
+                            )
+                
+                # Notify reporter about status change
+                if report.reporter:
+                    Notification.objects.create(
+                        user=report.reporter,
+                        title=f'Case Status Update - {report.case_id}',
+                        message=f'Case {report.case_id} status has been updated to: {status_names.get(new_status)}.\n\nThe Discipline Office is handling this case.',
+                        report=report
+                    )
+                
+                messages.success(request, f'Case {report.case_id} status updated to "{status_names.get(new_status)}". Student and adviser have been notified.')
         
         return redirect('behavior_concerns')
     

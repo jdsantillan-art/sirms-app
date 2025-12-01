@@ -78,11 +78,13 @@
                         </td>
                         <td class="px-3 py-2">
                             {% if report.status == 'classified' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">📋 Pending</span>
                             {% elif report.status == 'under_review' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">In Progress</span>
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">🔄 Ongoing</span>
                             {% elif report.status == 'resolved' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                <i class="fas fa-check-circle mr-1"></i>✅ Completed
+                            </span>
                             {% endif %}
                         </td>
                         <td class="px-3 py-2">
@@ -202,49 +204,24 @@
 
                 <div class="mb-4">
                     <label class="block text-sm font-bold text-gray-800 mb-2">
-                        <i class="fas fa-clipboard-check mr-1"></i>
-                        Evaluation Action: <span class="text-red-500">*</span>
-                    </label>
-                    <select name="evaluation_action" id="evaluationAction"
-                        class="w-full px-3 py-2 text-sm border-2 border-gray-300 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none"
-                        required>
-                        <option value="">Select Action</option>
-                        <option value="Intake Interview">📝 Intake Interview</option>
-                        <option value="Investigate">🔍 Investigate</option>
-                        <option value="Parent Conference">👨‍👩‍👦 Parent Conference</option>
-                    </select>
-                    <p class="text-xs text-gray-500 mt-1">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        Select the action being taken for this case
-                    </p>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-sm font-bold text-gray-800 mb-2">
                         <i class="fas fa-flag mr-1"></i>
-                        New Status: <span class="text-red-500">*</span>
+                        Case Status: <span class="text-red-500">*</span>
                     </label>
                     <select name="status" id="statusField"
-                        class="w-full px-3 py-2 text-sm border-2 border-gray-300 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none"
+                        class="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none font-semibold"
                         required>
                         <option value="">Select Status</option>
-                        <option value="classified">📋 Pending - Awaiting Action</option>
-                        <option value="under_review">🔄 In Progress - Being Handled</option>
-                        <option value="resolved">✅ Completed - Case Resolved</option>
+                        <option value="classified">📋 Pending</option>
+                        <option value="under_review">🔄 Ongoing</option>
+                        <option value="resolved">✅ Completed</option>
                     </select>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-sm font-bold text-gray-800 mb-2">
-                        <i class="fas fa-sticky-note mr-1"></i>
-                        Evaluation Notes: <span class="text-red-500">*</span>
-                    </label>
-                    <textarea name="notes" rows="4"
-                        class="w-full px-3 py-2 text-sm border-2 border-gray-300 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none"
-                        placeholder="Explain the evaluation action, findings, and any actions taken..." required></textarea>
-                    <p class="text-xs text-gray-500 mt-1">
+                    <p class="text-xs text-gray-500 mt-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        <strong>Note:</strong> Once marked as "Completed", the case will be locked and cannot be edited.
+                    </p>
+                    <p class="text-xs text-emerald-600 mt-1">
                         <i class="fas fa-bell mr-1"></i>
-                        Student (violator) and reporter will be automatically notified
+                        Student and their adviser will be notified of status updates.
                     </p>
                 </div>
 
@@ -281,6 +258,12 @@
 
     // Show update modal
     function showUpdateModal(reportId, caseId, currentStatus, studentName) {
+        // Check if case is already completed (locked)
+        if (currentStatus === 'resolved') {
+            alert('⚠️ This case is already completed and cannot be edited.\n\nCompleted cases are locked to maintain record integrity.');
+            return;
+        }
+        
         document.getElementById('modalReportId').value = reportId;
         document.querySelector('#updateModal h3').innerHTML = `<i class="fas fa-edit text-emerald-600 mr-2"></i>Evaluate Case - ${caseId}`;
 
