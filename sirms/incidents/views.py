@@ -1553,6 +1553,10 @@ def behavior_concerns(request):
                         'resolved': 'Your case has been completed and resolved by the Discipline Office. No further action is required at this time.'
                     }
                     
+                    Notification.objects.create(
+                        user=report.reported_student,
+                        title=f'Case Status Update - {report.case_id}',
+                        message=status_messages.get(new_status, 'Your case status has been updated.'),
                         report=report
                     )
                 

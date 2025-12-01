@@ -111,8 +111,10 @@
                                 <div class="flex items-center gap-2">
                                     <span>{{ report.reported_student.get_full_name }}</span>
                                     {% if report.is_repeat_offender %}
-                                    <span class="inline-flex items-center px-2 py-0.5 text-xs font-bold rounded-full bg-red-100 text-red-800 border border-red-300">
-                                        <i class="fas fa-exclamation-triangle mr-1"></i>REPEATED ({{ report.repeat_count }}x)
+                                    <span
+                                        class="inline-flex items-center px-2 py-0.5 text-xs font-bold rounded-full bg-red-100 text-red-800 border border-red-300">
+                                        <i class="fas fa-exclamation-triangle mr-1"></i>REPEATED ({{ report.repeat_count
+                                        }}x)
                                     </span>
                                     {% endif %}
                                 </div>
@@ -175,8 +177,8 @@
                             {% endif %}
                         </td>
                         <td class="px-3 py-2">
-                            <div class="text-sm text-gray-900">G{{ report.grade_level }} - {{
-                                report.section_name|truncatewords:2 }}</div>
+                            <div class="text-sm text-gray-900">G{{ report.grade_level }} - {{ report.section_name }}
+                            </div>
                         </td>
                         <td class="px-3 py-2">
                             {% if report.status == 'pending' %}
