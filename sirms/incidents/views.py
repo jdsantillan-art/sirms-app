@@ -859,6 +859,7 @@ def report_incident(request):
         form = IncidentReportForm()
         # Pre-fill reporter information
         form.fields['reporter_first_name'].initial = request.user.first_name
+        form.fields['reporter_middle_name'].initial = request.user.middle_name if hasattr(request.user, 'middle_name') else ''
         form.fields['reporter_last_name'].initial = request.user.last_name
     
     # Get context data for the template
