@@ -1397,6 +1397,26 @@ def behavior_concerns(request):
                 if scheduled_date.tzinfo is None:
                     scheduled_date = timezone.make_aware(scheduled_date)
                 
+                # Get student object
+                student = None
+                if student_id:
+                    student = get_object_or_404(CustomUser, id=student_id)
+                elif report.reported_student:
+                    student = report.reported_student
+                
+                # Create DOSchedule entry for sidebar display
+                do_schedule = DOSchedule.objects.create(
+                    report=report,
+                    discipline_officer=request.user,
+                    student=student,
+                    schedule_type=appointment_type,
+                    scheduled_date=scheduled_date,
+                    location=location if location else 'Discipline Office',
+                    purpose=f"Behavior concern follow-up for case {report.case_id}",
+                    notes=notes,
+                    status='scheduled'
+                )
+                
                 # Create internal note for the appointment
                 appointment_note = f"DO Appointment Scheduled\nType: {appointment_type}\nDate: {scheduled_date.strftime('%B %d, %Y at %I:%M %p')}\nLocation: {location if location else 'DO Office'}\nNotes: {notes if notes else 'N/A'}"
                 
@@ -1416,8 +1436,7 @@ def behavior_concerns(request):
                     report.classification.save()
                 
                 # Notify student
-                if student_id:
-                    student = get_object_or_404(CustomUser, id=student_id)
+                if student:
                     Notification.objects.create(
                         user=student,
                         title=f'DO Appointment Scheduled - Case {report.case_id}',
@@ -1425,7 +1444,7 @@ def behavior_concerns(request):
                         report=report
                     )
                 
-                messages.success(request, f'Appointment scheduled for {scheduled_date.strftime("%B %d, %Y at %I:%M %p")}. Student has been notified.')
+                messages.success(request, f'Appointment scheduled for {scheduled_date.strftime("%B %d, %Y at %I:%M %p")}. Student has been notified and added to DO Schedule.')
                 return redirect('behavior_concerns')
             
             elif action == 'update_status':
