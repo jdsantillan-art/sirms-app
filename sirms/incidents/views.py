@@ -802,7 +802,7 @@ def report_incident(request):
             # Try to find and assign the reported student from involved_students
             involved_students_text = form.cleaned_data['involved_students']
             if involved_students_text:
-                # Try to find a student by email or username in the involved students text
+                # Try to find a student by email, username, or name in the involved students text
                 # Split by common delimiters
                 import re
                 potential_identifiers = re.split(r'[,;\n]+', involved_students_text)
@@ -822,6 +822,29 @@ def report_incident(request):
                                 role='student',
                                 username__iexact=identifier
                             ).first()
+                        
+                        # If not found by username, try to match by full name
+                        if not student:
+                            # Split the identifier into potential first and last names
+                            name_parts = identifier.split()
+                            if len(name_parts) >= 2:
+                                first_name = name_parts[0]
+                                last_name = name_parts[-1]
+                                
+                                # Try exact match on first and last name
+                                student = CustomUser.objects.filter(
+                                    role='student',
+                                    first_name__iexact=first_name,
+                                    last_name__iexact=last_name
+                                ).first()
+                                
+                                # If still not found, try partial match
+                                if not student:
+                                    student = CustomUser.objects.filter(
+                                        role='student',
+                                        first_name__icontains=first_name,
+                                        last_name__icontains=last_name
+                                    ).first()
                         
                         # If found, assign as reported_student
                         if student:

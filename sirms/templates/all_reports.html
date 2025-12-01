@@ -28,8 +28,8 @@
         <div class="p-4 border-b">
             <div class="flex justify-between items-center mb-3">
                 <h2 class="text-lg font-bold text-gray-900">All Reports ({{ reports.count }})</h2>
-                <a href="{% url 'export_all_reports_excel' %}" 
-                   class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors text-sm">
+                <a href="{% url 'export_all_reports_excel' %}"
+                    class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors text-sm">
                     <i class="fas fa-file-excel mr-2"></i>
                     Export to Excel
                 </a>
@@ -39,8 +39,7 @@
             <div class="flex space-x-2">
                 <div class="flex-1">
                     <input type="text" id="searchInput" placeholder="🔍 Search by Report ID, Student Name..."
-                        class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
-                        onkeyup="filterReports()">
+                        class="w-full px-3 py-2 border border-gray-300 rounded text-sm" onkeyup="filterReports()">
                 </div>
                 <select id="filter-status" class="px-2 py-1 border border-gray-300 rounded text-sm"
                     onchange="filterReports()">
@@ -98,8 +97,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200" id="reports-table">
                     {% for report in reports %}
-                    <tr class="hover:bg-gray-50 report-row"
-                        data-status="{{ report.status }}"
+                    <tr class="hover:bg-gray-50 report-row" data-status="{{ report.status }}"
                         data-type="{% if report.incident_type %}{{ report.incident_type.severity }}{% endif %}"
                         data-grade="{{ report.grade_level }}"
                         data-reporter="{% if report.reporter %}{{ report.reporter.role }}{% endif %}"
@@ -111,34 +109,41 @@
                             <div class="text-sm font-medium text-gray-900">
                                 {% if report.reported_student %}
                                 {{ report.reported_student.get_full_name }}
+                                {% elif report.involved_students %}
+                                {{ report.involved_students|truncatewords:5 }}
                                 {% else %}
-                                <span class="text-gray-500">{{ report.involved_students|truncatewords:3|default:"Not specified" }}</span>
+                                <span class="text-gray-400 italic">Not specified</span>
                                 {% endif %}
                             </div>
                         </td>
                         <td class="px-3 py-2">
                             {% if report.reporter %}
-                                {% if report.reporter.role == 'student' %}
-                                <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                                    <i class="fas fa-user-graduate mr-1"></i>Student
-                                </span>
-                                {% elif report.reporter.role == 'teacher' %}
-                                <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
-                                    <i class="fas fa-chalkboard-teacher mr-1"></i>Teacher
-                                </span>
-                                {% elif report.reporter.role == 'do' %}
-                                <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">
-                                    <i class="fas fa-user-shield mr-1"></i>DO
-                                </span>
-                                {% elif report.reporter.role == 'counselor' %}
-                                <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-teal-100 text-teal-800">
-                                    <i class="fas fa-user-md mr-1"></i>Counselor
-                                </span>
-                                {% else %}
-                                <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
-                                    <i class="fas fa-user mr-1"></i>{{ report.reporter.role|title }}
-                                </span>
-                                {% endif %}
+                            {% if report.reporter.role == 'student' %}
+                            <span
+                                class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                <i class="fas fa-user-graduate mr-1"></i>Student
+                            </span>
+                            {% elif report.reporter.role == 'teacher' %}
+                            <span
+                                class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+                                <i class="fas fa-chalkboard-teacher mr-1"></i>Teacher
+                            </span>
+                            {% elif report.reporter.role == 'do' %}
+                            <span
+                                class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">
+                                <i class="fas fa-user-shield mr-1"></i>DO
+                            </span>
+                            {% elif report.reporter.role == 'counselor' %}
+                            <span
+                                class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-teal-100 text-teal-800">
+                                <i class="fas fa-user-md mr-1"></i>Counselor
+                            </span>
+                            {% else %}
+                            <span
+                                class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                                <i class="fas fa-user mr-1"></i>{{ report.reporter.role|title }}
+                            </span>
+                            {% endif %}
                             {% else %}
                             <span class="text-xs text-gray-400">-</span>
                             {% endif %}
@@ -152,33 +157,43 @@
                         </td>
                         <td class="px-3 py-2">
                             {% if report.incident_type %}
-                                {% if report.incident_type.severity == 'prohibited' %}
-                                <span class="text-xs px-1.5 py-0.5 bg-red-100 text-red-800 rounded font-semibold">PA</span>
-                                {% elif report.incident_type.severity == 'school_policy' %}
-                                <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded font-semibold">OSP</span>
-                                {% endif %}
+                            {% if report.incident_type.severity == 'prohibited' %}
+                            <span class="text-xs px-1.5 py-0.5 bg-red-100 text-red-800 rounded font-semibold">PA</span>
+                            {% elif report.incident_type.severity == 'school_policy' %}
+                            <span
+                                class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded font-semibold">OSP</span>
+                            {% endif %}
                             {% else %}
                             <span class="text-xs text-gray-400">-</span>
                             {% endif %}
                         </td>
                         <td class="px-3 py-2">
-                            <div class="text-sm text-gray-900">G{{ report.grade_level }} - {{ report.section_name|truncatewords:2 }}</div>
+                            <div class="text-sm text-gray-900">G{{ report.grade_level }} - {{
+                                report.section_name|truncatewords:2 }}</div>
                         </td>
                         <td class="px-3 py-2">
                             {% if report.status == 'pending' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                            <span
+                                class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
                             {% elif report.status == 'under_review' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">Under Review</span>
+                            <span
+                                class="px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">Under
+                                Review</span>
                             {% elif report.status == 'classified' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">Classified</span>
+                            <span
+                                class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">Classified</span>
                             {% elif report.status == 'evaluated' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Evaluated</span>
+                            <span
+                                class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Evaluated</span>
                             {% elif report.status == 'sanctioned' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Sanctioned</span>
+                            <span
+                                class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Sanctioned</span>
                             {% elif report.status == 'resolved' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Resolved</span>
+                            <span
+                                class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Resolved</span>
                             {% elif report.status == 'closed' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Closed</span>
+                            <span
+                                class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Closed</span>
                             {% endif %}
                         </td>
                         <td class="px-3 py-2">
@@ -204,33 +219,33 @@
 </div>
 
 <script>
-function filterReports() {
-    const searchValue = document.getElementById('searchInput').value.toLowerCase();
-    const statusFilter = document.getElementById('filter-status').value;
-    const typeFilter = document.getElementById('filter-type').value;
-    const gradeFilter = document.getElementById('filter-grade').value;
-    const reporterFilter = document.getElementById('filter-reporter').value;
-    const rows = document.querySelectorAll('.report-row');
-    
-    rows.forEach(row => {
-        const searchText = row.getAttribute('data-search');
-        const status = row.getAttribute('data-status');
-        const type = row.getAttribute('data-type');
-        const grade = row.getAttribute('data-grade');
-        const reporter = row.getAttribute('data-reporter');
-        
-        const searchMatch = !searchValue || searchText.includes(searchValue);
-        const statusMatch = !statusFilter || status === statusFilter;
-        const typeMatch = !typeFilter || type === typeFilter;
-        const gradeMatch = !gradeFilter || grade === gradeFilter;
-        const reporterMatch = !reporterFilter || reporter === reporterFilter;
-        
-        if (searchMatch && statusMatch && typeMatch && gradeMatch && reporterMatch) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
-    });
-}
+    function filterReports() {
+        const searchValue = document.getElementById('searchInput').value.toLowerCase();
+        const statusFilter = document.getElementById('filter-status').value;
+        const typeFilter = document.getElementById('filter-type').value;
+        const gradeFilter = document.getElementById('filter-grade').value;
+        const reporterFilter = document.getElementById('filter-reporter').value;
+        const rows = document.querySelectorAll('.report-row');
+
+        rows.forEach(row => {
+            const searchText = row.getAttribute('data-search');
+            const status = row.getAttribute('data-status');
+            const type = row.getAttribute('data-type');
+            const grade = row.getAttribute('data-grade');
+            const reporter = row.getAttribute('data-reporter');
+
+            const searchMatch = !searchValue || searchText.includes(searchValue);
+            const statusMatch = !statusFilter || status === statusFilter;
+            const typeMatch = !typeFilter || type === typeFilter;
+            const gradeMatch = !gradeFilter || grade === gradeFilter;
+            const reporterMatch = !reporterFilter || reporter === reporterFilter;
+
+            if (searchMatch && statusMatch && typeMatch && gradeMatch && reporterMatch) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
 </script>
 {% endblock %}
