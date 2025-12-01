@@ -87,6 +87,11 @@ def notify_adviser_of_counseling(report, scheduled_date, location, counselor_nam
 def home(request):
     return render(request, 'home.html')
 
+def health_check(request):
+    """Simple health check endpoint for Render"""
+    from django.http import JsonResponse
+    return JsonResponse({'status': 'ok', 'service': 'sirms'})
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)

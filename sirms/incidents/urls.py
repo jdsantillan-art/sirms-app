@@ -9,6 +9,7 @@ from . import do_schedule_views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('health/', views.health_check, name='health_check'),
     
     # Google OAuth URLs
     path('auth/google/', oauth_views.google_login, name='google_login'),
