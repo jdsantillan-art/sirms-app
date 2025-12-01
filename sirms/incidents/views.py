@@ -2346,24 +2346,34 @@ def case_evaluation(request):
             report.status = 'evaluated'
             report.save()
             
-            # If VPF selected, create VPF case
+            # If VPF selected, create VPF case for ESP Teacher to manage
             if intervention and ('VPF' in intervention or 'Values Reflective Formation' in intervention):
-                VPFCase.objects.create(
+                vpf_case = VPFCase.objects.create(
                     report=report,
                     student=report.reported_student,
                     assigned_by=request.user,
                     commission_level=commission,
                     intervention=intervention,
                     status='pending',
-                    notes=f"Commission: {commission}\nIntervention: {intervention}"
+                    notes=f"Commission: {commission}\nIntervention: {intervention}\nEvaluation Notes: {notes}"
                 )
                 
-                # Notify the reporter
+                # Notify ALL ESP Teachers (they will manage VPF)
+                esp_teachers = CustomUser.objects.filter(role='esp_teacher')
+                for esp_teacher in esp_teachers:
+                    Notification.objects.create(
+                        user=esp_teacher,
+                        title='New VPF Case Assigned',
+                        message=f'Case {report.case_id} has been assigned for VPF - {commission}. Student: {report.reported_student.get_full_name()}. Please schedule the VPF session.',
+                        report=report
+                    )
+                
+                # Notify the reporter (adviser/teacher)
                 if report.reporter:
                     Notification.objects.create(
                         user=report.reporter,
                         title='Case Evaluated - VPF Assigned',
-                        message=f'Case {report.case_id} has been evaluated. The student will undergo Values Reflective Formation (VPF) - {commission}.',
+                        message=f'Case {report.case_id} has been evaluated. The student will undergo Values Reflective Formation (VPF) - {commission}. ESP Teacher will schedule the session.',
                         report=report
                     )
                 
@@ -2372,30 +2382,46 @@ def case_evaluation(request):
                     Notification.objects.create(
                         user=report.reported_student,
                         title='VPF Case Assigned',
-                        message=f'You have been assigned to Values Reflective Formation (VPF) for case {report.case_id}.',
+                        message=f'You have been assigned to Values Reflective Formation (VPF) for case {report.case_id}. The ESP Teacher will schedule your session.',
                         report=report
                     )
                 
-                messages.success(request, f'✅ Evaluation completed. VPF case created for {report.reported_student.get_full_name()}.')
+                messages.success(request, f'✅ VPF case created for {report.reported_student.get_full_name()}. ESP Teachers have been notified to schedule the session.')
             else:
-                # Non-VPF intervention
+                # Non-VPF intervention - Create pending counseling schedule entry
+                # This will appear in Counseling Schedule sidebar for counselor to schedule
+                from datetime import datetime, timedelta
+                
+                # Create a placeholder counseling schedule (counselor will set actual date/time later)
+                counseling_schedule = CounselingSchedule.objects.create(
+                    evaluation=evaluation,
+                    counselor=request.user,
+                    student=report.reported_student,
+                    scheduled_date=datetime.now() + timedelta(days=7),  # Default 7 days from now
+                    location='Guidance Office',
+                    notes=f"Commission: {commission}\nIntervention: {intervention}\nStatus: {status}\n{notes}",
+                    status='scheduled'
+                )
+                
+                # Notify the adviser (reporter)
                 if report.reporter:
                     Notification.objects.create(
                         user=report.reporter,
-                        title='Case Evaluated',
-                        message=f'Case {report.case_id} has been evaluated. Intervention: {intervention}',
+                        title='Case Evaluated - Counseling Scheduled',
+                        message=f'Case {report.case_id} has been evaluated. Intervention: {intervention}. The student will be scheduled for counseling.',
                         report=report
                     )
                 
+                # Notify the student
                 if report.reported_student:
                     Notification.objects.create(
                         user=report.reported_student,
-                        title='Counseling Session Pending',
-                        message=f'Your case {report.case_id} has been evaluated. You will be scheduled for counseling.',
+                        title='Counseling Session Scheduled',
+                        message=f'Your case {report.case_id} has been evaluated. A counseling session will be scheduled. You will receive the schedule details soon.',
                         report=report
                     )
                 
-                messages.success(request, f'✅ Evaluation completed for {report.reported_student.get_full_name()}.')
+                messages.success(request, f'✅ Evaluation completed for {report.reported_student.get_full_name()}. Counseling schedule created. Please set the final schedule in Counseling Schedule.')
             
             return redirect('case_evaluation')
             
