@@ -130,7 +130,7 @@ def create_sample_users():
         )
         print("✅ Sample counselor created: username='counselor1', password='counselor123'")
     
-    # Sample DO
+    # Sample DO accounts
     if not CustomUser.objects.filter(username='do1').exists():
         CustomUser.objects.create_user(
             username='do1',
@@ -141,6 +141,18 @@ def create_sample_users():
             last_name='Garcia'
         )
         print("✅ Sample DO created: username='do1', password='do123'")
+    
+    # Additional DO account for easy access
+    if not CustomUser.objects.filter(username='do_admin').exists():
+        CustomUser.objects.create_user(
+            username='do_admin',
+            email='do.admin@school.edu',
+            password='do123',
+            role='do',
+            first_name='Discipline',
+            last_name='Officer'
+        )
+        print("✅ DO Admin created: username='do_admin', password='do123'")
 
 def main():
     print("\n🚀 Setting up initial data for SIRMS...\n")
@@ -169,6 +181,7 @@ def main():
     print("   Teacher:   username='teacher1'   password='teacher123'")
     print("   Counselor: username='counselor1' password='counselor123'")
     print("   DO:        username='do1'        password='do123'")
+    print("   DO Admin:  username='do_admin'   password='do123'")
     print("\n🌐 Access your app at: http://127.0.0.1:8000")
     print("🔧 Access admin panel at: http://127.0.0.1:8000/admin")
     print("\n")
