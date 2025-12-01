@@ -1,67 +1,92 @@
 {% extends 'base.html' %}
 
-{% block title %}Major Case Detail - {{ case.case_id }} - SIRMS{% endblock %}
+{% block title %}Case {{ case.case_id }} - SIRMS{% endblock %}
 
 {% block content %}
-<div class="max-w-6xl">
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-4xl font-bold text-green-700">🔍 Major Case Detail - {{ case.case_id }}</h1>
-        <a href="{% url 'major_case_review' %}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
-            ← Back to List
-        </a>
+<div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-3">
+        <h1 class="text-lg font-bold text-gray-900">📋 Case {{ case.case_id }}</h1>
+        <div class="flex space-x-2">
+            <a href="{% url 'major_case_review' %}" class="bg-gray-500 text-white px-3 py-1.5 rounded text-sm hover:bg-gray-600">
+                ← Back
+            </a>
+            <button onclick="window.print()" class="bg-blue-600 text-white px-3 py-1.5 rounded text-sm hover:bg-blue-700">
+                🖨️ Print
+            </button>
+        </div>
     </div>
     
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Compact Summary Cards -->
+    <div class="grid grid-cols-5 gap-2 mb-3">
+        <div class="bg-white border rounded p-2 text-center">
+            <div class="text-xs font-bold text-red-600">{{ case.incident_type.get_severity_display|default:"Major" }}</div>
+            <div class="text-xs text-gray-600">Priority</div>
+        </div>
+        <div class="bg-white border rounded p-2 text-center">
+            <div class="text-xs font-bold text-gray-900">{{ case.get_status_display }}</div>
+            <div class="text-xs text-gray-600">Status</div>
+        </div>
+        <div class="bg-white border rounded p-2 text-center">
+            <div class="text-xs font-bold text-blue-600">G{{ case.grade_level }}</div>
+            <div class="text-xs text-gray-600">Grade</div>
+        </div>
+        <div class="bg-white border rounded p-2 text-center">
+            <div class="text-xs font-bold text-green-600">{{ case.created_at|timesince }}</div>
+            <div class="text-xs text-gray-600">Age</div>
+        </div>
+        <div class="bg-white border rounded p-2 text-center">
+            <div class="text-xs font-bold text-purple-600">{{ case.reporter.get_role_display }}</div>
+            <div class="text-xs text-gray-600">Reporter</div>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <!-- Main Case Information -->
-        <div class="lg:col-span-2">
-            <div class="card mb-6">
-                <div class="flex justify-between items-start mb-4">
+        <div>
+            <div class="bg-white rounded-lg shadow-sm border p-3 mb-2">
+                <div class="flex justify-between items-start mb-2">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-800">Case {{ case.case_id }}</h2>
-                        <p class="text-lg text-gray-600">{{ case.incident_type.name }}</p>
-                        <p class="text-sm text-gray-500">Reported on {{ case.created_at|date:"M d, Y H:i" }}</p>
+                        <h2 class="text-sm font-bold text-gray-900">{{ case.incident_type.name }}</h2>
+                        <p class="text-xs text-gray-500">{{ case.incident_date|date:"M d, Y" }} at {{ case.incident_time|time:"g:i A" }}</p>
                     </div>
-                    <span class="px-3 py-1 rounded text-sm bg-red-100 text-red-800 font-semibold">
-                        Major Case
-                    </span>
+                    <span class="px-2 py-0.5 rounded text-xs bg-red-100 text-red-800 font-semibold">Major</span>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="grid grid-cols-2 gap-2 text-xs mb-2">
                     <div>
-                        <h4 class="font-bold text-gray-700">Student Information:</h4>
+                        <span class="font-semibold text-gray-700">Student:</span>
                         <p class="text-gray-900">{{ case.reported_student.get_full_name }}</p>
-                        <p class="text-sm text-gray-500">Grade {{ case.grade_level }} - {{ case.section_name }}</p>
-                        <p class="text-sm text-gray-500">Student ID: {{ case.reported_student.username }}</p>
+                        <p class="text-gray-500">{{ case.reported_student.username }}</p>
                     </div>
                     <div>
-                        <h4 class="font-bold text-gray-700">Incident Details:</h4>
-                        <p class="text-gray-900">{{ case.incident_date|date:"M d, Y" }}</p>
-                        <p class="text-sm text-gray-500">{{ case.incident_time|time:"H:i" }}</p>
-                        <p class="text-sm text-gray-500">Reported by: {{ case.reporter.get_full_name }}</p>
+                        <span class="font-semibold text-gray-700">Reporter:</span>
+                        <p class="text-gray-900">{{ case.reporter.get_full_name }}</p>
+                        <p class="text-gray-500">{{ case.reporter.get_role_display }}</p>
                     </div>
                 </div>
                 
-                <div class="mb-4">
-                    <h4 class="font-bold text-gray-700 mb-2">Incident Description:</h4>
-                    <div class="bg-gray-50 p-3 rounded">
-                        <p class="text-gray-700">{{ case.description|default:"No description provided" }}</p>
+                {% if case.description %}
+                <div class="mb-2">
+                    <span class="text-xs font-semibold text-gray-700">Description:</span>
+                    <div class="bg-gray-50 p-2 rounded text-xs mt-1">
+                        <p class="text-gray-700">{{ case.description }}</p>
                     </div>
                 </div>
+                {% endif %}
                 
                 {% if case.involved_students %}
-                <div class="mb-4">
-                    <h4 class="font-bold text-gray-700 mb-2">Involved Students:</h4>
-                    <div class="bg-blue-50 p-3 rounded">
+                <div class="mb-2">
+                    <span class="text-xs font-semibold text-gray-700">Involved Students:</span>
+                    <div class="bg-blue-50 p-2 rounded text-xs mt-1">
                         <p class="text-gray-700">{{ case.involved_students }}</p>
                     </div>
                 </div>
                 {% endif %}
                 
                 {% if case.evidence %}
-                <div class="mb-4">
-                    <h4 class="font-bold text-gray-700 mb-2">Evidence:</h4>
-                    <a href="{{ case.evidence.url }}" target="_blank" class="inline-flex items-center text-blue-600 hover:underline">
-                        📎 View Evidence File
+                <div>
+                    <a href="{{ case.evidence.url }}" target="_blank" class="inline-flex items-center text-xs text-blue-600 hover:underline">
+                        📎 View Evidence
                     </a>
                 </div>
                 {% endif %}
@@ -69,37 +94,32 @@
             
             <!-- DO Classification -->
             {% if case.classification %}
-            <div class="card mb-6">
-                <h3 class="text-xl font-bold text-green-700 mb-4">DO Classification</h3>
-                <div class="bg-yellow-50 p-4 rounded">
-                    <div class="flex justify-between items-start mb-2">
-                        <h4 class="font-bold text-gray-700">Classification Notes:</h4>
-                        <span class="px-2 py-1 text-xs rounded bg-red-100 text-red-800">
-                            {{ case.classification.get_severity_display }}
-                        </span>
-                    </div>
-                    <p class="text-gray-700 mb-2">{{ case.classification.internal_notes|default:"No classification notes" }}</p>
-                    <p class="text-sm text-gray-500">
-                        Classified by: {{ case.classification.classified_by.get_full_name }} 
-                        on {{ case.classification.classified_at|date:"M d, Y H:i" }}
+            <div class="bg-white rounded-lg shadow-sm border p-3 mb-2">
+                <h3 class="text-sm font-bold text-gray-900 mb-2">🏷️ Classification</h3>
+                <div class="bg-yellow-50 p-2 rounded text-xs">
+                    <p class="text-gray-700 mb-1">{{ case.classification.internal_notes|default:"No notes" }}</p>
+                    <p class="text-gray-500">
+                        By: {{ case.classification.classified_by.get_full_name }} | {{ case.classification.classified_at|date:"M d, Y" }}
                     </p>
                 </div>
             </div>
             {% endif %}
-            
-            <!-- Student History -->
-            <div class="card">
-                <h3 class="text-xl font-bold text-green-700 mb-4">Student Violation History</h3>
+        </div>
+        
+        <!-- Student History & Status -->
+        <div>
+            <div class="bg-white rounded-lg shadow-sm border p-3 mb-2">
+                <h3 class="text-sm font-bold text-gray-900 mb-2">📊 Student History</h3>
                 {% if student_history %}
-                    <div class="space-y-3 max-h-64 overflow-y-auto">
+                    <div class="space-y-2 max-h-48 overflow-y-auto">
                         {% for violation in student_history %}
-                        <div class="border border-gray-200 rounded p-3 {% if violation.severity == 'major' %}bg-red-50{% else %}bg-yellow-50{% endif %}">
+                        <div class="border rounded p-2 {% if violation.severity == 'major' %}bg-red-50{% else %}bg-yellow-50{% endif %}">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <h5 class="font-semibold">{{ violation.violation_type.name }}</h5>
-                                    <p class="text-sm text-gray-600">{{ violation.date_occurred|date:"M d, Y" }}</p>
+                                    <h5 class="text-xs font-semibold">{{ violation.violation_type.name }}</h5>
+                                    <p class="text-xs text-gray-600">{{ violation.date_occurred|date:"M d, Y" }}</p>
                                 </div>
-                                <span class="px-2 py-1 text-xs rounded {% if violation.severity == 'major' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                                <span class="px-1.5 py-0.5 text-xs rounded {% if violation.severity == 'major' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
                                     {{ violation.get_severity_display }}
                                 </span>
                             </div>
@@ -107,78 +127,40 @@
                         {% endfor %}
                     </div>
                     {% if student_history.count > 1 %}
-                    <div class="mt-3 p-3 bg-orange-50 border border-orange-200 rounded">
-                        <p class="text-orange-800 font-semibold">⚠️ Repeat Offender</p>
-                        <p class="text-orange-700 text-sm">This student has {{ student_history.count }} previous violations.</p>
+                    <div class="mt-2 p-2 bg-orange-50 border border-orange-200 rounded">
+                        <p class="text-xs text-orange-800 font-semibold">⚠️ Repeat Offender ({{ student_history.count }} violations)</p>
                     </div>
                     {% endif %}
                 {% else %}
-                    <div class="text-center py-4">
-                        <p class="text-gray-500">No previous violations found.</p>
-                        <p class="text-sm text-gray-400">This is the student's first recorded incident.</p>
+                    <div class="text-center py-3">
+                        <p class="text-xs text-gray-500">No previous violations</p>
                     </div>
                 {% endif %}
             </div>
-        </div>
-        
-        <!-- Actions Sidebar -->
-        <div class="lg:col-span-1">
-            <div class="card sticky top-4">
-                <h3 class="text-xl font-bold text-green-700 mb-4">Actions</h3>
-                
-                <div class="space-y-3">
-                    <a href="{% url 'case_evaluation' %}?case_id={{ case.id }}" class="btn-primary w-full text-center block">
-                        📋 Evaluate Case
-                    </a>
-                    
-                    <a href="{% url 'counseling_management' %}?student_id={{ case.reported_student.id }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full text-center block">
-                        🗣️ Schedule Counseling
-                    </a>
-                    
-                    <a href="{% url 'report_detail' case.case_id %}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 w-full text-center block">
-                        📄 Full Report Details
-                    </a>
-                    
-                    <button onclick="printCase()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 w-full">
-                        🖨️ Print Case
-                    </button>
-                </div>
-                
-                <!-- Case Status -->
-                <div class="mt-6 p-3 bg-gray-50 rounded">
-                    <h4 class="font-bold text-gray-700 mb-2">Case Status</h4>
-                    <div class="space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-600">Current Status:</span>
-                            <span class="text-sm font-semibold text-gray-800">{{ case.get_status_display }}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-600">Priority:</span>
-                            <span class="text-sm font-semibold text-red-600">High</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-600">Days Open:</span>
-                            <span class="text-sm font-semibold text-gray-800">{{ days_open }}</span>
-                        </div>
+            
+            <!-- Case Status -->
+            <div class="bg-white rounded-lg shadow-sm border p-3">
+                <h4 class="text-sm font-bold text-gray-900 mb-2">📋 Case Info</h4>
+                <div class="space-y-1 text-xs">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Status:</span>
+                        <span class="font-semibold">{{ case.get_status_display }}</span>
                     </div>
-                </div>
-                
-                <!-- Quick Stats -->
-                <div class="mt-4 p-3 bg-blue-50 rounded">
-                    <h4 class="font-bold text-gray-700 mb-2">Quick Stats</h4>
-                    <div class="space-y-1">
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-600">Student Grade:</span>
-                            <span class="text-sm font-semibold">{{ case.grade_level }}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-600">Incident Type:</span>
-                            <span class="text-sm font-semibold">{{ case.incident_type.get_severity_display }}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-600">Reporter:</span>
-                            <span class="text-sm font-semibold">{{ case.reporter.get_role_display }}</span>
-                        </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Priority:</span>
+                        <span class="font-semibold text-red-600">High</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Days Open:</span>
+                        <span class="font-semibold">{{ days_open|default:"N/A" }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Grade/Section:</span>
+                        <span class="font-semibold">G{{ case.grade_level }} - {{ case.section_name }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Incident Type:</span>
+                        <span class="font-semibold">{{ case.incident_type.get_severity_display|default:"Major" }}</span>
                     </div>
                 </div>
             </div>
@@ -186,15 +168,8 @@
     </div>
 </div>
 
-<script>
-function printCase() {
-    window.print();
-}
-</script>
-
 <style>
 @media print {
-    .sticky { position: static !important; }
     .no-print { display: none !important; }
 }
 </style>
