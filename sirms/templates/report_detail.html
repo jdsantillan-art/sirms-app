@@ -73,7 +73,14 @@
                 <div class="mb-1">
                     <span class="text-xs font-semibold text-gray-700">Involved Students:</span>
                     <div class="bg-blue-50 p-1.5 rounded text-xs">
-                        <p class="text-gray-700">{{ report.involved_students }}</p>
+                        <div class="flex items-center justify-between">
+                            <p class="text-gray-700">{{ report.involved_students }}</p>
+                            {% if is_repeat_offender %}
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800 border border-red-300">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>REPEATED OFFENDER ({{ repeat_count }}x previous)
+                            </span>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
                 {% endif %}

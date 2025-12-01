@@ -925,8 +925,30 @@ def all_reports(request):
     if severity_filter:
         reports = reports.filter(classification__severity=severity_filter)
     
+    # Add repeat offender detection for each report
+    reports_with_repeat_info = []
+    for report in reports:
+        # Count previous violations for this student
+        repeat_count = 0
+        is_repeat_offender = False
+        
+        if report.reported_student:
+            # Count all previous reports for this student (excluding current report)
+            repeat_count = IncidentReport.objects.filter(
+                reported_student=report.reported_student,
+                created_at__lt=report.created_at
+            ).count()
+            
+            # Mark as repeat offender if they have 1 or more previous violations
+            is_repeat_offender = repeat_count > 0
+        
+        # Add repeat info to report object
+        report.repeat_count = repeat_count
+        report.is_repeat_offender = is_repeat_offender
+        reports_with_repeat_info.append(report)
+    
     return render(request, 'all_reports.html', {
-        'reports': reports,
+        'reports': reports_with_repeat_info,
         'pending_count': pending_count,
         'classified_count': classified_count,
         'resolved_count': resolved_count,
@@ -1000,6 +1022,23 @@ def report_detail(request, case_id):
     
     if request.user.role == 'do':
         context['classification_form'] = ClassificationForm()
+    
+    # Add repeat offender detection
+    repeat_count = 0
+    is_repeat_offender = False
+    
+    if report.reported_student:
+        # Count all previous reports for this student (excluding current report)
+        repeat_count = IncidentReport.objects.filter(
+            reported_student=report.reported_student,
+            created_at__lt=report.created_at
+        ).count()
+        
+        # Mark as repeat offender if they have 1 or more previous violations
+        is_repeat_offender = repeat_count > 0
+    
+    context['repeat_count'] = repeat_count
+    context['is_repeat_offender'] = is_repeat_offender
     
     return render(request, 'report_detail.html', context)
 
