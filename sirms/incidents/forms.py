@@ -41,9 +41,19 @@ class CustomUserCreationForm(NoNAValidationMixin, UserCreationForm):
         help_text='Select your role. Note: Counselor and Discipline Officer accounts are created by administrators.'
     )
     
+    middle_name = forms.CharField(
+        max_length=150,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'w-full pl-8 pr-3 py-2 text-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all outline-none',
+            'placeholder': 'Middle name (optional)'
+        }),
+        help_text='Optional: Enter your middle name'
+    )
+    
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'first_name', 'last_name', 'role')
+        fields = ('username', 'email', 'first_name', 'middle_name', 'last_name', 'role')
     
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -56,6 +66,12 @@ class CustomUserCreationForm(NoNAValidationMixin, UserCreationForm):
         if not first_name or not first_name.strip():
             raise ValidationError('First name is required.')
         return first_name.title()
+    
+    def clean_middle_name(self):
+        middle_name = self.cleaned_data.get('middle_name')
+        if middle_name and middle_name.strip():
+            return middle_name.title()
+        return ''
     
     def clean_last_name(self):
         last_name = self.cleaned_data.get('last_name')

@@ -12,20 +12,29 @@ class CustomUser(AbstractUser):
     ]
     
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    middle_name = models.CharField(max_length=150, blank=True, null=True, help_text="Optional middle name")
     employee_id = models.CharField(max_length=50, unique=True, null=True, blank=True)
     grade_level = models.CharField(max_length=10, null=True, blank=True)
     section = models.CharField(max_length=50, null=True, blank=True)
+    
+    def get_full_name_with_middle(self):
+        """Return full name including middle name if available"""
+        if self.middle_name:
+            return f"{self.first_name} {self.middle_name} {self.last_name}"
+        return self.get_full_name()
     
     def save(self, *args, **kwargs):
         """Auto-capitalize names before saving"""
         if self.first_name:
             self.first_name = self.first_name.title()
+        if self.middle_name:
+            self.middle_name = self.middle_name.title()
         if self.last_name:
             self.last_name = self.last_name.title()
         super().save(*args, **kwargs)
     
     def __str__(self):
-        return f"{self.get_full_name()} ({self.get_role_display()})"
+        return f"{self.get_full_name_with_middle()} ({self.get_role_display()})"
 
 
 class Curriculum(models.Model):
