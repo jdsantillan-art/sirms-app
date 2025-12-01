@@ -802,6 +802,18 @@ function createDashboardCharts() {
         });
         
         // Prohibited Acts vs Other School Policies - PIE CHART
+        let violationTypeData = [];
+        try {
+            const rawViolationData = '{{ violation_type_data|safe }}';
+            violationTypeData = JSON.parse(rawViolationData || '[]');
+        } catch(e) {
+            console.error('Error parsing violation type data:', e);
+            violationTypeData = [
+                {name: 'Prohibited Acts', value: 0},
+                {name: 'Other School Policies', value: 0}
+            ];
+        }
+        
         monthChartInstance = new Chart(document.getElementById('monthChart'), {
             type: 'pie',
             data: {
