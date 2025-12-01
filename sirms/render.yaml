@@ -3,7 +3,8 @@ services:
     name: sirms
     env: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn sirms_project.wsgi:application"
+    startCommand: "gunicorn sirms_project.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --graceful-timeout 120"
+    healthCheckPath: /
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0

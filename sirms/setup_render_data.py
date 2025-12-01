@@ -18,11 +18,17 @@ def setup_all_data():
     print("🚀 SETTING UP RENDER DATABASE")
     print("="*80)
     
-    # Check if data already exists
+    # Quick check if data already exists
     existing_violations = IncidentType.objects.count()
-    if existing_violations >= 47:
-        print(f"\n✅ Data already loaded ({existing_violations} violations found)")
-        print("   Skipping data load...")
+    existing_teachers = TeacherAssignment.objects.count()
+    existing_users = CustomUser.objects.count()
+    
+    if existing_violations >= 40 and existing_teachers >= 30 and existing_users >= 40:
+        print(f"\n✅ Data already loaded:")
+        print(f"   - {existing_violations} violations")
+        print(f"   - {existing_teachers} teacher assignments")
+        print(f"   - {existing_users} users")
+        print("   Skipping data load to speed up deployment...")
         return
     
     # Import and run setup_initial_data
