@@ -78,6 +78,29 @@ class CustomUserCreationForm(NoNAValidationMixin, UserCreationForm):
         if not last_name or not last_name.strip():
             raise ValidationError('Last name is required.')
         return last_name.title()
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        email = self.cleaned_data.get('email', '').lower()
+        
+        # Automatic role assignment based on email domain
+        if email.endswith('.dmlmhsteacher@gmail.com'):
+            # Teacher email format: lastname(firstletterfirstname,middleinitial).dmlmhsteacher@gmail.com
+            user.role = 'teacher'
+        elif email.endswith('.espteacher@gmail.com'):
+            # ESP Teacher email format: lastname.espteacher@gmail.com
+            user.role = 'esp_teacher'
+        elif email == 'dmlmhs.guidance@gmail.com':
+            # Guidance Counselor
+            user.role = 'counselor'
+        elif email == 'dmlmhs.do@gmail.com':
+            # Discipline Officer
+            user.role = 'do'
+        # Otherwise, keep the role selected by the user
+        
+        if commit:
+            user.save()
+        return user
 
 class CustomUserChangeForm(forms.ModelForm):
     class Meta:
