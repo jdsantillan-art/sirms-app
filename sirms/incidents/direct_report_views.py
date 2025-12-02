@@ -8,9 +8,10 @@ from django.contrib import messages
 from django.utils import timezone
 from .models import (
     IncidentReport, CustomUser, Notification, IncidentType,
-    TeacherAssignment, Curriculum
+    TeacherAssignment, Curriculum, InvolvedParty
 )
 from .forms import IncidentReportForm
+from .notification_utils import send_smart_notifications
 
 
 @login_required
@@ -59,6 +60,41 @@ def direct_report(request):
             
             report.evidence = form.cleaned_data['evidence']
             
+            # NEW: Handle proper process fields
+            report.reporter_is_victim = request.POST.get('reporter_is_victim') == 'on'
+            report.is_confidential = request.POST.get('is_confidential') == 'on'
+            
+            # Save the report first to get an ID
+            report.save()
+            
+            # NEW: Create InvolvedParty record
+            party_type = request.POST.get('party_type', 'student')
+            
+            if party_type == 'teacher':
+                # Teacher incident
+                teacher_name_input = request.POST.get('teacher_name', '')
+                department = request.POST.get('department', '')
+                
+                InvolvedParty.objects.create(
+                    report=report,
+                    party_type='teacher',
+                    teacher_name=teacher_name_input,
+                    department=department
+                )
+                
+                # Mark as confidential for teacher incidents
+                report.is_confidential = True
+                report.save()
+            else:
+                # Student incident
+                InvolvedParty.objects.create(
+                    report=report,
+                    party_type='student',
+                    student_name=form.cleaned_data['involved_students'],
+                    grade_level=form.cleaned_data['grade_level'],
+                    section=form.cleaned_data['section_name']
+                )
+            
             # Try to find and assign the reported student from involved_students
             involved_students_text = form.cleaned_data['involved_students']
             if involved_students_text:
@@ -94,42 +130,16 @@ def direct_report(request):
             
             report.save()
             
-            # Create notifications based on who created the report
-            if request.user.role == 'do':
-                # Notify the DO themselves (confirmation)
-                Notification.objects.create(
-                    user=request.user,
-                    title='Direct Report Recorded',
-                    message=f'Direct report {report.case_id} has been recorded. You can now proceed with fact-checking and classification.',
-                    report=report
-                )
-            elif request.user.role == 'counselor':
-                # Notify all DOs about the direct report from counselor
-                do_users = CustomUser.objects.filter(role='do')
-                for do_user in do_users:
-                    Notification.objects.create(
-                        user=do_user,
-                        title='Direct Report from Guidance',
-                        message=f'Guidance Counselor {request.user.get_full_name()} recorded direct report {report.case_id}.',
-                        report=report
-                    )
-                
-                # Notify the counselor themselves (confirmation)
-                Notification.objects.create(
-                    user=request.user,
-                    title='Direct Report Recorded',
-                    message=f'Direct report {report.case_id} has been recorded and is under review.',
-                    report=report
-                )
+            # NEW: Use smart notification system
+            send_smart_notifications(report, party_type)
             
-            # Notify the reported student if assigned
-            if report.reported_student:
-                Notification.objects.create(
-                    user=report.reported_student,
-                    title='Incident Report Filed',
-                    message=f'An incident report {report.case_id} has been filed regarding you. Please check your dashboard for details.',
-                    report=report
-                )
+            # Create confirmation notification for the encoder
+            Notification.objects.create(
+                user=request.user,
+                title='Direct Report Recorded',
+                message=f'Direct report {report.case_id} has been recorded successfully. Notifications sent to relevant parties.',
+                report=report
+            )
             
             messages.success(request, f'Direct report {report.case_id} recorded successfully')
             return redirect('all_reports')
