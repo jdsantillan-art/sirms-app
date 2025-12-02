@@ -272,9 +272,6 @@ class Notification(models.Model):
     
     # Email notification tracking
     email_sent = models.BooleanField(default=False)
-    email_sent_at = models.DateTimeField(null=True, blank=True
-    )
-    email_sent = models.BooleanField(default=False)
     email_sent_at = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
