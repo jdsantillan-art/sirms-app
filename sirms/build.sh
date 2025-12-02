@@ -11,8 +11,8 @@ python manage.py collectstatic --no-input
 echo "🗄️  Running migrations..."
 python manage.py migrate
 
-echo "📊 Loading initial data..."
-# Load data quickly, skip if already exists
-python setup_render_data.py 2>&1 | head -n 50 || echo "⚠️  Data loading skipped or had issues"
+echo "📊 Loading initial data (if needed)..."
+# Run data loading in background to avoid timeout
+timeout 30 python setup_render_data.py 2>&1 | head -n 20 || echo "⚠️  Data loading skipped or timed out (this is OK if data exists)"
 
 echo "✅ Build completed successfully!"
