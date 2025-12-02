@@ -961,10 +961,12 @@ def all_reports(request):
         'classification', 'incident_type', 'reported_student'
     ).prefetch_related('involved_parties').order_by('-incident_date', '-incident_time')
     
-    # Calculate statistics
-    pending_count = reports.filter(status='pending').count()
-    classified_count = reports.filter(status='classified').count()
-    resolved_count = reports.filter(status__in=['resolved', 'closed']).count()
+    # Calculate statistics (before filtering)
+    all_reports = IncidentReport.objects.all()
+    pending_count = all_reports.filter(status='pending').count()
+    under_review_count = all_reports.filter(status='under_review').count()
+    classified_count = all_reports.filter(status='classified').count()
+    resolved_count = all_reports.filter(status__in=['resolved', 'closed']).count()
     
     # Filter by status
     status_filter = request.GET.get('status')
@@ -1001,6 +1003,7 @@ def all_reports(request):
     return render(request, 'all_reports.html', {
         'reports': reports_with_repeat_info,
         'pending_count': pending_count,
+        'under_review_count': under_review_count,
         'classified_count': classified_count,
         'resolved_count': resolved_count,
     })

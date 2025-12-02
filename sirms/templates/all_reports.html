@@ -4,24 +4,57 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto">
-    <!-- Compact Statistics -->
-    <div class="grid grid-cols-4 gap-3 mb-4">
-        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+    <!-- Clickable Statistics Cards -->
+    <div class="grid grid-cols-5 gap-3 mb-4">
+        <!-- Total Reports -->
+        <a href="{% url 'all_reports' %}" 
+           class="bg-white rounded-lg shadow-sm border p-3 text-center hover:shadow-md hover:border-blue-400 transition-all cursor-pointer transform hover:-translate-y-0.5">
             <div class="text-xl font-bold text-blue-600">{{ reports.count }}</div>
             <div class="text-gray-600 text-xs">Total Reports</div>
-        </div>
-        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+            <div class="text-xs text-blue-500 mt-1">
+                <i class="fas fa-mouse-pointer mr-1"></i>Click to view all
+            </div>
+        </a>
+        
+        <!-- Pending -->
+        <a href="{% url 'all_reports' %}?status=pending" 
+           class="bg-white rounded-lg shadow-sm border p-3 text-center hover:shadow-md hover:border-yellow-400 transition-all cursor-pointer transform hover:-translate-y-0.5">
             <div class="text-xl font-bold text-yellow-600">{{ pending_count }}</div>
             <div class="text-gray-600 text-xs">Pending</div>
-        </div>
-        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+            <div class="text-xs text-yellow-500 mt-1">
+                <i class="fas fa-filter mr-1"></i>Filter pending
+            </div>
+        </a>
+        
+        <!-- Under Review (Ongoing) -->
+        <a href="{% url 'all_reports' %}?status=under_review" 
+           class="bg-white rounded-lg shadow-sm border p-3 text-center hover:shadow-md hover:border-blue-400 transition-all cursor-pointer transform hover:-translate-y-0.5">
+            <div class="text-xl font-bold text-blue-600">{{ under_review_count }}</div>
+            <div class="text-gray-600 text-xs">Ongoing</div>
+            <div class="text-xs text-blue-500 mt-1">
+                <i class="fas fa-filter mr-1"></i>Filter ongoing
+            </div>
+        </a>
+        
+        <!-- Classified -->
+        <a href="{% url 'all_reports' %}?status=classified" 
+           class="bg-white rounded-lg shadow-sm border p-3 text-center hover:shadow-md hover:border-purple-400 transition-all cursor-pointer transform hover:-translate-y-0.5">
             <div class="text-xl font-bold text-purple-600">{{ classified_count }}</div>
             <div class="text-gray-600 text-xs">Classified</div>
-        </div>
-        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+            <div class="text-xs text-purple-500 mt-1">
+                <i class="fas fa-filter mr-1"></i>Filter classified
+            </div>
+        </a>
+        
+        <!-- Resolved -->
+        <a href="{% url 'all_reports' %}?status=resolved" 
+           class="bg-white rounded-lg shadow-sm border p-3 text-center hover:shadow-md hover:border-green-400 transition-all cursor-pointer transform hover:-translate-y-0.5">
             <div class="text-xl font-bold text-green-600">{{ resolved_count }}</div>
             <div class="text-gray-600 text-xs">Resolved</div>
-        </div>
+            <div class="text-xs text-green-500 mt-1">
+                <i class="fas fa-filter mr-1"></i>Filter resolved
+            </div>
+        </a>
     </div>
 
     <div class="bg-white rounded-lg shadow-sm border">
