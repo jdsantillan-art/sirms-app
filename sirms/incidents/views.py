@@ -12,8 +12,10 @@ from .models import (
     CustomUser, IncidentReport, Classification, CounselingSession,
     Notification, IncidentType, Section, TeacherAssignment,
     Curriculum, Track, Grade, ViolationHistory, CaseEvaluation,
-    InternalNote, SystemBackup, ReportAnalytics, LegalReference, CounselingSchedule
+    InternalNote, SystemBackup, ReportAnalytics, LegalReference, CounselingSchedule,
+    InvolvedParty
 )
+from .notification_utils import send_smart_notifications
 from .forms import (
     CustomUserCreationForm, IncidentReportForm, ClassificationForm,
     CounselingSessionForm, CaseEvaluationForm,
@@ -853,23 +855,70 @@ def report_incident(request):
             
             report.save()
             
-            # Create notification for all Discipline Officers
-            do_users = CustomUser.objects.filter(role='do')
-            for do_user in do_users:
+            # NEW: Proper Process System - Handle involved parties
+            reporter_is_victim = request.POST.get('reporter_is_victim') == 'on'
+            is_confidential = request.POST.get('is_confidential') == 'on'
+            party_type = request.POST.get('party_type')
+            
+            # Update report with new fields
+            report.reporter_is_victim = reporter_is_victim
+            report.is_confidential = is_confidential
+            report.save()
+            
+            # Create involved party based on type
+            if party_type == 'student' and report.reported_student:
+                involved_party = InvolvedParty.objects.create(
+                    party_type='student',
+                    student=report.reported_student,
+                )
+                report.involved_parties.add(involved_party)
+                
+            elif party_type == 'teacher':
+                teacher_name = request.POST.get('teacher_name')
+                department = request.POST.get('department', '')
+                
+                if teacher_name:
+                    involved_party = InvolvedParty.objects.create(
+                        party_type='teacher',
+                        name_if_unknown=teacher_name,
+                        department=department,
+                    )
+                    report.involved_parties.add(involved_party)
+            
+            # If reporter is victim, add them as involved party
+            if reporter_is_victim and request.user.role == 'student':
+                victim_party = InvolvedParty.objects.create(
+                    party_type='student',
+                    student=request.user,
+                    is_confirmed=True,
+                    confirmed_by=request.user,
+                    confirmed_at=timezone.now(),
+                )
+                report.involved_parties.add(victim_party)
+            
+            # NEW: Send smart notifications instead of manual ones
+            try:
+                send_smart_notifications(report, 'report_submitted')
+            except Exception as e:
+                # Fallback to old notification system if smart notifications fail
+                print(f"Smart notification error: {e}")
+                # Create notification for all Discipline Officers
+                do_users = CustomUser.objects.filter(role='do')
+                for do_user in do_users:
+                    Notification.objects.create(
+                        user=do_user,
+                        title='New Incident Report Submitted',
+                        message=f'New incident report {report.case_id} filed by {request.user.get_full_name()}. Requires fact-checking and classification.',
+                        report=report
+                    )
+                
+                # Notify the reporter
                 Notification.objects.create(
-                    user=do_user,
-                    title='New Incident Report Submitted',
-                    message=f'New incident report {report.case_id} filed by {request.user.get_full_name()}. Requires fact-checking and classification.',
+                    user=request.user,
+                    title='Report Submitted Successfully',
+                    message=f'Your incident report {report.case_id} has been submitted and is being reviewed by the Discipline Office.',
                     report=report
                 )
-            
-            # Notify the reporter
-            Notification.objects.create(
-                user=request.user,
-                title='Report Submitted Successfully',
-                message=f'Your incident report {report.case_id} has been submitted and is being reviewed by the Discipline Office.',
-                report=report
-            )
             
             messages.success(request, f'Report {report.case_id} submitted successfully')
             return redirect('my_reports')

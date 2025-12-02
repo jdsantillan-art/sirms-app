@@ -174,6 +174,22 @@ class IncidentReport(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    # Proper Process System Fields
+    reporter_is_victim = models.BooleanField(
+        default=False,
+        help_text="Check if reporter is also a victim/involved party"
+    )
+    is_confidential = models.BooleanField(
+        default=False,
+        help_text="Mark as confidential (recommended for teacher incidents)"
+    )
+    involved_parties = models.ManyToManyField(
+        'InvolvedParty',
+        related_name='incident_reports',
+        blank=True,
+        help_text="Students or teachers involved in this incident"
+    )
+    
     def __str__(self):
         return f"{self.case_id} - {self.reported_student}"
     
@@ -235,6 +251,26 @@ class Notification(models.Model):
     report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE, null=True, blank=True)
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Notification Tracking Fields
+    NOTIFICATION_TYPE_CHOICES = [
+        ('report_submitted', 'Report Submitted'),
+        ('party_confirmed', 'Party Confirmed'),
+        ('do_classified', 'DO Classified'),
+        ('guidance_evaluation', 'Guidance Evaluation'),
+        ('vrf_assigned', 'VRF Assigned'),
+        ('counseling_scheduled', 'Counseling Scheduled'),
+        ('session_completed', 'Session Completed'),
+        ('status_update', 'Status Update'),
+    ]
+    
+    notification_type = models.CharField(
+        max_length=50,
+        choices=NOTIFICATION_TYPE_CHOICES,
+        default='status_update'
+    )
+    email_sent = models.BooleanField(default=False)
+    email_sent_at = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
         return f"{self.title} - {self.user}"
@@ -483,43 +519,122 @@ class DOSchedule(models.Model):
         return f"DO Schedule - {self.get_schedule_type_display()} - {student_name} - {self.scheduled_date.strftime('%Y-%m-%d %H:%M')}"
 
 
-class DOSchedule(models.Model):
-    """Schedule for DO appointments (parent conferences, interviews, etc.)"""
-    STATUS_CHOICES = [
-        ('scheduled', 'Scheduled'),
-        ('completed', 'Completed'),
-        ('cancelled', 'Cancelled'),
-        ('rescheduled', 'Rescheduled'),
-        ('no_show', 'No Show'),
+class InvolvedParty(models.Model):
+    """Model to track involved parties (students or teachers) in incident reports"""
+    PARTY_TYPE_CHOICES = [
+        ('student', 'Student'),
+        ('teacher', 'Teacher'),
     ]
     
-    report = models.ForeignKey('IncidentReport', on_delete=models.CASCADE, related_name='do_schedules')
-    discipline_officer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='do_schedules')
-    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='student_do_schedules')
-    schedule_type = models.CharField(max_length=100, help_text="Type of appointment")
-    scheduled_date = models.DateTimeField()
-    location = models.CharField(max_length=200, default='DO Office')
-    attendees = models.TextField(blank=True, help_text="List of attendees")
-    purpose = models.TextField()
-    notes = models.TextField(blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
+    party_type = models.CharField(max_length=20, choices=PARTY_TYPE_CHOICES)
+    
+    # For students
+    student = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={'role': 'student'},
+        related_name='student_involved_parties'
+    )
+    curriculum = models.ForeignKey('Curriculum', on_delete=models.SET_NULL, null=True, blank=True)
+    grade_level = models.CharField(max_length=10, null=True, blank=True)
+    section = models.ForeignKey('Section', on_delete=models.SET_NULL, null=True, blank=True)
+    adviser = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={'role': 'teacher'},
+        related_name='advised_involved_parties'
+    )
+    
+    # For teachers
+    teacher = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={'role': 'teacher'},
+        related_name='teacher_involved_parties'
+    )
+    department = models.CharField(max_length=100, null=True, blank=True)
+    grade_level_taught = models.CharField(max_length=50, null=True, blank=True)
+    
+    # Common fields
+    name_if_unknown = models.CharField(max_length=200, null=True, blank=True, help_text="Name if party not in system")
+    is_confirmed = models.BooleanField(default=False, help_text="Confirmed by DO")
+    confirmed_by = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='confirmed_parties'
+    )
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        ordering = ['-scheduled_date']
-        verbose_name = 'DO Schedule'
-        verbose_name_plural = 'DO Schedules'
+        verbose_name = 'Involved Party'
+        verbose_name_plural = 'Involved Parties'
+        ordering = ['-created_at']
     
     def __str__(self):
-        return f"{self.schedule_type} - {self.student.get_full_name()} on {self.scheduled_date.strftime('%Y-%m-%d')}"
+        if self.party_type == 'student' and self.student:
+            return f"Student: {self.student.get_full_name()}"
+        elif self.party_type == 'teacher' and self.teacher:
+            return f"Teacher: {self.teacher.get_full_name()}"
+        elif self.name_if_unknown:
+            return f"Unknown {self.party_type}: {self.name_if_unknown}"
+        return f"Unknown {self.party_type}"
     
-    def get_status_display_with_icon(self):
-        icons = {
-            'scheduled': '📅',
-            'completed': '✅',
-            'cancelled': '❌',
-            'rescheduled': '🔄',
-            'no_show': '⚠️',
-        }
-        return f"{icons.get(self.status, '')} {self.get_status_display()}"
+    def get_display_name(self):
+        """Get display name for the involved party"""
+        if self.party_type == 'student' and self.student:
+            return self.student.get_full_name()
+        elif self.party_type == 'teacher' and self.teacher:
+            return self.teacher.get_full_name()
+        return self.name_if_unknown or "Unknown"
+    
+    def get_academic_info(self):
+        """Get academic info string for display"""
+        if self.party_type == 'student':
+            if self.section:
+                adviser_name = self.adviser.get_full_name() if self.adviser else "No adviser"
+                return f"G{self.grade_level} - {self.section.name}, {adviser_name}"
+            elif self.grade_level:
+                return f"Grade {self.grade_level}"
+            return "Academic info pending"
+        elif self.party_type == 'teacher':
+            parts = []
+            if self.department:
+                parts.append(self.department)
+            if self.grade_level_taught:
+                parts.append(f"Grade {self.grade_level_taught}")
+            return ", ".join(parts) if parts else "Department info pending"
+        return ""
+
+
+# Update IncidentReport model with proper process fields
+# Add these fields to your IncidentReport model:
+# reporter_is_victim = models.BooleanField(default=False, help_text="Check if reporter is also a victim/involved party")
+# is_confidential = models.BooleanField(default=False, help_text="Mark as confidential (recommended for teacher incidents)")
+# involved_parties = models.ManyToManyField('InvolvedParty', related_name='incident_reports', blank=True, help_text="Students or teachers involved in this incident")
+
+# Update Notification model with tracking fields
+# Add these fields to your Notification model:
+# NOTIFICATION_TYPE_CHOICES = [
+#     ('report_submitted', 'Report Submitted'),
+#     ('party_confirmed', 'Party Confirmed'),
+#     ('do_classified', 'DO Classified'),
+#     ('guidance_evaluation', 'Guidance Evaluation'),
+#     ('vrf_assigned', 'VRF Assigned'),
+#     ('counseling_scheduled', 'Counseling Scheduled'),
+#     ('session_completed', 'Session Completed'),
+#     ('status_update', 'Status Update'),
+# ]
+# notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPE_CHOICES, default='status_update')
+# email_sent = models.BooleanField(default=False)
+# email_sent_at = models.DateTimeField(null=True, blank=True)
