@@ -957,7 +957,9 @@ def all_reports(request):
     if request.user.role not in ['do', 'counselor', 'principal']:
         return redirect('dashboard')
     
-    reports = IncidentReport.objects.all().select_related('classification', 'incident_type', 'reported_student').order_by('-incident_date', '-incident_time')
+    reports = IncidentReport.objects.all().select_related(
+        'classification', 'incident_type', 'reported_student'
+    ).prefetch_related('involved_parties').order_by('-incident_date', '-incident_time')
     
     # Calculate statistics
     pending_count = reports.filter(status='pending').count()
