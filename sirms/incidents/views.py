@@ -2655,6 +2655,11 @@ def case_evaluation(request):
                     status='scheduled'
                 )
                 
+                # NEW: Auto-update report status to 'pending' when counseling is scheduled
+                if report.status != 'pending':
+                    report.status = 'pending'
+                    report.save()
+                
                 # Notify the adviser (reporter)
                 if report.reporter:
                     Notification.objects.create(
@@ -2752,6 +2757,11 @@ def counselor_schedule(request):
             notes=notes,
             status='scheduled'
         )
+        
+        # NEW: Auto-update report status to 'pending' when counseling is scheduled
+        if evaluation.report.status != 'pending':
+            evaluation.report.status = 'pending'
+            evaluation.report.save()
         
         # Notify the student
         Notification.objects.create(

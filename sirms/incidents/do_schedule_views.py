@@ -129,6 +129,11 @@ def create_do_schedule(request):
             schedule.discipline_officer = request.user
             schedule.save()
             
+            # NEW: Auto-update report status to 'pending' when scheduled
+            if schedule.report and schedule.report.status != 'pending':
+                schedule.report.status = 'pending'
+                schedule.report.save()
+            
             # Create notification for the student if assigned
             if schedule.student:
                 Notification.objects.create(
