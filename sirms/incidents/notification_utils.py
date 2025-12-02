@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import Notification, CustomUser
+from .email_utils import send_notification_email
 
 
 def send_smart_notifications(report, event_type='status_update'):
@@ -99,7 +100,7 @@ def send_smart_notifications(report, event_type='status_update'):
 
 
 def create_notification(user, title, message, report, notification_type):
-    """Create notification and optionally send email"""
+    """Create notification and send email"""
     notification = Notification.objects.create(
         user=user,
         title=title,
@@ -108,21 +109,15 @@ def create_notification(user, title, message, report, notification_type):
         notification_type=notification_type
     )
     
-    # Send email if configured
-    if hasattr(settings, 'EMAIL_HOST') and settings.EMAIL_HOST:
-        try:
-            send_mail(
-                subject=f'SIRMS - {title}',
-                message=message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[user.email],
-                fail_silently=True,
-            )
+    # Always attempt to send email notification
+    try:
+        email_sent = send_notification_email(user, title, message, report)
+        if email_sent:
             notification.email_sent = True
             notification.email_sent_at = timezone.now()
             notification.save()
-        except Exception as e:
-            print(f"Email send failed: {e}")
+    except Exception as e:
+        print(f"Email notification failed for {user.email}: {e}")
     
     return notification
 

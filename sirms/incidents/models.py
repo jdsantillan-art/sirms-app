@@ -269,6 +269,11 @@ class Notification(models.Model):
         choices=NOTIFICATION_TYPE_CHOICES,
         default='status_update'
     )
+    
+    # Email notification tracking
+    email_sent = models.BooleanField(default=False)
+    email_sent_at = models.DateTimeField(null=True, blank=True
+    )
     email_sent = models.BooleanField(default=False)
     email_sent_at = models.DateTimeField(null=True, blank=True)
     
