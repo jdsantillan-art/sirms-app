@@ -1002,6 +1002,7 @@ def all_reports(request):
     
     return render(request, 'all_reports.html', {
         'reports': reports_with_repeat_info,
+        'total_count': all_reports.count(),  # Total count of ALL reports
         'pending_count': pending_count,
         'under_review_count': under_review_count,
         'classified_count': classified_count,
