@@ -1,0 +1,84 @@
+================================================================================
+DEPLOYMENT COMMANDS - RUN THESE IN A NEW TERMINAL
+================================================================================
+
+IMPORTANT: Close this terminal first, then open a NEW Command Prompt or PowerShell
+
+Then run these commands one by one:
+
+1. Navigate to project folder:
+   cd C:\Users\lenovo\Downloads\sirms-20251127T154258Z-1-001\sirms
+
+2. Add all changes:
+   git add .
+
+3. Commit changes:
+   git commit -m "Fix: Behavior concerns schedule + indentation error + template fixes"
+
+4. Push to GitHub (this triggers Render deployment):
+   git push origin main
+
+================================================================================
+WHAT'S BEING DEPLOYED:
+================================================================================
+
+✅ Fixed indentation error in incidents/views.py (line 1556)
+   - Was causing: IndentationError: unexpected indent
+   - Now: Proper Notification.objects.create() call
+
+✅ Fixed all_reports.html template
+   - Was: G7 - {{ report.section_name|truncatewords:2 }}
+   - Now: G7 - {{ report.section_name }}
+   - Shows full section name without truncation
+
+✅ Added behavior_concerns_views.py (NEW FILE)
+   - Handles schedule appointment functionality
+   - Handles status updates
+   - Sends notifications to students and advisers
+
+✅ Updated incidents/urls.py
+   - Routes /behavior-concerns/ to new view
+   - Imported behavior_concerns_views module
+
+================================================================================
+AFTER DEPLOYMENT - VERIFY:
+================================================================================
+
+1. Check Render Dashboard:
+   https://dashboard.render.com
+   - Watch build logs
+   - Wait for "Deploy succeeded" message
+
+2. Test Live Site:
+   https://sirmsportal.onrender.com
+   
+3. Test Behavior Concerns Schedule:
+   - Login as DO: do_admin / do123
+   - Go to Behavior Concerns
+   - Click calendar icon
+   - Fill form and submit
+   - Should create appointment successfully
+
+4. Test All Reports:
+   - Go to All Reports
+   - Check Grade/Section column
+   - Should show full section names
+
+================================================================================
+IF YOU GET ERRORS:
+================================================================================
+
+If git says "nothing to commit":
+   - Files are already committed
+   - Just run: git push origin main
+
+If git asks for credentials:
+   - Enter your GitHub username
+   - Enter your GitHub personal access token (not password)
+
+If Render build fails:
+   - Check Render logs for specific error
+   - Most likely: migration issue
+   - Solution: Run migrations in Render shell
+
+================================================================================

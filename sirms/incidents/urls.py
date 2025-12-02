@@ -6,6 +6,7 @@ from . import export_views
 from . import completed_sessions_views
 from . import incident_type_views
 from . import do_schedule_views
+from . import behavior_concerns_views
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -53,7 +54,7 @@ urlpatterns = [
     
     # DO-specific URLs
     path('fact-check-reports/', views.fact_check_reports, name='fact_check_reports'),
-    path('behavior-concerns/', views.behavior_concerns, name='behavior_concerns'),
+    path('behavior-concerns/', behavior_concerns_views.behavior_concerns, name='behavior_concerns'),
     path('classify-violations/', views.classify_violations, name='classify_violations'),  # Backward compatibility
     path('pre-counseling-schedule/', views.pre_counseling_schedule, name='pre_counseling_schedule'),
     path('case-history/', views.case_history, name='case_history'),

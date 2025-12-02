@@ -481,3 +481,45 @@ class DOSchedule(models.Model):
     def __str__(self):
         student_name = self.student.get_full_name() if self.student else 'No student'
         return f"DO Schedule - {self.get_schedule_type_display()} - {student_name} - {self.scheduled_date.strftime('%Y-%m-%d %H:%M')}"
+
+
+class DOSchedule(models.Model):
+    """Schedule for DO appointments (parent conferences, interviews, etc.)"""
+    STATUS_CHOICES = [
+        ('scheduled', 'Scheduled'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+        ('rescheduled', 'Rescheduled'),
+        ('no_show', 'No Show'),
+    ]
+    
+    report = models.ForeignKey('IncidentReport', on_delete=models.CASCADE, related_name='do_schedules')
+    discipline_officer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='do_schedules')
+    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='student_do_schedules')
+    schedule_type = models.CharField(max_length=100, help_text="Type of appointment")
+    scheduled_date = models.DateTimeField()
+    location = models.CharField(max_length=200, default='DO Office')
+    attendees = models.TextField(blank=True, help_text="List of attendees")
+    purpose = models.TextField()
+    notes = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-scheduled_date']
+        verbose_name = 'DO Schedule'
+        verbose_name_plural = 'DO Schedules'
+    
+    def __str__(self):
+        return f"{self.schedule_type} - {self.student.get_full_name()} on {self.scheduled_date.strftime('%Y-%m-%d')}"
+    
+    def get_status_display_with_icon(self):
+        icons = {
+            'scheduled': '📅',
+            'completed': '✅',
+            'cancelled': '❌',
+            'rescheduled': '🔄',
+            'no_show': '⚠️',
+        }
+        return f"{icons.get(self.status, '')} {self.get_status_display()}"
