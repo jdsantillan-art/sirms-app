@@ -105,29 +105,29 @@
                         data-search="{{ report.case_id|lower }} {% if report.reported_student %}{{ report.reported_student.get_full_name|lower }}{% else %}{{ report.involved_students|lower }}{% endif %}">
                         <!-- ID -->
                         <td class="px-2 py-1.5">
-                            <div class="text-xs font-medium text-gray-900">{{ report.case_id|slice:"-3:" }}</div>
+                            <div class="text-sm font-bold text-gray-900">{{ report.case_id }}</div>
                         </td>
                         
                         <!-- Involved -->
                         <td class="px-2 py-1.5">
-                            <div class="text-xs text-gray-900">
+                            <div class="text-sm font-medium text-gray-900">
                                 {% if report.involved_parties.exists %}
                                     {% for party in report.involved_parties.all %}
                                         {% if party.party_type == 'student' %}
                                             {% if report.reported_student %}
-                                                {{ report.reported_student.first_name }} {{ report.reported_student.last_name|slice:":1" }}.
+                                                {{ report.reported_student.get_full_name }}
                                             {% else %}
-                                                {{ party.student_name|truncatewords:2 }}
+                                                {{ party.student_name }}
                                             {% endif %}
                                         {% elif party.party_type == 'teacher' %}
-                                            {{ party.teacher_name|truncatewords:2 }}
+                                            {{ party.teacher_name }}
                                         {% endif %}
                                         {% if not forloop.last %}, {% endif %}
                                     {% endfor %}
                                 {% elif report.reported_student %}
-                                    {{ report.reported_student.first_name }} {{ report.reported_student.last_name|slice:":1" }}.
+                                    {{ report.reported_student.get_full_name }}
                                 {% elif report.involved_students %}
-                                    {{ report.involved_students|truncatewords:2 }}
+                                    {{ report.involved_students }}
                                 {% else %}
                                     <span class="text-gray-400">-</span>
                                 {% endif %}
@@ -153,26 +153,26 @@
                         
                         <!-- Academic/Dept -->
                         <td class="px-2 py-1.5">
-                            <div class="text-xs text-gray-700">
+                            <div class="text-sm text-gray-700">
                                 {% if report.involved_parties.exists %}
                                     {% for party in report.involved_parties.all %}
                                         {% if party.party_type == 'student' %}
-                                            G{{ report.grade_level }}-{{ report.section_name|truncatewords:1 }}
+                                            Grade {{ report.grade_level }} - {{ report.section_name }}
                                         {% elif party.party_type == 'teacher' %}
-                                            {{ party.department|default:"-"|truncatewords:2 }}
+                                            {{ party.department|default:"No Department" }}
                                         {% endif %}
                                     {% endfor %}
                                 {% else %}
-                                    G{{ report.grade_level }}-{{ report.section_name|truncatewords:1 }}
+                                    Grade {{ report.grade_level }} - {{ report.section_name }}
                                 {% endif %}
                             </div>
                         </td>
                         
                         <!-- Reporter -->
                         <td class="px-2 py-1.5">
-                            <div class="text-xs text-gray-700">
+                            <div class="text-sm text-gray-700">
                                 {% if report.reporter %}
-                                    {{ report.reporter.first_name }} {{ report.reporter.last_name|slice:":1" }}.
+                                    {{ report.reporter.get_full_name }}
                                 {% else %}
                                     <span class="text-gray-400">-</span>
                                 {% endif %}
@@ -199,51 +199,55 @@
                         <!-- Incident -->
                         <td class="px-2 py-1.5">
                             {% if report.incident_type %}
-                                <div class="text-xs text-gray-900">{{ report.incident_type.name|truncatewords:2 }}</div>
-                                {% if report.incident_type.severity == 'prohibited' %}
-                                <span class="text-xs px-1 py-0.5 bg-red-100 text-red-700 rounded font-medium">PA</span>
-                                {% elif report.incident_type.severity == 'school_policy' %}
-                                <span class="text-xs px-1 py-0.5 bg-blue-100 text-blue-700 rounded font-medium">OSP</span>
-                                {% endif %}
+                                <div class="text-sm font-medium text-gray-900">{{ report.incident_type.name }}</div>
+                                <div class="mt-0.5">
+                                    {% if report.incident_type.severity == 'prohibited' %}
+                                    <span class="text-xs px-1.5 py-0.5 bg-red-100 text-red-700 rounded font-semibold">Prohibited Act</span>
+                                    {% elif report.incident_type.severity == 'school_policy' %}
+                                    <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded font-semibold">School Policy</span>
+                                    {% endif %}
+                                </div>
                             {% else %}
-                                <span class="text-xs text-gray-400">-</span>
+                                <span class="text-sm text-gray-400">Not specified</span>
                             {% endif %}
                         </td>
                         
                         <!-- Status -->
                         <td class="px-2 py-1.5">
                             {% if report.status == 'pending' %}
-                            <span class="text-xs px-1.5 py-0.5 bg-yellow-100 text-yellow-700 rounded font-medium">Pending</span>
+                            <span class="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded font-semibold">Pending</span>
                             {% elif report.status == 'under_review' %}
-                            <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded font-medium">Review</span>
+                            <span class="text-sm px-2 py-1 bg-blue-100 text-blue-800 rounded font-semibold">Under Review</span>
                             {% elif report.status == 'classified' %}
-                            <span class="text-xs px-1.5 py-0.5 bg-purple-100 text-purple-700 rounded font-medium">Classified</span>
+                            <span class="text-sm px-2 py-1 bg-purple-100 text-purple-800 rounded font-semibold">Classified</span>
                             {% elif report.status == 'evaluated' %}
-                            <span class="text-xs px-1.5 py-0.5 bg-indigo-100 text-indigo-700 rounded font-medium">Evaluated</span>
+                            <span class="text-sm px-2 py-1 bg-indigo-100 text-indigo-800 rounded font-semibold">Evaluated</span>
                             {% elif report.status == 'sanctioned' %}
-                            <span class="text-xs px-1.5 py-0.5 bg-orange-100 text-orange-700 rounded font-medium">Sanctioned</span>
+                            <span class="text-sm px-2 py-1 bg-orange-100 text-orange-800 rounded font-semibold">Sanctioned</span>
                             {% elif report.status == 'resolved' %}
-                            <span class="text-xs px-1.5 py-0.5 bg-green-100 text-green-700 rounded font-medium">Resolved</span>
+                            <span class="text-sm px-2 py-1 bg-green-100 text-green-800 rounded font-semibold">Resolved</span>
                             {% elif report.status == 'closed' %}
-                            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-700 rounded font-medium">Closed</span>
+                            <span class="text-sm px-2 py-1 bg-gray-100 text-gray-800 rounded font-semibold">Closed</span>
                             {% endif %}
                             {% if report.is_repeat_offender %}
-                            <div class="mt-0.5">
-                                <span class="text-xs px-1 py-0.5 rounded bg-red-100 text-red-700 font-bold">×{{ report.repeat_count }}</span>
+                            <div class="mt-1">
+                                <span class="text-xs px-1.5 py-0.5 rounded bg-red-100 text-red-800 font-bold">
+                                    <i class="fas fa-exclamation-triangle mr-1"></i>Repeat ×{{ report.repeat_count }}
+                                </span>
                             </div>
                             {% endif %}
                         </td>
                         
                         <!-- Date -->
                         <td class="px-2 py-1.5">
-                            <div class="text-xs text-gray-700">{{ report.created_at|date:"m/d/y" }}</div>
+                            <div class="text-sm text-gray-700">{{ report.created_at|date:"M d, Y" }}</div>
                         </td>
                         
                         <!-- Action -->
                         <td class="px-2 py-1.5">
                             <a href="{% url 'report_detail' report.case_id %}"
-                                class="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
-                                View
+                                class="inline-flex items-center px-3 py-1.5 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-eye mr-1"></i>View
                             </a>
                         </td>
                     </tr>
