@@ -103,6 +103,7 @@ urlpatterns = [
     
     # Export URLs
     path('export-all-reports-excel/', export_views.export_all_reports_excel, name='export_all_reports_excel'),
+    path('export-behavior-concerns-excel/', export_views.export_behavior_concerns_excel, name='export_behavior_concerns_excel'),
     
     # Maintenance URLs (Counselor only)
     path('manage-curriculum/', views.manage_curriculum, name='manage_curriculum'),

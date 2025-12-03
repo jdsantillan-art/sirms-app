@@ -9,7 +9,7 @@ from django.contrib import messages
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from datetime import datetime
-from .models import IncidentReport
+from .models import IncidentReport, DOSchedule
 
 
 @login_required
@@ -131,6 +131,172 @@ def export_all_reports_excel(request):
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
     filename = f'SIRMS_All_Reports_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    # Save workbook to response
+    wb.save(response)
+    
+    return response
+
+
+
+@login_required
+def export_behavior_concerns_excel(request):
+    """
+    Export completed behavior concerns (DO handled cases) to Excel
+    """
+    # Check permissions - only DO can export
+    if request.user.role != 'do':
+        messages.error(request, 'You do not have permission to export behavior concerns.')
+        return redirect('dashboard')
+    
+    # Get completed behavior concerns (resolved status)
+    reports = IncidentReport.objects.filter(
+        status='resolved'
+    ).select_related(
+        'incident_type', 'reported_student', 'reporter', 'classification'
+    ).order_by('-created_at')
+    
+    # Create workbook
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Completed Behavior Concerns"
+    
+    # Define styles
+    header_fill = PatternFill(start_color="16A34A", end_color="16A34A", fill_type="solid")  # Green
+    header_font = Font(bold=True, color="FFFFFF", size=11)
+    border = Border(
+        left=Side(style='thin'),
+        right=Side(style='thin'),
+        top=Side(style='thin'),
+        bottom=Side(style='thin')
+    )
+    
+    # Headers
+    headers = [
+        'Case ID', 'Student Name', 'Student Gender', 'Grade', 'Section',
+        'Incident Type', 'Type Category', 'Incident Date', 'Incident Time',
+        'Reporter Name', 'Reporter Role', 'Description', 
+        'Classification', 'Reported Date', 'Completed Date', 'Days to Complete',
+        'Scheduled Appointments', 'Appointment Details', 'Final Notes'
+    ]
+    
+    # Write headers
+    for col, header in enumerate(headers, start=1):
+        cell = ws.cell(row=1, column=col, value=header)
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal='center', vertical='center')
+        cell.border = border
+    
+    # Write data
+    for row_idx, report in enumerate(reports, start=2):
+        # Calculate days to complete
+        days_to_complete = (report.updated_at.date() - report.created_at.date()).days
+        
+        # Get student name
+        student_name = report.reported_student.get_full_name() if report.reported_student else report.involved_students
+        
+        # Get classification
+        classification = ""
+        if hasattr(report, 'classification') and report.classification:
+            classification = report.classification.get_severity_display()
+        
+        # Get type category
+        type_category = ""
+        if report.incident_type:
+            type_category = "Prohibited Acts" if report.incident_type.severity == 'prohibited' else "School Policies"
+        
+        # Get scheduled appointments
+        schedules = DOSchedule.objects.filter(report=report).order_by('scheduled_date')
+        appointment_count = schedules.count()
+        appointment_details = []
+        
+        for schedule in schedules:
+            detail = f"{schedule.get_schedule_type_display()} on {schedule.scheduled_date.strftime('%Y-%m-%d %H:%M')}"
+            if schedule.location:
+                detail += f" at {schedule.location}"
+            if schedule.status:
+                detail += f" ({schedule.get_status_display()})"
+            appointment_details.append(detail)
+        
+        appointment_details_str = "\n".join(appointment_details) if appointment_details else "No appointments scheduled"
+        
+        # Get final notes from latest schedule
+        final_notes = ""
+        if schedules.exists():
+            latest_schedule = schedules.last()
+            if latest_schedule.notes:
+                final_notes = latest_schedule.notes
+        
+        data = [
+            report.case_id,
+            student_name,
+            report.student_gender.title() if report.student_gender else 'Not specified',
+            f"Grade {report.grade_level}",
+            report.section_name,
+            report.incident_type.name if report.incident_type else 'Not specified',
+            type_category,
+            report.incident_date.strftime('%Y-%m-%d') if report.incident_date else '',
+            report.incident_time.strftime('%H:%M') if report.incident_time else '',
+            f"{report.reporter_first_name} {report.reporter_last_name}",
+            report.reporter.get_role_display() if report.reporter else '',
+            report.description,
+            classification,
+            report.created_at.strftime('%Y-%m-%d %H:%M'),
+            report.updated_at.strftime('%Y-%m-%d %H:%M'),
+            days_to_complete,
+            appointment_count,
+            appointment_details_str,
+            final_notes
+        ]
+        
+        for col, value in enumerate(data, start=1):
+            cell = ws.cell(row=row_idx, column=col, value=value)
+            cell.border = border
+            cell.alignment = Alignment(vertical='top', wrap_text=True)
+    
+    # Adjust column widths
+    column_widths = {
+        'A': 12,  # Case ID
+        'B': 20,  # Student Name
+        'C': 12,  # Gender
+        'D': 10,  # Grade
+        'E': 20,  # Section
+        'F': 30,  # Incident Type
+        'G': 18,  # Type Category
+        'H': 12,  # Incident Date
+        'I': 10,  # Incident Time
+        'J': 20,  # Reporter Name
+        'K': 15,  # Reporter Role
+        'L': 40,  # Description
+        'M': 15,  # Classification
+        'N': 18,  # Reported Date
+        'O': 18,  # Completed Date
+        'P': 12,  # Days to Complete
+        'Q': 12,  # Scheduled Appointments
+        'R': 40,  # Appointment Details
+        'S': 40,  # Final Notes
+    }
+    
+    for col, width in column_widths.items():
+        ws.column_dimensions[col].width = width
+    
+    # Freeze header row
+    ws.freeze_panes = 'A2'
+    
+    # Add summary at the bottom
+    last_row = len(reports) + 2
+    ws.cell(row=last_row + 1, column=1, value="SUMMARY").font = Font(bold=True, size=12)
+    ws.cell(row=last_row + 2, column=1, value=f"Total Completed Cases: {reports.count()}")
+    ws.cell(row=last_row + 3, column=1, value=f"Export Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    ws.cell(row=last_row + 4, column=1, value=f"Exported By: {request.user.get_full_name()}")
+    
+    # Create response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    filename = f'SIRMS_Completed_Behavior_Concerns_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     
     # Save workbook to response

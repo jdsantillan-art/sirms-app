@@ -7,32 +7,40 @@
 
     <!-- Page Header -->
     <div class="mb-6">
-        
+
     </div>
 
-    <!-- Compact Statistics -->
+    <!-- Clickable Statistics Cards -->
     <div class="grid grid-cols-3 gap-3 mb-4">
-        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+        <button onclick="filterCases('all')" id="card-all"
+            class="bg-white rounded-lg shadow-sm border-2 p-3 text-center hover:shadow-md transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <div class="text-2xl font-bold text-blue-600">{{ total_cases }}</div>
             <div class="text-gray-600 text-xs">Total</div>
-        </div>
-        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+        </button>
+        <button onclick="filterCases('pending')" id="card-pending"
+            class="bg-white rounded-lg shadow-sm border-2 p-3 text-center hover:shadow-md transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500">
             <div class="text-2xl font-bold text-yellow-600">{{ pending_cases }}</div>
             <div class="text-gray-600 text-xs">Pending</div>
-        </div>
-        <div class="bg-white rounded-lg shadow-sm border p-3 text-center">
+        </button>
+        <button onclick="filterCases('completed')" id="card-completed"
+            class="bg-white rounded-lg shadow-sm border-2 p-3 text-center hover:shadow-md transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500">
             <div class="text-2xl font-bold text-green-600">{{ completed_cases }}</div>
             <div class="text-gray-600 text-xs">Completed</div>
-        </div>
+        </button>
     </div>
 
     <!-- Cases List -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-5 border-b border-gray-200 bg-gray-50">
+        <div class="p-5 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
             <h2 class="text-xl font-bold text-gray-900">
                 <i class="fas fa-list mr-2 text-blue-600"></i>
-                DO Handled Cases
+                <span id="list-title">DO Handled Cases</span>
+                <span id="filter-badge" class="ml-2 text-sm font-normal text-gray-500"></span>
             </h2>
+            <button onclick="exportToExcel()" id="export-btn"
+                class="hidden px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-semibold">
+                <i class="fas fa-file-excel mr-2"></i>Export to Excel
+            </button>
         </div>
 
         {% if reports %}
@@ -50,7 +58,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     {% for report in reports %}
-                    <tr class="hover:bg-gray-50">
+                    <tr class="hover:bg-gray-50 case-row" data-status="{{ report.status }}">
                         <td class="px-3 py-2">
                             <div class="text-sm font-medium text-gray-900">{{ report.case_id }}</div>
                             <div class="text-xs text-gray-500">{{ report.incident_date|date:"M d" }}</div>
@@ -63,10 +71,12 @@
                                 <span class="text-gray-400">{{ report.involved_students|truncatewords:3 }}</span>
                                 {% endif %}
                             </div>
-                            <div class="text-xs text-gray-500">G{{ report.grade_level }} - {{ report.section_name }}</div>
+                            <div class="text-xs text-gray-500">G{{ report.grade_level }} - {{ report.section_name }}
+                            </div>
                         </td>
                         <td class="px-3 py-2">
-                            <div class="text-sm text-gray-900">{{ report.incident_type.name|default:"Not specified"|truncatewords:3 }}</div>
+                            <div class="text-sm text-gray-900">{{ report.incident_type.name|default:"Not
+                                specified"|truncatewords:3 }}</div>
                             <div class="text-xs text-gray-500">{{ report.reporter.get_full_name|truncatewords:2 }}</div>
                         </td>
                         <td class="px-3 py-2">
@@ -74,11 +84,14 @@
                         </td>
                         <td class="px-3 py-2">
                             {% if report.status == 'classified' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">📋 Pending</span>
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">📋
+                                Pending</span>
                             {% elif report.status == 'under_review' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">🔄 Ongoing</span>
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">🔄
+                                Ongoing</span>
                             {% elif report.status == 'resolved' %}
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                            <span
+                                class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
                                 <i class="fas fa-check-circle mr-1"></i>✅ Completed
                             </span>
                             {% endif %}
@@ -89,12 +102,14 @@
                                     class="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <button onclick="showUpdateModal('{{ report.id }}', '{{ report.case_id }}', '{{ report.status }}', '{% if report.reported_student %}{{ report.reported_student.get_full_name }}{% endif %}')"
+                                <button
+                                    onclick="showUpdateModal('{{ report.id }}', '{{ report.case_id }}', '{{ report.status }}', '{% if report.reported_student %}{{ report.reported_student.get_full_name }}{% endif %}')"
                                     class="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-emerald-600 rounded hover:bg-emerald-700">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 {% if report.reported_student %}
-                                <button onclick="showScheduleModal('{{ report.id }}', '{{ report.case_id }}', '{{ report.reported_student.get_full_name }}', '{{ report.reported_student.id }}')"
+                                <button
+                                    onclick="showScheduleModal('{{ report.id }}', '{{ report.case_id }}', '{{ report.reported_student.get_full_name }}', '{{ report.reported_student.id }}')"
                                     class="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-purple-600 rounded hover:bg-purple-700">
                                     <i class="fas fa-calendar"></i>
                                 </button>
@@ -126,19 +141,21 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <form method="post" id="scheduleForm">
                 {% csrf_token %}
                 <input type="hidden" name="report_id" id="scheduleReportId">
                 <input type="hidden" name="student_id" id="scheduleStudentId">
                 <input type="hidden" name="action" value="schedule_appointment">
-                
+
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-bold text-gray-800 mb-2">
                             Appointment Type <span class="text-red-500">*</span>
                         </label>
-                        <select name="appointment_type" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-purple-500" required>
+                        <select name="appointment_type"
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-purple-500"
+                            required>
                             <option value="">Select Type</option>
                             <option value="Intake Interview">📝 Intake Interview</option>
                             <option value="Investigation Meeting">🔍 Investigation Meeting</option>
@@ -146,37 +163,44 @@
                             <option value="Follow-up Meeting">🔄 Follow-up Meeting</option>
                         </select>
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-bold text-gray-800 mb-2">
                             Date & Time <span class="text-red-500">*</span>
                         </label>
-                        <input type="datetime-local" name="scheduled_date" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-purple-500" required>
+                        <input type="datetime-local" name="scheduled_date"
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-purple-500"
+                            required>
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-bold text-gray-800 mb-2">
                             Location
                         </label>
-                        <input type="text" name="location" placeholder="e.g., DO Office, Conference Room" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-purple-500">
+                        <input type="text" name="location" placeholder="e.g., DO Office, Conference Room"
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-purple-500">
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-bold text-gray-800 mb-2">
                             Notes
                         </label>
-                        <textarea name="notes" rows="3" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-purple-500" placeholder="Additional notes about the appointment..."></textarea>
+                        <textarea name="notes" rows="3"
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-purple-500"
+                            placeholder="Additional notes about the appointment..."></textarea>
                         <p class="text-xs text-gray-500 mt-1">
                             <i class="fas fa-bell mr-1"></i>Student will be notified of this appointment
                         </p>
                     </div>
                 </div>
-                
+
                 <div class="flex justify-end space-x-2 mt-6 pt-4 border-t">
-                    <button type="button" onclick="closeScheduleModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
+                    <button type="button" onclick="closeScheduleModal()"
+                        class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
                         Cancel
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-semibold">
+                    <button type="submit"
+                        class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-semibold">
                         <i class="fas fa-calendar-check mr-1"></i>Schedule & Notify
                     </button>
                 </div>
@@ -238,6 +262,105 @@
 </div>
 
 <script>
+    // Current filter state
+    let currentFilter = 'all';
+
+    // Filter cases by status
+    function filterCases(filter) {
+        currentFilter = filter;
+        const rows = document.querySelectorAll('.case-row');
+        const listTitle = document.getElementById('list-title');
+        const filterBadge = document.getElementById('filter-badge');
+        const exportBtn = document.getElementById('export-btn');
+        
+        // Reset all card styles
+        document.querySelectorAll('[id^="card-"]').forEach(card => {
+            card.classList.remove('border-blue-500', 'border-yellow-500', 'border-green-500', 'bg-blue-50', 'bg-yellow-50', 'bg-green-50');
+            card.classList.add('border-2');
+        });
+
+        let visibleCount = 0;
+
+        if (filter === 'all') {
+            // Show all cases
+            rows.forEach(row => {
+                row.style.display = '';
+                visibleCount++;
+            });
+            listTitle.textContent = 'DO Handled Cases';
+            filterBadge.textContent = '(All Cases)';
+            exportBtn.classList.add('hidden');
+            
+            // Highlight card
+            const card = document.getElementById('card-all');
+            card.classList.add('border-blue-500', 'bg-blue-50');
+        } else if (filter === 'pending') {
+            // Show only pending cases (classified)
+            rows.forEach(row => {
+                if (row.dataset.status === 'classified') {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            listTitle.textContent = 'Pending Cases';
+            filterBadge.textContent = `(${visibleCount} pending)`;
+            exportBtn.classList.add('hidden');
+            
+            // Highlight card
+            const card = document.getElementById('card-pending');
+            card.classList.add('border-yellow-500', 'bg-yellow-50');
+        } else if (filter === 'completed') {
+            // Show only completed cases (resolved)
+            rows.forEach(row => {
+                if (row.dataset.status === 'resolved') {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            listTitle.textContent = 'Completed Cases';
+            filterBadge.textContent = `(${visibleCount} completed)`;
+            exportBtn.classList.remove('hidden'); // Show export button for completed cases
+            
+            // Highlight card
+            const card = document.getElementById('card-completed');
+            card.classList.add('border-green-500', 'bg-green-50');
+        }
+
+        // Show empty state if no cases
+        const tableContainer = document.querySelector('.overflow-x-auto');
+        const emptyState = document.querySelector('.p-12.text-center');
+        
+        if (visibleCount === 0) {
+            if (tableContainer) tableContainer.style.display = 'none';
+            if (!emptyState) {
+                const parent = tableContainer ? tableContainer.parentElement : document.querySelector('.bg-white.rounded-xl');
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'p-12 text-center empty-state-dynamic';
+                emptyDiv.innerHTML = `
+                    <div class="text-6xl mb-4">📋</div>
+                    <div class="text-gray-500 text-lg mb-2">No ${filter} cases found</div>
+                    <p class="text-gray-400">Try selecting a different filter</p>
+                `;
+                parent.appendChild(emptyDiv);
+            }
+        } else {
+            if (tableContainer) tableContainer.style.display = '';
+            const dynamicEmpty = document.querySelector('.empty-state-dynamic');
+            if (dynamicEmpty) dynamicEmpty.remove();
+        }
+    }
+
+    // Export completed cases to Excel
+    function exportToExcel() {
+        if (currentFilter === 'completed') {
+            window.location.href = '{% url "export_behavior_concerns_excel" %}';
+        }
+    }
+
     // Show schedule modal
     function showScheduleModal(reportId, caseId, studentName, studentId) {
         document.getElementById('scheduleModal').classList.remove('hidden');
@@ -259,7 +382,7 @@
             alert('⚠️ This case is already completed and cannot be edited.\n\nCompleted cases are locked to maintain record integrity.');
             return;
         }
-        
+
         document.getElementById('modalReportId').value = reportId;
         document.querySelector('#updateModal h3').innerHTML = `<i class="fas fa-edit text-emerald-600 mr-2"></i>Evaluate Case - ${caseId}`;
 
@@ -291,6 +414,11 @@
             hideUpdateModal();
             closeScheduleModal();
         }
+    });
+
+    // Initialize with 'all' filter on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        filterCases('all');
     });
 </script>
 
