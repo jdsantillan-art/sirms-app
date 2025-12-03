@@ -104,13 +104,11 @@
                                     title="View Details">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                {% if vpf.status == 'pending' or vpf.status == 'ongoing' %}
                                 <button onclick="showScheduleModal({{ vpf.id }}, '{{ vpf.student.get_full_name|escapejs }}', '{{ vpf.report.case_id }}')"
                                     class="inline-flex items-center justify-center w-8 h-8 text-white bg-purple-600 rounded hover:bg-purple-700 transition-colors"
                                     title="Schedule VPF Session">
                                     <i class="fas fa-calendar-alt"></i>
                                 </button>
-                                {% endif %}
                                 <button onclick="showStatusModal({{ vpf.id }}, '{{ vpf.status }}', '{{ vpf.student.get_full_name|escapejs }}', '{{ vpf.report.case_id }}')"
                                     class="inline-flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700 transition-colors"
                                     title="Update Status">
