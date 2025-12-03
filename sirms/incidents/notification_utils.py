@@ -184,9 +184,8 @@ def get_student_adviser(student):
     if hasattr(student, 'section') and student.section:
         from .models import TeacherAssignment
         assignments = TeacherAssignment.objects.filter(
-            section=student.section,
-            is_adviser=True
-        ).select_related('teacher').first()
+            section_name=student.section
+        ).first()
         if assignments:
             return assignments.teacher
     return None

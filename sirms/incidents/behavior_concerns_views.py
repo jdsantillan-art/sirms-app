@@ -17,9 +17,8 @@ def notify_adviser_of_schedule(report, scheduled_date, location, appointment_typ
     # Find adviser
     if report.reported_student.section:
         adviser_assignments = TeacherAssignment.objects.filter(
-            section=report.reported_student.section,
-            is_adviser=True
-        ).select_related('teacher')
+            section_name=report.reported_student.section
+        )
         
         for assignment in adviser_assignments:
             if assignment.teacher:
@@ -79,9 +78,8 @@ def behavior_concerns(request):
                 # Notify adviser
                 if report.reported_student and report.reported_student.section:
                     adviser_assignments = TeacherAssignment.objects.filter(
-                        section=report.reported_student.section,
-                        is_adviser=True
-                    ).select_related('teacher')
+                        section_name=report.reported_student.section
+                    )
                     
                     for assignment in adviser_assignments:
                         if assignment.teacher:

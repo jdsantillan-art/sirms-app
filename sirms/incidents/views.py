@@ -1651,9 +1651,8 @@ def behavior_concerns(request):
                     # Find the adviser for this student's section
                     from .models import TeacherAssignment
                     adviser_assignments = TeacherAssignment.objects.filter(
-                        section=report.reported_student.section,
-                        is_adviser=True
-                    ).select_related('teacher')
+                        section_name=report.reported_student.section
+                    )
                     
                     for assignment in adviser_assignments:
                         if assignment.teacher:
