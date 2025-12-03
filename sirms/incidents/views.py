@@ -357,7 +357,11 @@ def dashboard(request):
         success_rate = int((completed_sessions / total_sessions * 100)) if total_sessions > 0 else 0
         
         # New analytics metrics - Fixed counts
-        from .models import VPFCase
+        try:
+            from .models import VPFCase
+            vpf_model_exists = True
+        except ImportError:
+            vpf_model_exists = False
         
         # Count PA and OSP based on incident type severity
         total_prohibited_acts = IncidentReport.objects.filter(
@@ -380,11 +384,18 @@ def dashboard(request):
             status='completed'
         ).count()
         
-        # Completed VPF - based on VPFCase status='completed'
-        completed_vpf = VPFCase.objects.filter(status='completed').count()
-        
-        # Total VPF Referrals - VPF cases assigned by this counselor
-        total_vpf_referrals = VPFCase.objects.filter(assigned_by=user).count()
+        # Completed VPF - based on VPFCase status='completed' (if model exists)
+        if vpf_model_exists:
+            completed_vpf = VPFCase.objects.filter(status='completed').count()
+            total_vpf_referrals = VPFCase.objects.filter(assigned_by=user).count()
+        else:
+            # Fallback: count from incident reports with VPF status
+            completed_vpf = IncidentReport.objects.filter(
+                status='vpf_completed'
+            ).count()
+            total_vpf_referrals = IncidentReport.objects.filter(
+                status__in=['vpf_assigned', 'vpf_in_progress', 'vpf_completed']
+            ).count()
         
         context.update({
             'total_prohibited_acts': total_prohibited_acts,
@@ -770,6 +781,16 @@ def report_incident(request):
     if request.method == 'POST':
         form = IncidentReportForm(request.POST, request.FILES)
         if form.is_valid():
+            # Prevent duplicate submissions - check if similar report exists in last 5 seconds
+            recent_duplicate = IncidentReport.objects.filter(
+                reporter=request.user,
+                created_at__gte=timezone.now() - timedelta(seconds=5)
+            ).first()
+            
+            if recent_duplicate:
+                messages.info(request, f'Report {recent_duplicate.case_id} was already submitted.')
+                return redirect('my_reports')
+            
             # Create the report manually since we're using custom fields
             report = IncidentReport()
             report.reporter = request.user
@@ -896,31 +917,41 @@ def report_incident(request):
                 )
                 report.involved_parties.add(victim_party)
             
-            # NEW: Send smart notifications instead of manual ones
-            try:
-                send_smart_notifications(report, 'report_submitted')
-            except Exception as e:
-                # Fallback to old notification system if smart notifications fail
-                print(f"Smart notification error: {e}")
-                # Create notification for all Discipline Officers
-                do_users = CustomUser.objects.filter(role='do')
-                for do_user in do_users:
+            # NEW: Send smart notifications in background (non-blocking)
+            # Save report first, then send notifications asynchronously
+            messages.success(request, f'Report {report.case_id} submitted successfully')
+            
+            # Send notifications in a separate thread to avoid blocking
+            import threading
+            def send_notifications_async():
+                try:
+                    send_smart_notifications(report, 'report_submitted')
+                except Exception as e:
+                    # Fallback to old notification system if smart notifications fail
+                    print(f"Smart notification error: {e}")
+                    # Create notification for all Discipline Officers
+                    do_users = CustomUser.objects.filter(role='do')
+                    for do_user in do_users:
+                        Notification.objects.create(
+                            user=do_user,
+                            title='New Incident Report Submitted',
+                            message=f'New incident report {report.case_id} filed by {request.user.get_full_name()}. Requires fact-checking and classification.',
+                            report=report
+                        )
+                    
+                    # Notify the reporter
                     Notification.objects.create(
-                        user=do_user,
-                        title='New Incident Report Submitted',
-                        message=f'New incident report {report.case_id} filed by {request.user.get_full_name()}. Requires fact-checking and classification.',
+                        user=request.user,
+                        title='Report Submitted Successfully',
+                        message=f'Your incident report {report.case_id} has been submitted and is being reviewed by the Discipline Office.',
                         report=report
                     )
-                
-                # Notify the reporter
-                Notification.objects.create(
-                    user=request.user,
-                    title='Report Submitted Successfully',
-                    message=f'Your incident report {report.case_id} has been submitted and is being reviewed by the Discipline Office.',
-                    report=report
-                )
             
-            messages.success(request, f'Report {report.case_id} submitted successfully')
+            # Start notification thread (non-blocking)
+            notification_thread = threading.Thread(target=send_notifications_async)
+            notification_thread.daemon = True
+            notification_thread.start()
+            
             return redirect('my_reports')
         else:
             # Display form errors
