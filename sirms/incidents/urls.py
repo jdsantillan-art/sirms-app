@@ -94,7 +94,6 @@ urlpatterns = [
     path('vpf-cases/', views.vpf_cases, name='vpf_cases'),
     path('vpf/update-status/<int:vpf_id>/', views.update_vpf_status, name='update_vpf_status'),
     path('vpf-schedule/', views.vpf_schedule, name='vpf_schedule'),
-    path('for-vpf/', views.for_vpf, name='for_vpf'),
     path('assign-vpf-teacher/', views.assign_vpf_teacher, name='assign_vpf_teacher'),
     
     # API endpoints for dashboard analytics
