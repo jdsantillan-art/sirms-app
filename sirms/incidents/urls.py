@@ -7,6 +7,7 @@ from . import completed_sessions_views
 from . import incident_type_views
 from . import do_schedule_views
 from . import behavior_concerns_views
+from . import esp_teacher_views
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -110,7 +111,14 @@ urlpatterns = [
     path('manage-incident-types/', views.manage_incident_types, name='manage_incident_types'),
     path('manage-legal-references/', views.manage_legal_references, name='manage_legal_references'),
     path('manage-counselors/', views.manage_counselors, name='manage_counselors'),
-    path('manage-esp-teachers/', views.manage_esp_teachers, name='manage_esp_teachers'),
     path('manage-students/', views.manage_students, name='manage_students'),
     path('backup-restore/', views.backup_restore, name='backup_restore'),
+    
+    # ESP Teacher Management URLs
+    path('manage-esp-teachers/', esp_teacher_views.manage_esp_teachers, name='manage_esp_teachers'),
+    path('esp-teacher/add/', esp_teacher_views.add_esp_teacher, name='add_esp_teacher'),
+    path('esp-teacher/<int:teacher_id>/edit/', esp_teacher_views.edit_esp_teacher, name='edit_esp_teacher'),
+    path('esp-teacher/<int:teacher_id>/delete/', esp_teacher_views.delete_esp_teacher, name='delete_esp_teacher'),
+    path('vpf-case/<int:vpf_case_id>/assign-teacher/', esp_teacher_views.assign_esp_teacher_to_vpf, name='assign_esp_teacher_to_vpf'),
+    path('for-vpf/', esp_teacher_views.for_vpf_cases, name='for_vpf'),
 ]

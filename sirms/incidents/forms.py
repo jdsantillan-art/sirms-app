@@ -522,3 +522,54 @@ class DOScheduleForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+class ESPTeacherForm(forms.ModelForm):
+    """Form for managing ESP Teachers"""
+    class Meta:
+        model = Counselor
+        fields = ['name', 'email', 'phone', 'specialization']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500',
+                'placeholder': 'Full Name'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500',
+                'placeholder': 'lastnameespteacher@gmail.com'
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500',
+                'placeholder': '09XX XXX XXXX'
+            }),
+            'specialization': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500',
+                'placeholder': 'e.g., Values Education, Behavioral Counseling'
+            }),
+        }
+        labels = {
+            'name': 'Teacher Name',
+            'email': 'Email Address',
+            'phone': 'Phone Number',
+            'specialization': 'Specialization',
+        }
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email:
+            # Check if email already exists (excluding current instance if editing)
+            existing = Counselor.objects.filter(email=email)
+            if self.instance.pk:
+                existing = existing.exclude(pk=self.instance.pk)
+            if existing.exists():
+                raise ValidationError('This email is already registered.')
+        return email
+    
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if phone:
+            # Remove spaces and validate format
+            phone = phone.replace(' ', '')
+            if not phone.startswith('09') or len(phone) != 11:
+                raise ValidationError('Phone number must be in format: 09XX XXX XXXX (11 digits starting with 09)')
+        return phone

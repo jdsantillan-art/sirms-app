@@ -34,8 +34,7 @@
             <div class="flex space-x-2">
                 <div class="flex-1">
                     <input type="text" id="searchInput" placeholder="🔍 Search by Name, Case ID..."
-                        class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
-                        onkeyup="filterCases()">
+                        class="w-full px-3 py-2 border border-gray-300 rounded text-sm" onkeyup="filterCases()">
                 </div>
                 <select id="filter-grade" class="px-2 py-1 border border-gray-300 rounded text-sm"
                     onchange="filterCases()">
@@ -84,12 +83,14 @@
                         </td>
                         <td class="px-3 py-2">
                             {% if case.reported_student %}
-                            <div class="text-sm font-medium text-gray-900">{{ case.reported_student.get_full_name }}</div>
+                            <div class="text-sm font-medium text-gray-900">{{ case.reported_student.get_full_name }}
+                            </div>
                             {% else %}
                             <div class="text-sm font-medium text-red-600">
                                 <i class="fas fa-exclamation-triangle mr-1"></i>No student assigned
                             </div>
-                            <div class="text-xs text-gray-500">{{ case.involved_students|default:"Not specified" }}</div>
+                            <div class="text-xs text-gray-500">{{ case.involved_students|default:"Not specified" }}
+                            </div>
                             {% endif %}
                         </td>
                         <td class="px-3 py-2">
@@ -101,11 +102,12 @@
                         </td>
                         <td class="px-3 py-2">
                             {% if case.incident_type %}
-                                {% if case.incident_type.severity == 'prohibited' %}
-                                <span class="text-xs px-1.5 py-0.5 bg-red-100 text-red-800 rounded font-semibold">PA</span>
-                                {% elif case.incident_type.severity == 'school_policy' %}
-                                <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded font-semibold">OSP</span>
-                                {% endif %}
+                            {% if case.incident_type.severity == 'prohibited' %}
+                            <span class="text-xs px-1.5 py-0.5 bg-red-100 text-red-800 rounded font-semibold">PA</span>
+                            {% elif case.incident_type.severity == 'school_policy' %}
+                            <span
+                                class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded font-semibold">OSP</span>
+                            {% endif %}
                             {% else %}
                             <span class="text-xs text-gray-400">-</span>
                             {% endif %}
@@ -128,7 +130,8 @@
                                     <i class="fas fa-clipboard-check mr-1"></i>Evaluate
                                 </button>
                                 {% else %}
-                                <button onclick="alert('Cannot evaluate: No student assigned to this case. Please contact the reporter to add student information.')"
+                                <button
+                                    onclick="alert('Cannot evaluate: No student assigned to this case. Please contact the reporter to add student information.')"
                                     class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-white bg-gray-400 rounded cursor-not-allowed">
                                     <i class="fas fa-ban mr-1"></i>No Student
                                 </button>
@@ -158,55 +161,63 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <form method="post" id="evaluationForm">
                 {% csrf_token %}
                 <input type="hidden" name="report_id" id="evaluationReportId">
-                
+
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-bold text-gray-800 mb-2">
                             Commission Level <span class="text-red-500">*</span>
                         </label>
-                        <select name="commission" id="commissionSelect" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500" required onchange="updateInterventions()">
+                        <select name="commission" id="commissionSelect"
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500"
+                            required onchange="updateInterventions()">
                             <option value="">Select Commission</option>
                             <option value="1st">1st Commission</option>
                             <option value="2nd">2nd Commission</option>
                             <option value="3rd">3rd Commission</option>
                         </select>
                     </div>
-                    
+
                     <div id="interventionDiv" style="display: none;">
                         <label class="block text-sm font-bold text-gray-800 mb-2">
                             Intervention <span class="text-red-500">*</span>
                         </label>
-                        <select name="intervention" id="interventionSelect" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500" required>
+                        <select name="intervention" id="interventionSelect"
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500"
+                            required>
                             <option value="">Select Intervention</option>
                         </select>
                     </div>
-                    
+
                     <div class="bg-green-50 p-4 rounded-lg border border-green-200">
                         <label class="block text-sm font-bold text-gray-800 mb-2">
                             Status <span class="text-red-500">*</span>
                         </label>
-                        <select name="status" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500" required>
+                        <select name="status"
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500"
+                            required>
                             <option value="">Select Status</option>
                             <option value="pending">📋 Pending</option>
                             <option value="ongoing">🔄 Ongoing</option>
                             <option value="complete">✅ Complete</option>
                         </select>
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-bold text-gray-800 mb-2">
                             Evaluation Notes
                         </label>
-                        <textarea name="notes" rows="3" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500" placeholder="Enter evaluation notes (optional)..."></textarea>
+                        <textarea name="notes" rows="3"
+                            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500"
+                            placeholder="Enter evaluation notes (optional)..."></textarea>
                         <p class="text-xs text-gray-500 mt-1">
                             <i class="fas fa-bell mr-1"></i>Student and teacher will be notified
                         </p>
                     </div>
-                    
+
                     <!-- Repeat Offender Display (Auto-detected) -->
                     <div id="repeatOffenderBadge" class="hidden bg-red-50 p-3 rounded-lg border border-red-200">
                         <div class="flex items-center">
@@ -215,12 +226,14 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="flex justify-end space-x-2 mt-6 pt-4 border-t">
-                    <button type="button" onclick="closeEvaluationModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
+                    <button type="button" onclick="closeEvaluationModal()"
+                        class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
                         Cancel
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold">
+                    <button type="submit"
+                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold">
                         Submit Evaluation
                     </button>
                 </div>
@@ -230,107 +243,107 @@
 </div>
 
 <script>
-const interventions = {
-    '1st': [
-        'Parent Conference with Adviser/Subject Teacher',
-        'Counseling/Follow-up/Supervised Intervention'
-    ],
-    '2nd': [
-        'Parent Conference',
-        'Counseling/Follow-up/Supervised Intervention',
-        'Values Reflective Formation (VPF)'
-    ],
-    '3rd': [
-        'Parent Conference',
-        'Counseling/Follow-up/Supervised Intervention',
-        'Values Reflective Formation (VPF)'
-    ]
-};
+    const interventions = {
+        '1st': [
+            'Parent Conference with Adviser/Subject Teacher',
+            'Counseling/Follow-up/Supervised Intervention'
+        ],
+        '2nd': [
+            'Parent Conference',
+            'Counseling/Follow-up/Supervised Intervention',
+            'Values Reflective Formation (VPF)'
+        ],
+        '3rd': [
+            'Parent Conference',
+            'Counseling/Follow-up/Supervised Intervention',
+            'Values Reflective Formation (VPF)'
+        ]
+    };
 
-function updateInterventions() {
-    const commission = document.getElementById('commissionSelect').value;
-    const interventionDiv = document.getElementById('interventionDiv');
-    const interventionSelect = document.getElementById('interventionSelect');
-    
-    if (commission) {
-        interventionDiv.style.display = 'block';
-        interventionSelect.innerHTML = '<option value="">Select Intervention</option>';
-        
-        interventions[commission].forEach(intervention => {
-            const option = document.createElement('option');
-            option.value = intervention;
-            option.textContent = intervention;
-            interventionSelect.appendChild(option);
-        });
-    } else {
-        interventionDiv.style.display = 'none';
-        interventionSelect.innerHTML = '<option value="">Select Intervention</option>';
-    }
-}
+    function updateInterventions() {
+        const commission = document.getElementById('commissionSelect').value;
+        const interventionDiv = document.getElementById('interventionDiv');
+        const interventionSelect = document.getElementById('interventionSelect');
 
-function showEvaluationForm(reportId, caseId) {
-    document.getElementById('evaluationModal').classList.remove('hidden');
-    document.getElementById('evaluationModalTitle').textContent = 'Evaluate Case ' + caseId;
-    document.getElementById('evaluationReportId').value = reportId;
-    // Reset form
-    document.getElementById('commissionSelect').value = '';
-    document.getElementById('interventionDiv').style.display = 'none';
-    
-    // Check if repeat offender (fetch from server)
-    fetch(`/api/check-repeat-offender/${reportId}/`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.is_repeat) {
-                document.getElementById('repeatOffenderBadge').classList.remove('hidden');
-            } else {
-                document.getElementById('repeatOffenderBadge').classList.add('hidden');
-            }
-        })
-        .catch(() => {
-            document.getElementById('repeatOffenderBadge').classList.add('hidden');
-        });
-}
+        if (commission) {
+            interventionDiv.style.display = 'block';
+            interventionSelect.innerHTML = '<option value="">Select Intervention</option>';
 
-function closeEvaluationModal() {
-    document.getElementById('evaluationModal').classList.add('hidden');
-    document.getElementById('evaluationForm').reset();
-}
-
-function filterCases() {
-    const searchValue = document.getElementById('searchInput').value.toLowerCase();
-    const gradeFilter = document.getElementById('filter-grade').value;
-    const typeFilter = document.getElementById('filter-type').value;
-    const rows = document.querySelectorAll('.case-row');
-    
-    rows.forEach(row => {
-        const type = row.getAttribute('data-type');
-        const grade = row.getAttribute('data-grade');
-        const student = row.getAttribute('data-student');
-        
-        const typeMatch = !typeFilter || type === typeFilter;
-        const gradeMatch = !gradeFilter || grade === gradeFilter;
-        const searchMatch = !searchValue || student.includes(searchValue);
-        
-        if (typeMatch && gradeMatch && searchMatch) {
-            row.style.display = '';
+            interventions[commission].forEach(intervention => {
+                const option = document.createElement('option');
+                option.value = intervention;
+                option.textContent = intervention;
+                interventionSelect.appendChild(option);
+            });
         } else {
-            row.style.display = 'none';
+            interventionDiv.style.display = 'none';
+            interventionSelect.innerHTML = '<option value="">Select Intervention</option>';
+        }
+    }
+
+    function showEvaluationForm(reportId, caseId) {
+        document.getElementById('evaluationModal').classList.remove('hidden');
+        document.getElementById('evaluationModalTitle').textContent = 'Evaluate Case ' + caseId;
+        document.getElementById('evaluationReportId').value = reportId;
+        // Reset form
+        document.getElementById('commissionSelect').value = '';
+        document.getElementById('interventionDiv').style.display = 'none';
+
+        // Check if repeat offender (fetch from server)
+        fetch(`/api/check-repeat-offender/${reportId}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.is_repeat) {
+                    document.getElementById('repeatOffenderBadge').classList.remove('hidden');
+                } else {
+                    document.getElementById('repeatOffenderBadge').classList.add('hidden');
+                }
+            })
+            .catch(() => {
+                document.getElementById('repeatOffenderBadge').classList.add('hidden');
+            });
+    }
+
+    function closeEvaluationModal() {
+        document.getElementById('evaluationModal').classList.add('hidden');
+        document.getElementById('evaluationForm').reset();
+    }
+
+    function filterCases() {
+        const searchValue = document.getElementById('searchInput').value.toLowerCase();
+        const gradeFilter = document.getElementById('filter-grade').value;
+        const typeFilter = document.getElementById('filter-type').value;
+        const rows = document.querySelectorAll('.case-row');
+
+        rows.forEach(row => {
+            const type = row.getAttribute('data-type');
+            const grade = row.getAttribute('data-grade');
+            const student = row.getAttribute('data-student');
+
+            const typeMatch = !typeFilter || type === typeFilter;
+            const gradeMatch = !gradeFilter || grade === gradeFilter;
+            const searchMatch = !searchValue || student.includes(searchValue);
+
+            if (typeMatch && gradeMatch && searchMatch) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('evaluationModal').addEventListener('click', function (e) {
+        if (e.target === this) {
+            closeEvaluationModal();
         }
     });
-}
 
-// Close modal when clicking outside
-document.getElementById('evaluationModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeEvaluationModal();
-    }
-});
-
-// Keyboard shortcut - ESC to close modal
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeEvaluationModal();
-    }
-});
+    // Keyboard shortcut - ESC to close modal
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeEvaluationModal();
+        }
+    });
 </script>
 {% endblock %}
