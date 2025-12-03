@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from .models import (CustomUser, IncidentReport, CounselingSession, Classification,
                      Curriculum, Track, Grade, Section, IncidentType, TeacherAssignment,
                      ViolationHistory, CaseEvaluation, InternalNote, SystemBackup, ReportAnalytics,
-                     LegalReference, DOSchedule)
+                     LegalReference, DOSchedule, Counselor)
 
 
 class NoNAValidationMixin:
