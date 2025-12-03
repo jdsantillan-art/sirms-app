@@ -2591,6 +2591,9 @@ def case_evaluation(request):
     if request.user.role != 'counselor':
         return redirect('dashboard')
     
+    # Import VPFCase for VPF assignments
+    from .models import VPFCase
+    
     if request.method == 'POST':
         report_id = request.POST.get('report_id')
         commission = request.POST.get('commission')
