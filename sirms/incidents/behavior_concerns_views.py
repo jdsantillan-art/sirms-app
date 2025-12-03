@@ -133,18 +133,33 @@ def behavior_concerns(request):
                     status='scheduled'
                 )
                 
+                # AUTO-SYNC: Update Behavioral Concern status to 'under_review' (Scheduled)
+                report.status = 'under_review'
+                report.save()
+                
                 # Notify student
                 Notification.objects.create(
                     user=student,
                     title=f'{appointment_type} Scheduled',
                     message=f'You have a {appointment_type.lower()} scheduled on {scheduled_date.strftime("%B %d, %Y at %I:%M %p")}. Location: {location or "DO Office"}. Please be on time.',
-                    report=report
+                    report=report,
+                    notification_type='counseling_scheduled'
                 )
+                
+                # Notify reporter about the schedule
+                if report.reporter:
+                    Notification.objects.create(
+                        user=report.reporter,
+                        title='Behavioral Concern Scheduled',
+                        message=f'The behavioral concern (Case: {report.case_id}) has been scheduled. A {appointment_type.lower()} will be held on {scheduled_date.strftime("%B %d, %Y at %I:%M %p")}.',
+                        report=report,
+                        notification_type='counseling_scheduled'
+                    )
                 
                 # Notify adviser
                 notify_adviser_of_schedule(report, scheduled_date, location or 'DO Office', appointment_type)
                 
-                messages.success(request, f'{appointment_type} scheduled successfully! Student and adviser have been notified.')
+                messages.success(request, f'{appointment_type} scheduled successfully! Status updated to Scheduled. Student, reporter, and adviser have been notified.')
             
             except CustomUser.DoesNotExist:
                 messages.error(request, 'Student not found.')

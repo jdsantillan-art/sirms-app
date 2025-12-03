@@ -129,10 +129,20 @@ def create_do_schedule(request):
             schedule.discipline_officer = request.user
             schedule.save()
             
-            # NEW: Auto-update report status to 'under_review' (ongoing) when scheduled
+            # AUTO-SYNC: Update Behavioral Concern status to 'under_review' when DO schedule is created
             if schedule.report:
-                schedule.report.status = 'under_review'
+                schedule.report.status = 'under_review'  # Represents "Scheduled" status
                 schedule.report.save()
+                
+                # Notify the reporter that schedule was created
+                if schedule.report.reporter:
+                    Notification.objects.create(
+                        user=schedule.report.reporter,
+                        title='Behavioral Concern Scheduled',
+                        message=f'The behavioral concern (Case: {schedule.report.case_id}) has been scheduled. A {schedule.get_schedule_type_display().lower()} will be held on {schedule.scheduled_date.strftime("%B %d, %Y at %I:%M %p")}. Location: {schedule.location}',
+                        report=schedule.report,
+                        notification_type='counseling_scheduled'
+                    )
             
             # Create notification for the student if assigned
             if schedule.student:
@@ -205,6 +215,22 @@ def update_do_schedule_status(request, schedule_id):
             if notes:
                 schedule.notes = notes
             schedule.save()
+            
+            # AUTO-SYNC: Update Behavioral Concern status when DO Schedule is completed
+            if schedule.report and new_status == 'completed':
+                # When DO Schedule is marked as completed, automatically update Behavioral Concern to resolved
+                schedule.report.status = 'resolved'
+                schedule.report.save()
+                
+                # Notify the reporter
+                if schedule.report.reporter:
+                    Notification.objects.create(
+                        user=schedule.report.reporter,
+                        title='Behavioral Concern Completed',
+                        message=f'The behavioral concern (Case: {schedule.report.case_id}) has been resolved. The {schedule.get_schedule_type_display().lower()} was successfully completed on {schedule.scheduled_date.strftime("%B %d, %Y")}.',
+                        report=schedule.report,
+                        notification_type='session_completed'
+                    )
             
             # Notify student if status changed
             if schedule.student and old_status != new_status:
