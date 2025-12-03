@@ -4342,11 +4342,17 @@ def vpf_cases(request):
         return redirect('dashboard')
     
     from .models import VPFCase, Counselor
+    from django.db.models import Q
     
-    # Find the Counselor record that matches this ESP teacher's name
-    # This links the user account to the counselor in "Manage ESP Teacher/VPF"
+    # Find the Counselor record that matches this ESP teacher
+    # Try matching by email first (most reliable), then by name
+    esp_teacher_email = request.user.email
     esp_teacher_name = request.user.get_full_name()
-    matching_counselors = Counselor.objects.filter(name__icontains=esp_teacher_name)
+    
+    matching_counselors = Counselor.objects.filter(
+        Q(email__iexact=esp_teacher_email) |  # Match by email (case-insensitive)
+        Q(name__icontains=esp_teacher_name)    # Or match by name
+    ).filter(is_active=True)
     
     # Get only VPF cases assigned to this ESP teacher
     if matching_counselors.exists():
@@ -4509,9 +4515,16 @@ def vpf_schedule(request):
         messages.success(request, f'VPF session scheduled for {vpf_case.student.get_full_name()} on {scheduled_date.strftime("%B %d, %Y at %I:%M %p")}')
         return redirect('vpf_schedule')
     
-    # Find the Counselor record that matches this ESP teacher's name
+    # Find the Counselor record that matches this ESP teacher
+    # Try matching by email first (most reliable), then by name
+    from django.db.models import Q
+    esp_teacher_email = request.user.email
     esp_teacher_name = request.user.get_full_name()
-    matching_counselors = Counselor.objects.filter(name__icontains=esp_teacher_name)
+    
+    matching_counselors = Counselor.objects.filter(
+        Q(email__iexact=esp_teacher_email) |  # Match by email (case-insensitive)
+        Q(name__icontains=esp_teacher_name)    # Or match by name
+    ).filter(is_active=True)
     
     # Get pending VPF cases assigned to this ESP teacher (not yet scheduled)
     if matching_counselors.exists():
