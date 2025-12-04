@@ -331,8 +331,7 @@ def account_settings(request):
 
 # Add any other essential views here as needed...
 
-# Ad
-ditional required functions for URLs
+# Additional required functions for URLs
 @login_required
 def analytics_dashboard(request):
     """Analytics dashboard placeholder"""
