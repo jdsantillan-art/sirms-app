@@ -21,7 +21,7 @@ try:
         Classification, CounselingSession, IncidentType, 
         TeacherAssignment, Curriculum, ViolationHistory, 
         CaseEvaluation, LegalReference, InvolvedParty,
-        VPFCase, CounselingSchedule
+        VPFCase, VPFSchedule, CounselingSchedule, Counselor
     )
 except ImportError:
     pass
@@ -976,22 +976,184 @@ def reports_analytics(request):
 
 @login_required
 def vpf_cases(request):
-    """VPF cases placeholder"""
-    try:
-        context = {'user_role': request.user.role}
-        return render(request, 'esp/vpf_cases.html', context)
-    except:
+    """VPF Cases management for ESP Teachers - Only show cases assigned to them"""
+    if request.user.role != 'esp_teacher':
         return redirect('dashboard')
+    
+    from .models import VPFCase, Counselor
+    from django.db.models import Q
+    
+    # Find the Counselor record that matches this ESP teacher
+    # Try matching by email first (most reliable), then by name
+    esp_teacher_email = request.user.email
+    esp_teacher_name = request.user.get_full_name()
+    
+    matching_counselors = Counselor.objects.filter(
+        Q(email__iexact=esp_teacher_email) |  # Match by email (case-insensitive)
+        Q(name__icontains=esp_teacher_name)    # Or match by name
+    ).filter(is_active=True)
+    
+    # Get only VPF cases assigned to this ESP teacher
+    if matching_counselors.exists():
+        vpf_cases = VPFCase.objects.filter(
+            esp_teacher_assigned__in=matching_counselors
+        ).select_related(
+            'student', 'report', 'assigned_by', 'esp_teacher_assigned'
+        ).order_by('-assigned_at')
+    else:
+        # No matching counselor found, show empty list
+        vpf_cases = VPFCase.objects.none()
+    
+    # Filter by status
+    status_filter = request.GET.get('status', '')
+    if status_filter:
+        vpf_cases = vpf_cases.filter(status=status_filter)
+    
+    # Statistics
+    total_cases = vpf_cases.count()
+    pending_cases = vpf_cases.filter(status='pending').count()
+    scheduled_cases = vpf_cases.filter(status='scheduled').count()
+    completed_cases = vpf_cases.filter(status='completed').count()
+    
+    return render(request, 'esp/vpf_cases.html', {
+        'vpf_cases': vpf_cases,
+        'total_cases': total_cases,
+        'pending_cases': pending_cases,
+        'scheduled_cases': scheduled_cases,
+        'completed_cases': completed_cases,
+        'status_filter': status_filter,
+    })
 
 
 @login_required
 def vpf_schedule(request):
-    """VPF schedule placeholder"""
-    try:
-        context = {'user_role': request.user.role}
-        return render(request, 'esp/vpf_schedule.html', context)
-    except:
+    """VPF Schedule management for ESP Teachers"""
+    if request.user.role != 'esp_teacher':
         return redirect('dashboard')
+    
+    from .models import VPFCase, VPFSchedule, Counselor
+    from datetime import datetime, timedelta
+    from django.db.models import Q
+    
+    if request.method == 'POST':
+        vpf_case_id = request.POST.get('vpf_case_id')
+        scheduled_date_str = request.POST.get('scheduled_date')
+        location = request.POST.get('location', '')
+        notes = request.POST.get('notes', '')
+        
+        vpf_case = get_object_or_404(VPFCase, id=vpf_case_id)
+        
+        # Parse the datetime string
+        try:
+            scheduled_date = datetime.fromisoformat(scheduled_date_str.replace('Z', '+00:00'))
+        except:
+            try:
+                scheduled_date = datetime.strptime(scheduled_date_str, '%Y-%m-%dT%H:%M')
+            except ValueError:
+                scheduled_date = datetime.strptime(scheduled_date_str, '%Y-%m-%d %H:%M:%S')
+        
+        # Make timezone-aware if needed
+        if scheduled_date.tzinfo is None:
+            scheduled_date = timezone.make_aware(scheduled_date)
+        
+        # Check for duplicate schedule (same VPF case already scheduled)
+        existing_schedule = VPFSchedule.objects.filter(
+            vpf_case=vpf_case,
+            status__in=['scheduled', 'ongoing']
+        ).first()
+        
+        if existing_schedule:
+            messages.error(request, f'This VPF case is already scheduled for {existing_schedule.scheduled_date.strftime("%B %d, %Y at %I:%M %p")}. Please cancel or complete the existing schedule first.')
+            return redirect('vpf_schedule')
+        
+        # Check for time conflict (same ESP teacher, overlapping time)
+        time_buffer = timedelta(hours=1)  # 1 hour buffer
+        conflicting_schedules = VPFSchedule.objects.filter(
+            esp_teacher=request.user,
+            status__in=['scheduled', 'ongoing'],
+            scheduled_date__gte=scheduled_date - time_buffer,
+            scheduled_date__lte=scheduled_date + time_buffer
+        )
+        
+        if conflicting_schedules.exists():
+            conflict = conflicting_schedules.first()
+            messages.error(request, f'Time conflict! You already have a session scheduled at {conflict.scheduled_date.strftime("%I:%M %p")} with {conflict.vpf_case.student.get_full_name()}. Please choose a different time.')
+            return redirect('vpf_schedule')
+        
+        # Find matching counselor for this ESP teacher
+        esp_teacher_email = request.user.email
+        esp_teacher_name = request.user.get_full_name()
+        matching_counselor = Counselor.objects.filter(
+            Q(email__iexact=esp_teacher_email) |
+            Q(name__icontains=esp_teacher_name)
+        ).filter(is_active=True).first()
+        
+        # Create schedule
+        schedule = VPFSchedule.objects.create(
+            vpf_case=vpf_case,
+            esp_teacher=request.user,
+            counselor_assigned=matching_counselor,
+            scheduled_date=scheduled_date,
+            location=location,
+            notes=notes,
+            status='scheduled'
+        )
+        
+        # Update VPF case status to 'scheduled'
+        vpf_case.status = 'scheduled'
+        vpf_case.save()
+        
+        # Notify student
+        Notification.objects.create(
+            user=vpf_case.student,
+            title='VPF Session Scheduled',
+            message=f'You have been scheduled for a Values Reflective Formation session on {scheduled_date.strftime("%B %d, %Y at %I:%M %p")}. Location: {location if location else "TBA"}. Please attend on time.',
+            report=vpf_case.report
+        )
+        
+        # Notify the guidance counselor who assigned the case
+        if vpf_case.assigned_by:
+            Notification.objects.create(
+                user=vpf_case.assigned_by,
+                title='VPF Session Scheduled',
+                message=f'ESP Teacher {request.user.get_full_name()} has scheduled a VPF session for {vpf_case.student.get_full_name()} (Case {vpf_case.report.case_id}) on {scheduled_date.strftime("%B %d, %Y at %I:%M %p")}.',
+                report=vpf_case.report
+            )
+        
+        messages.success(request, f'VPF session scheduled for {vpf_case.student.get_full_name()} on {scheduled_date.strftime("%B %d, %Y at %I:%M %p")}')
+        return redirect('vpf_schedule')
+    
+    # Find the Counselor record that matches this ESP teacher
+    esp_teacher_email = request.user.email
+    esp_teacher_name = request.user.get_full_name()
+    
+    matching_counselors = Counselor.objects.filter(
+        Q(email__iexact=esp_teacher_email) |
+        Q(name__icontains=esp_teacher_name)
+    ).filter(is_active=True)
+    
+    # Get pending VPF cases assigned to this ESP teacher (not yet scheduled)
+    if matching_counselors.exists():
+        pending_vpf_cases = VPFCase.objects.filter(
+            esp_teacher_assigned__in=matching_counselors,
+            status='pending'
+        ).select_related('student', 'report', 'esp_teacher_assigned')
+    else:
+        pending_vpf_cases = VPFCase.objects.none()
+    
+    # Get schedules for cases assigned to this ESP teacher
+    if matching_counselors.exists():
+        schedules = VPFSchedule.objects.filter(
+            esp_teacher=request.user
+        ).select_related('vpf_case__student', 'vpf_case__report', 'counselor_assigned').order_by('scheduled_date')
+    else:
+        schedules = VPFSchedule.objects.none()
+    
+    return render(request, 'esp/vpf_schedule.html', {
+        'pending_vpf_cases': pending_vpf_cases,
+        'schedules': schedules,
+        'today': timezone.now().date()
+    })
 
 
 @login_required

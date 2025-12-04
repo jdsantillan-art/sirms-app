@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Count, Q
 from django.db import models
-from .models import Counselor, VPFCase
+from django.utils import timezone
+from .models import Counselor, VPFCase, CustomUser, Notification
 from .forms import ESPTeacherForm
 
 
@@ -109,10 +110,12 @@ def delete_esp_teacher(request, teacher_id):
 
 @login_required
 def assign_esp_teacher_to_vpf(request, vpf_case_id):
-    """Assign ESP teacher to VPF case"""
-    if request.user.role != 'counselor':
+    """Assign ESP teacher to VPF case - sends to ESP Teacher's VPF Cases display"""
+    if request.user.role not in ['counselor', 'guidance']:
         messages.error(request, 'Access denied.')
         return redirect('dashboard')
+    
+    from .models import CustomUser, Notification
     
     vpf_case = get_object_or_404(VPFCase, id=vpf_case_id)
     
@@ -121,14 +124,40 @@ def assign_esp_teacher_to_vpf(request, vpf_case_id):
         if teacher_id:
             teacher = get_object_or_404(Counselor, id=teacher_id, is_active=True)
             vpf_case.esp_teacher_assigned = teacher
-            vpf_case.status = 'scheduled'
+            # Keep status as 'pending' until ESP teacher schedules it
+            vpf_case.status = 'pending'
             vpf_case.save()
             
-            messages.success(request, f'ESP Teacher {teacher.name} assigned to VPF case successfully!')
+            # Find the ESP Teacher user account that matches this Counselor record
+            # Match by email first, then by name
+            esp_teacher_user = CustomUser.objects.filter(
+                Q(email__iexact=teacher.email) | 
+                Q(first_name__icontains=teacher.name.split()[0] if teacher.name else '') |
+                Q(last_name__icontains=teacher.name.split()[-1] if teacher.name else '')
+            ).filter(role='esp_teacher', is_active=True).first()
+            
+            # Notify the specific ESP Teacher
+            if esp_teacher_user:
+                Notification.objects.create(
+                    user=esp_teacher_user,
+                    title='VPF Case Assigned to You',
+                    message=f'Case {vpf_case.report.case_id} for student {vpf_case.student.get_full_name()} has been assigned to you. Please schedule the VPF session.',
+                    report=vpf_case.report
+                )
+            
+            # Notify the student
+            Notification.objects.create(
+                user=vpf_case.student,
+                title='VPF Teacher Assigned',
+                message=f'Your VPF case ({vpf_case.report.case_id}) has been assigned to {teacher.name}. You will be notified when the session is scheduled.',
+                report=vpf_case.report
+            )
+            
+            messages.success(request, f'ESP Teacher {teacher.name} assigned to VPF case successfully! The case will now appear in their VPF Cases display.')
         else:
             messages.error(request, 'Please select an ESP teacher.')
         
-        return redirect('major_case_detail', case_id=vpf_case.report.id)
+        return redirect('for_vpf')
     
     # Get active ESP teachers
     esp_teachers = Counselor.objects.filter(is_active=True).annotate(
