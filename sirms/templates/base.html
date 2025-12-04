@@ -30,7 +30,7 @@
         }
 
         .sidebar {
-            background: linear-gradient(180deg, #0d4f2e 0%, #1a7a4a 25%, #2d9d5f 50%, #3db870 75%, #4fd682 100%);
+            background: #2E8B57;
             transition: all 0.3s ease;
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -82,7 +82,7 @@
         }
 
         .sidebar a {
-            color: #1a472a;
+            color: #ffffff;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -91,23 +91,23 @@
             border-radius: 8px;
             transition: all 0.3s ease;
             position: relative;
-            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
             font-weight: 600;
         }
 
         .sidebar a:hover {
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.2);
             transform: translateX(4px);
-            color: #0d2818;
-            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+            color: #ffffff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .sidebar a.active {
-            background-color: rgba(255, 255, 255, 0.4);
-            color: #0d2818;
+            background-color: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
             font-weight: 700;
-            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6);
-            border-left: 3px solid rgba(255, 255, 255, 0.8);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            border-left: 3px solid rgba(255, 255, 255, 0.9);
         }
 
         .sidebar a.active:hover {
@@ -118,6 +118,11 @@
             width: 20px;
             margin-right: 12px;
             text-align: center;
+            color: #ffffff;
+        }
+
+        .sidebar-text {
+            color: #ffffff !important;
         }
 
         .sidebar.collapsed a i {
@@ -209,9 +214,9 @@
                     <div class="flex items-center space-x-3">
                         <img src="{% static 'images/school-logo.jpg' %}" alt="School Logo"
                             class="h-8 w-8 object-contain rounded-lg bg-white/10 p-1">
-                        <h2 class="sidebar-logo text-2xl font-bold sidebar-text" style="color: #1a472a; text-shadow: 0 1px 3px rgba(255, 255, 255, 0.4);">SIRMS</h2>
+                        <h2 class="sidebar-logo text-2xl font-bold sidebar-text" style="color: #ffffff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);">SIRMS</h2>
                     </div>
-                    <button id="sidebarToggle" class="hover:bg-white/30 p-2 rounded-lg transition-colors" style="color: #1a472a; text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);">
+                    <button id="sidebarToggle" class="hover:bg-white/30 p-2 rounded-lg transition-colors" style="color: #ffffff; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
                         <i class="fas fa-bars"></i>
                     </button>
                 </div>
@@ -314,7 +319,7 @@
                 </a>
 
                 <!-- Maintenance Section for Counselor -->
-                <div class="px-4 py-2 text-sm font-semibold text-white/70 sidebar-text mt-4">System Maintenance</div>
+                <div class="px-4 py-2 text-sm font-semibold text-white sidebar-text mt-4">System Maintenance</div>
 
                 <a href="{% url 'manage_teachers' %}" class="nav-item" data-tooltip="Manage Teachers">
                     <i class="fas fa-chalkboard-teacher"></i>
@@ -399,7 +404,7 @@
                 </a>
                 {% endif %}
 
-                <div class="px-4 py-2 text-sm font-semibold text-white/70 sidebar-text mt-4">System Maintenance</div>
+                <div class="px-4 py-2 text-sm font-semibold text-white sidebar-text mt-4">System Maintenance</div>
                 <a href="{% url 'manage_curriculum' %}" class="nav-item" data-tooltip="Manage Curriculum">
                     <i class="fas fa-book-open"></i>
                     <span class="sidebar-text">Manage Curriculum</span>
