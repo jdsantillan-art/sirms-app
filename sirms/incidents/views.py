@@ -21,7 +21,8 @@ try:
         Classification, CounselingSession, IncidentType, 
         TeacherAssignment, Curriculum, ViolationHistory, 
         CaseEvaluation, LegalReference, InvolvedParty,
-        VPFCase, VPFSchedule, CounselingSchedule, Counselor
+        VPFCase, VPFSchedule, CounselingSchedule, Counselor,
+        InternalNote
     )
 except ImportError:
     pass
@@ -406,9 +407,51 @@ def report_detail(request, case_id):
     """Report detail view"""
     try:
         report = get_object_or_404(IncidentReport, case_id=case_id)
-        context = {'report': report}
+        
+        # Check permissions - allow users to view reports they created or are involved in
+        if request.user.role == 'student':
+            # Students can view reports where they are the reported student or the reporter
+            if report.reported_student != request.user and report.reporter != request.user:
+                messages.error(request, 'You do not have permission to view this report.')
+                return redirect('dashboard')
+        elif request.user.role not in ['do', 'counselor', 'principal']:
+            # Other roles can only view reports they created
+            if report.reporter != request.user:
+                messages.error(request, 'You do not have permission to view this report.')
+                return redirect('dashboard')
+        
+        context = {'report': report, 'user': request.user}
+        
+        # Add classification if exists
+        try:
+            if hasattr(report, 'classification') and report.classification:
+                context['classification'] = report.classification
+        except:
+            pass
+        
+        # Add counseling sessions related to this report
+        try:
+            if report.reported_student:
+                counseling_sessions = CounselingSession.objects.filter(
+                    student=report.reported_student,
+                    report=report
+                ).order_by('scheduled_date')
+                context['counseling_sessions'] = counseling_sessions
+        except:
+            pass
+        
+        # Add internal notes for authorized users
+        try:
+            if request.user.role in ['do', 'counselor', 'principal']:
+                internal_notes = InternalNote.objects.filter(
+                    report=report
+                ).order_by('-created_at')
+                context['internal_notes'] = internal_notes
+        except:
+            pass
+        
         return render(request, 'report_detail.html', context)
-    except:
+    except Exception as e:
         messages.error(request, 'Report not found.')
         return redirect('all_reports')
 
