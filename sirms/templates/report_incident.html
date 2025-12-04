@@ -470,7 +470,6 @@
         }
     });
 });
-</script>
 
 // Toggle between student and teacher fields based on party type
 document.addEventListener('DOMContentLoaded', function() {
@@ -497,25 +496,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-    // Prevent double submission
-    const form = document.getElementById('incident-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const submitIcon = document.getElementById('submit-icon');
-    const submitText = document.getElementById('submit-text');
-    let isSubmitting = false;
+// Prevent double submission
+const form = document.getElementById('incident-form');
+const submitBtn = document.getElementById('submit-btn');
+const submitIcon = document.getElementById('submit-icon');
+const submitText = document.getElementById('submit-text');
+let isSubmitting = false;
 
-    form.addEventListener('submit', function(e) {
-        if (isSubmitting) {
-            e.preventDefault();
-            return false;
-        }
-        
-        isSubmitting = true;
-        submitBtn.disabled = true;
-        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
-        submitBtn.classList.remove('hover:from-emerald-700', 'hover:to-teal-700', 'hover:shadow-xl', 'hover:-translate-y-0.5');
-        submitIcon.className = 'fas fa-spinner fa-spin';
-        submitText.textContent = 'Submitting...';
-    });
+form.addEventListener('submit', function(e) {
+    if (isSubmitting) {
+        e.preventDefault();
+        return false;
+    }
+    
+    isSubmitting = true;
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    submitBtn.classList.remove('hover:from-emerald-700', 'hover:to-teal-700', 'hover:shadow-xl', 'hover:-translate-y-0.5');
+    submitIcon.className = 'fas fa-spinner fa-spin';
+    submitText.textContent = 'Submitting...';
+});
 </script>
 {% endblock %}
