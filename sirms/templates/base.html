@@ -30,7 +30,7 @@
         }
 
         .sidebar {
-            background: linear-gradient(135deg, #2E8B57 0%, #4CAF7F 50%, #FFFFFF 100%);
+            background: linear-gradient(135deg, #1B5E3E 0%, #2E8B57 85%, #E8F5E9 100%);
             transition: all 0.3s ease;
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -82,7 +82,7 @@
         }
 
         .sidebar a {
-            color: var(--white);
+            color: #FFFFFF;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -91,13 +91,15 @@
             border-radius: 8px;
             transition: all 0.3s ease;
             position: relative;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: 500;
         }
 
         .sidebar a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.25);
             transform: translateX(4px);
-            color: #1a472a;
+            color: #FFFFFF;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
         }
 
         .sidebar a i {
@@ -195,9 +197,9 @@
                     <div class="flex items-center space-x-3">
                         <img src="{% static 'images/school-logo.jpg' %}" alt="School Logo"
                             class="h-8 w-8 object-contain rounded-lg bg-white/10 p-1">
-                        <h2 class="sidebar-logo text-2xl font-bold sidebar-text">SIRMS</h2>
+                        <h2 class="sidebar-logo text-2xl font-bold sidebar-text text-white" style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">SIRMS</h2>
                     </div>
-                    <button id="sidebarToggle" class="text-white hover:bg-white/20 p-2 rounded-lg transition-colors">
+                    <button id="sidebarToggle" class="text-white hover:bg-white/30 p-2 rounded-lg transition-colors" style="text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);">
                         <i class="fas fa-bars"></i>
                     </button>
                 </div>
