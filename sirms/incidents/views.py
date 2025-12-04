@@ -20,7 +20,8 @@ try:
     from .models import (
         Classification, CounselingSession, IncidentType, 
         TeacherAssignment, Curriculum, ViolationHistory, 
-        CaseEvaluation, LegalReference, InvolvedParty
+        CaseEvaluation, LegalReference, InvolvedParty,
+        VPFCase, CounselingSchedule
     )
 except ImportError:
     pass
@@ -637,6 +638,13 @@ def major_case_review(request):
                     messages.error(request, f'Error processing case: {str(e)}')
             
             return redirect('major_case_review')
+        
+        # GET request - show the review page
+        # Add your GET request handling here
+        return render(request, 'counselor/major_case_review.html', {})
+    except Exception as e:
+        messages.error(request, f'Error: {str(e)}')
+        return redirect('dashboard')
 
 
 @login_required
@@ -662,22 +670,258 @@ def counseling_management(request):
 
 @login_required
 def case_evaluation(request):
-    """Case evaluation placeholder"""
-    try:
-        context = {'user_role': request.user.role}
-        return render(request, 'counselor/case_evaluation.html', context)
-    except:
+    """Case evaluation - routes VRF to ESP Teacher, others to Counseling Schedule"""
+    if request.user.role not in ['counselor', 'guidance']:
         return redirect('dashboard')
+    
+    if request.method == 'POST':
+        report_id = request.POST.get('report_id')
+        commission = request.POST.get('commission')
+        intervention = request.POST.get('intervention')
+        status = request.POST.get('status')
+        notes = request.POST.get('notes', '')
+        
+        try:
+            report = IncidentReport.objects.get(id=report_id)
+        except IncidentReport.DoesNotExist:
+            messages.error(request, 'Report not found.')
+            return redirect('case_evaluation')
+        
+        # Check if report has a student
+        if not report.reported_student:
+            messages.error(request, f'Cannot evaluate case {report.case_id}: No student associated with this report.')
+            return redirect('case_evaluation')
+        
+        # Check if evaluation already exists
+        if hasattr(report, 'evaluation'):
+            messages.error(request, f'Case {report.case_id} has already been evaluated.')
+            return redirect('case_evaluation')
+        
+        # Determine recommendation based on intervention
+        recommendation = 'counseling'  # default
+        if intervention and ('VPF' in intervention or 'Values Reflective Formation' in intervention):
+            recommendation = 'monitoring'
+        
+        # Create evaluation
+        try:
+            evaluation = CaseEvaluation.objects.create(
+                report=report,
+                evaluated_by=request.user,
+                recommendation=recommendation,
+                verdict='pending',
+                is_repeat_offender=False,
+                evaluation_notes=f"Commission: {commission}\nIntervention: {intervention}\nStatus: {status}\n{notes}"
+            )
+            
+            # Update report status
+            report.status = 'evaluated'
+            report.save()
+            
+            # If VRF selected, create VPF case for ESP Teacher to manage
+            if intervention and ('VPF' in intervention or 'Values Reflective Formation' in intervention):
+                vpf_case = VPFCase.objects.create(
+                    report=report,
+                    student=report.reported_student,
+                    assigned_by=request.user,
+                    commission_level=commission,
+                    intervention=intervention,
+                    status='pending',
+                    notes=f"Commission: {commission}\nIntervention: {intervention}\nEvaluation Notes: {notes}"
+                )
+                
+                # Notify ALL ESP Teachers (they will manage VPF)
+                esp_teachers = CustomUser.objects.filter(role='esp_teacher')
+                for esp_teacher in esp_teachers:
+                    Notification.objects.create(
+                        user=esp_teacher,
+                        title='New VPF Case Assigned',
+                        message=f'Case {report.case_id} has been assigned for VPF - {commission}. Student: {report.reported_student.get_full_name()}. Please schedule the VPF session.',
+                        report=report
+                    )
+                
+                # Notify the reporter (adviser/teacher)
+                if report.reporter:
+                    Notification.objects.create(
+                        user=report.reporter,
+                        title='Case Evaluated - VPF Assigned',
+                        message=f'Case {report.case_id} has been evaluated. The student will undergo Values Reflective Formation (VPF) - {commission}. ESP Teacher will schedule the session.',
+                        report=report
+                    )
+                
+                # Notify the student
+                if report.reported_student:
+                    Notification.objects.create(
+                        user=report.reported_student,
+                        title='VPF Case Assigned',
+                        message=f'You have been assigned to Values Reflective Formation (VPF) for case {report.case_id}. The ESP Teacher will schedule your session.',
+                        report=report
+                    )
+                
+                messages.success(request, f'✅ VPF case created for {report.reported_student.get_full_name()}. ESP Teachers have been notified. Case will appear in "For VRF" sidebar.')
+            else:
+                # Non-VPF intervention - Save to Counseling Schedule sidebar
+                # Create a pending counseling schedule entry (counselor will set actual date/time later)
+                counseling_schedule = CounselingSchedule.objects.create(
+                    evaluation=evaluation,
+                    counselor=request.user,
+                    student=report.reported_student,
+                    scheduled_date=timezone.now() + timedelta(days=7),  # Default 7 days from now
+                    location='Guidance Office',
+                    notes=f"Commission: {commission}\nIntervention: {intervention}\nStatus: {status}\n{notes}",
+                    status='scheduled'
+                )
+                
+                # Update report status to 'under_review' (ongoing) when counseling is scheduled
+                report.status = 'under_review'
+                report.save()
+                
+                # Notify the adviser (reporter)
+                if report.reporter:
+                    Notification.objects.create(
+                        user=report.reporter,
+                        title='Case Evaluated - Counseling Scheduled',
+                        message=f'Case {report.case_id} has been evaluated. Intervention: {intervention}. The student will be scheduled for counseling.',
+                        report=report
+                    )
+                
+                # Notify the student
+                if report.reported_student:
+                    Notification.objects.create(
+                        user=report.reported_student,
+                        title='Counseling Session Scheduled',
+                        message=f'Your case {report.case_id} has been evaluated. A counseling session will be scheduled. You will receive the schedule details soon.',
+                        report=report
+                    )
+                
+                messages.success(request, f'✅ Evaluation completed for {report.reported_student.get_full_name()}. Case saved to Counseling Schedule sidebar.')
+            
+            return redirect('case_evaluation')
+            
+        except Exception as e:
+            messages.error(request, f'Error creating evaluation: {str(e)}')
+            return redirect('case_evaluation')
+    
+    # Get cases ready for evaluation (not yet evaluated)
+    cases_for_evaluation = IncidentReport.objects.filter(
+        evaluation__isnull=True,
+        reported_student__isnull=False
+    ).exclude(
+        status__in=['closed', 'resolved']
+    ).order_by('-created_at')
+    
+    return render(request, 'counselor/case_evaluation.html', {
+        'cases': cases_for_evaluation,
+    })
 
 
 @login_required
 def counselor_schedule(request):
-    """Counselor schedule placeholder"""
-    try:
-        context = {'user_role': request.user.role}
-        return render(request, 'counselor/counselor_schedule.html', context)
-    except:
+    """Counseling schedule page for non-VPF interventions"""
+    if request.user.role not in ['counselor', 'guidance']:
         return redirect('dashboard')
+    
+    if request.method == 'POST':
+        evaluation_id = request.POST.get('evaluation_id')
+        scheduled_date_str = request.POST.get('scheduled_date')
+        location = request.POST.get('location', '')
+        notes = request.POST.get('notes', '')
+        
+        evaluation = get_object_or_404(CaseEvaluation, id=evaluation_id)
+        
+        # Parse the scheduled date and make it timezone-aware
+        scheduled_date = datetime.fromisoformat(scheduled_date_str)
+        
+        # Make the datetime timezone-aware if it's naive
+        if scheduled_date.tzinfo is None:
+            scheduled_date = timezone.make_aware(scheduled_date)
+        
+        # Validation 1: Check if weekend
+        if scheduled_date.weekday() >= 5:  # 5=Saturday, 6=Sunday
+            messages.error(request, 'Weekend scheduling is not allowed. Please select a weekday.')
+            return redirect(f'/counselor-schedule/?evaluation_id={evaluation_id}')
+        
+        # Validation 2: Check if in the past
+        if scheduled_date < timezone.now():
+            messages.error(request, 'Cannot schedule in the past. Please select a future date and time.')
+            return redirect(f'/counselor-schedule/?evaluation_id={evaluation_id}')
+        
+        # Validation 3: Check for duplicate/conflict for this student
+        time_window_start = scheduled_date - timedelta(hours=1)
+        time_window_end = scheduled_date + timedelta(hours=1)
+        
+        existing_schedule = CounselingSchedule.objects.filter(
+            student=evaluation.report.reported_student,
+            scheduled_date__range=(time_window_start, time_window_end),
+            status__in=['scheduled', 'rescheduled']
+        ).exists()
+        
+        if existing_schedule:
+            messages.error(request, f'Schedule conflict: {evaluation.report.reported_student.get_full_name()} already has a session scheduled within this time window. Please choose a different time.')
+            return redirect(f'/counselor-schedule/?evaluation_id={evaluation_id}')
+        
+        # Create counseling schedule
+        schedule = CounselingSchedule.objects.create(
+            evaluation=evaluation,
+            counselor=request.user,
+            student=evaluation.report.reported_student,
+            scheduled_date=scheduled_date,
+            location=location,
+            notes=notes,
+            status='scheduled'
+        )
+        
+        # Auto-update report status to 'under_review' (ongoing) when counseling is scheduled
+        evaluation.report.status = 'under_review'
+        evaluation.report.save()
+        
+        # Notify the student
+        Notification.objects.create(
+            user=evaluation.report.reported_student,
+            title='Counseling Session Scheduled',
+            message=f'Your counseling session for case {evaluation.report.case_id} has been scheduled for {schedule.scheduled_date.strftime("%B %d, %Y at %I:%M %p")}. Location: {location if location else "TBA"}',
+            report=evaluation.report
+        )
+        
+        # Notify the reporter
+        if evaluation.report.reporter:
+            Notification.objects.create(
+                user=evaluation.report.reporter,
+                title='Counseling Session Scheduled',
+                message=f'A counseling session for case {evaluation.report.case_id} has been scheduled for {schedule.scheduled_date.strftime("%B %d, %Y at %I:%M %p")}.',
+                report=evaluation.report
+            )
+        
+        messages.success(request, f'Counseling session scheduled for {evaluation.report.reported_student.get_full_name()}. Notifications sent.')
+        return redirect('counselor_schedule')
+    
+    # Get pending evaluations that need scheduling (non-VPF)
+    pending_evaluations = CaseEvaluation.objects.filter(
+        evaluated_by=request.user,
+        counseling_schedules__isnull=True
+    ).exclude(
+        report__vpf_cases__isnull=False
+    ).select_related('report', 'report__reported_student')
+    
+    # Get all scheduled sessions
+    schedules = CounselingSchedule.objects.filter(
+        counselor=request.user
+    ).select_related('evaluation__report', 'student').order_by('scheduled_date')
+    
+    # Check if a specific evaluation is pre-selected
+    selected_evaluation_id = request.GET.get('evaluation_id')
+    selected_evaluation = None
+    if selected_evaluation_id:
+        try:
+            selected_evaluation = pending_evaluations.get(id=selected_evaluation_id)
+        except CaseEvaluation.DoesNotExist:
+            pass
+    
+    return render(request, 'counselor/counselor_schedule.html', {
+        'pending_evaluations': pending_evaluations,
+        'schedules': schedules,
+        'selected_evaluation': selected_evaluation,
+        'today': timezone.now().date()
+    })
 
 
 @login_required

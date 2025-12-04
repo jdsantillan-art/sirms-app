@@ -18,6 +18,8 @@ services:
         generateValue: true
       - key: DEBUG
         value: false
+      - key: ALLOWED_HOSTS
+        value: ${RENDER_SERVICE_NAME}.onrender.com
 
 databases:
   - name: sirms-db

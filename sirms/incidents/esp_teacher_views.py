@@ -146,7 +146,7 @@ def assign_esp_teacher_to_vpf(request, vpf_case_id):
 @login_required
 def for_vpf_cases(request):
     """View VPF cases that need ESP teacher assignment"""
-    if request.user.role != 'counselor':
+    if request.user.role not in ['counselor', 'guidance']:
         messages.error(request, 'Access denied.')
         return redirect('dashboard')
     
