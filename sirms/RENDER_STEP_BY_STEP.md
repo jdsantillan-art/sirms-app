@@ -24,7 +24,7 @@ git init
 git add .
 git commit -m "Initial commit for Render deployment"
 git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/sirms-app.git
+git remote add origin https://github.com/jdsantillan-art/sirms-app.git
 git push -u origin main
 ```
 

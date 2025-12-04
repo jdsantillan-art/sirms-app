@@ -50,6 +50,7 @@ Open a NEW terminal (close any stuck ones) and run:
 ```bash
 cd sirms
 python manage.py makemigrations
+
 python manage.py migrate
 ```
 

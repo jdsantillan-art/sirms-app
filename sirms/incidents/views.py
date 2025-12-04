@@ -308,11 +308,69 @@ def my_reports(request):
 # Placeholder functions for other views that might be called
 @login_required
 def all_reports(request):
+    """All reports view - shows different reports based on user role"""
     try:
-        reports = IncidentReport.objects.all().order_by('-created_at')
-        return render(request, 'all_reports.html', {'reports': reports})
-    except:
-        return render(request, 'all_reports.html', {'reports': []})
+        user = request.user
+        
+        if user.role == 'counselor':
+            # Counselors see major cases and cases assigned to them
+            reports = IncidentReport.objects.filter(
+                Q(classification='major') | 
+                Q(status='classified') |
+                Q(status='under_review')
+            ).order_by('-created_at')
+            
+            # Add filtering for counselor-specific cases
+            counselor_reports = reports.filter(
+                Q(notes__icontains='counseling') |
+                Q(incident_type__severity='prohibited') |
+                Q(classification='major')
+            )
+            
+            context = {
+                'reports': counselor_reports,
+                'user_role': user.role,
+                'total_reports': counselor_reports.count(),
+                'pending_evaluation': counselor_reports.filter(status='classified').count(),
+                'under_review': counselor_reports.filter(status='under_review').count(),
+                'completed': counselor_reports.filter(status__in=['resolved', 'closed']).count(),
+            }
+            
+        elif user.role == 'do':
+            # DO sees all reports for fact-checking and minor cases
+            reports = IncidentReport.objects.all().order_by('-created_at')
+            context = {
+                'reports': reports,
+                'user_role': user.role,
+                'total_reports': reports.count(),
+                'pending': reports.filter(status='pending').count(),
+                'classified': reports.filter(status='classified').count(),
+            }
+            
+        elif user.role in ['principal', 'guidance']:
+            # Principal and guidance see all reports
+            reports = IncidentReport.objects.all().order_by('-created_at')
+            context = {
+                'reports': reports,
+                'user_role': user.role,
+                'total_reports': reports.count(),
+            }
+            
+        else:
+            # Other roles see limited reports
+            reports = IncidentReport.objects.filter(
+                Q(reporter=user) | Q(reported_student=user)
+            ).order_by('-created_at')
+            context = {
+                'reports': reports,
+                'user_role': user.role,
+            }
+        
+        return render(request, 'all_reports.html', context)
+        
+    except Exception as e:
+        print(f"All reports error: {e}")
+        return render(request, 'all_reports.html', {'reports': [], 'user_role': request.user.role})
 
 
 @login_required
@@ -531,12 +589,54 @@ def fact_check_reports(request):
 
 @login_required
 def major_case_review(request):
-    """Major case review placeholder"""
+    """Major case review - Counselors review and evaluate major cases"""
     try:
-        context = {'user_role': request.user.role}
-        return render(request, 'counselor/major_case_review.html', context)
-    except:
-        return redirect('dashboard')
+        # Handle POST request for case evaluation
+        if request.method == 'POST':
+            case_id = request.POST.get('case_id')
+            action = request.POST.get('action')
+            
+            if case_id and action:
+                try:
+                    report = IncidentReport.objects.get(case_id=case_id)
+                    
+                    if action == 'start_evaluation':
+                        report.status = 'under_review'
+                        report.save()
+                        messages.success(request, f'Started evaluation for case {case_id}')
+                        
+                    elif action == 'schedule_counseling':
+                        # Create counseling session
+                        report.status = 'counseling_scheduled'
+                        report.save()
+                        messages.success(request, f'Counseling scheduled for case {case_id}')
+                        
+                    elif action == 'complete_evaluation':
+                        evaluation_notes = request.POST.get('evaluation_notes', '')
+                        recommendation = request.POST.get('recommendation', '')
+                        
+                        report.status = 'evaluated'
+                        report.notes = f"Evaluation: {evaluation_notes}\nRecommendation: {recommendation}"
+                        report.save()
+                        
+                        # Create case evaluation record
+                        try:
+                            CaseEvaluation.objects.create(
+                                report=report,
+                                counselor=request.user,
+                                evaluation_notes=evaluation_notes,
+                                recommendation=recommendation,
+                                evaluation_date=timezone.now()
+                            )
+                        except:
+                            pass
+                        
+                        messages.success(request, f'Evaluation completed for case {case_id}')
+                        
+                except Exception as e:
+                    messages.error(request, f'Error processing case: {str(e)}')
+            
+            return redirect('major_case
 
 
 @login_required
