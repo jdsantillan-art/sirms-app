@@ -14,10 +14,10 @@ from .models import CounselingSchedule, CaseEvaluation, IncidentReport
 def completed_reports(request):
     """
     View for displaying all completed counseling reports
-    Only accessible by counselors
+    Only accessible by counselors and guidance
     """
-    # Check if user is a counselor
-    if request.user.role != 'counselor':
+    # Check if user is a counselor or guidance
+    if request.user.role not in ['counselor', 'guidance']:
         messages.error(request, 'You do not have permission to access this page.')
         return redirect('dashboard')
     

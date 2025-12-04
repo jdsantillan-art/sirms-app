@@ -261,7 +261,7 @@
                     <i class="fas fa-calendar-check"></i>
                     <span class="sidebar-text">DO Schedule</span>
                 </a>
-                
+
 
                 {% elif user.role == 'counselor' %}
 
@@ -277,6 +277,10 @@
                     <i class="fas fa-calendar-alt"></i>
                     <span class="sidebar-text">Counseling Schedule</span>
                 </a>
+                <a href="{% url 'completed_reports' %}" class="nav-item" data-tooltip="Completed Reports">
+                    <i class="fas fa-check-double"></i>
+                    <span class="sidebar-text">Completed Reports</span>
+                </a>
 
                 <a href="{% url 'for_vpf' %}" class="nav-item">
                     <i class="fas fa-user-shield"></i>
@@ -286,7 +290,7 @@
                     <i class="fas fa-file-medical"></i>
                     <span class="sidebar-text">Direct Report</span>
                 </a>
-               
+
                 <!-- Maintenance Section for Counselor -->
                 <div class="px-4 py-2 text-sm font-semibold text-white/70 sidebar-text mt-4">System Maintenance</div>
 
@@ -344,7 +348,36 @@
                     <span class="sidebar-text">VrF Schedule</span>
                 </a>
                 {% elif user.role == 'guidance' or user.role == 'maintenance' %}
-                <div class="px-4 py-2 text-sm font-semibold text-white/70 sidebar-text">System Maintenance</div>
+                
+                <!-- Counseling Section for Guidance -->
+                {% if user.role == 'guidance' %}
+                <a href="{% url 'major_case_review' %}" class="nav-item" data-tooltip="All Reports">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span class="sidebar-text">All Reports</span>
+                </a>
+                <a href="{% url 'case_evaluation' %}" class="nav-item" data-tooltip="Referral Evaluation">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span class="sidebar-text">Referral Evaluation</span>
+                </a>
+                <a href="{% url 'counselor_schedule' %}" class="nav-item" data-tooltip="Counseling Schedule">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="sidebar-text">Counseling Schedule</span>
+                </a>
+                <a href="{% url 'completed_reports' %}" class="nav-item" data-tooltip="Completed Reports">
+                    <i class="fas fa-check-double"></i>
+                    <span class="sidebar-text">Completed Reports</span>
+                </a>
+                <a href="{% url 'for_vpf' %}" class="nav-item" data-tooltip="For VRF">
+                    <i class="fas fa-user-shield"></i>
+                    <span class="sidebar-text">For VRF</span>
+                </a>
+                <a href="{% url 'direct_report' %}" class="nav-item" data-tooltip="Direct Report">
+                    <i class="fas fa-file-medical"></i>
+                    <span class="sidebar-text">Direct Report</span>
+                </a>
+                {% endif %}
+                
+                <div class="px-4 py-2 text-sm font-semibold text-white/70 sidebar-text mt-4">System Maintenance</div>
                 <a href="{% url 'manage_curriculum' %}" class="nav-item" data-tooltip="Manage Curriculum">
                     <i class="fas fa-book-open"></i>
                     <span class="sidebar-text">Manage Curriculum</span>

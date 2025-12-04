@@ -311,8 +311,8 @@ def export_completed_reports_excel(request):
     """
     Export completed counseling reports to Excel for Guidance Counselors
     """
-    # Check permissions - only counselors can export
-    if request.user.role != 'counselor':
+    # Check permissions - only counselors and guidance can export
+    if request.user.role not in ['counselor', 'guidance']:
         messages.error(request, 'You do not have permission to export completed reports.')
         return redirect('dashboard')
     
