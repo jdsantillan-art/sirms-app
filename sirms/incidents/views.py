@@ -12,7 +12,7 @@ from .models import (
     CustomUser, IncidentReport, Classification, CounselingSession,
     Notification, IncidentType, Section, TeacherAssignment,
     Curriculum, Track, Grade, ViolationHistory, CaseEvaluation,
-    InternalNote, SystemBackup, ReportAnalytics, LegalReference, CounselingSchedule,
+    InternalNote, SystemBackup, ReportAnalytics, LegalReference,
     InvolvedParty
 )
 from .notification_utils import send_smart_notifications
@@ -356,6 +356,29 @@ def dashboard(request):
         ).count()
         success_rate = int((completed_sessions / total_sessions * 100)) if total_sessions > 0 else 0
         
+        # Resolution data for counselor
+        resolution_data = []
+        start_date = timezone.now() - timedelta(days=365)  # Start from 1 year ago
+        for i in range(12):
+            month_start = start_date + timedelta(days=30*i)
+            month_end = month_start + timedelta(days=30)
+            
+            resolved_count = IncidentReport.objects.filter(
+                created_at__range=[month_start, month_end],
+                status='resolved'
+            ).count()
+            
+            pending_count = IncidentReport.objects.filter(
+                created_at__range=[month_start, month_end],
+                status__in=['pending', 'under_review', 'classified', 'evaluated']
+            ).count()
+            
+            resolution_data.append({
+                'month': month_start.strftime('%b'),
+                'resolved': resolved_count,
+                'pending': pending_count
+            })
+        
         # New analytics metrics - Fixed counts
         try:
             from .models import VPFCase
@@ -372,14 +395,14 @@ def dashboard(request):
             incident_type__severity='school_policy'
         ).count()
         
-        # Scheduled sessions - from CounselingSchedule, not CounselingSession
-        scheduled_sessions_count = CounselingSchedule.objects.filter(
+        # Scheduled sessions - from CounselingSession
+        scheduled_sessions_count = CounselingSession.objects.filter(
             counselor=user,
             status='scheduled'
         ).count()
         
-        # Completed sessions - from CounselingSchedule with status='completed'
-        completed_sessions_count = CounselingSchedule.objects.filter(
+        # Completed sessions - from CounselingSession with status='completed'
+        completed_sessions_count = CounselingSession.objects.filter(
             counselor=user,
             status='completed'
         ).count()
@@ -456,70 +479,86 @@ def dashboard(request):
         })
     elif user.role == 'esp_teacher':
         # ESP Teacher Dashboard Analytics
-        from .models import VPFCase, VPFSchedule, Counselor
+        try:
+            from .models import VPFCase, VPFSchedule, Counselor
+            vpf_models_exist = True
+        except ImportError:
+            vpf_models_exist = False
         
-        # Find the Counselor record that matches this ESP teacher's name
-        esp_teacher_name = user.get_full_name()
-        matching_counselors = Counselor.objects.filter(name__icontains=esp_teacher_name)
-        
-        if matching_counselors.exists():
-            # Get VPF cases assigned to this ESP teacher
-            vpf_cases_assigned = VPFCase.objects.filter(
-                esp_teacher_assigned__in=matching_counselors
-            )
+        if vpf_models_exist:
+            # Find the Counselor record that matches this ESP teacher's name
+            esp_teacher_name = user.get_full_name()
+            matching_counselors = Counselor.objects.filter(name__icontains=esp_teacher_name)
             
-            # Get scheduled sessions for this ESP teacher
-            scheduled_vpf_sessions = VPFSchedule.objects.filter(
-                vpf_case__esp_teacher_assigned__in=matching_counselors,
-                status='scheduled'
-            ).count()
-            
-            # Get completed VPF cases
-            completed_vpf_count = vpf_cases_assigned.filter(status='completed').count()
-            pending_vpf_count = vpf_cases_assigned.filter(status__in=['pending', 'ongoing']).count()
-            
-            # Total VPF referrals assigned to this ESP teacher
-            total_vpf_referrals_count = vpf_cases_assigned.count()
-            
-            # VPF Improvement Rate Data (monthly trend)
-            vpf_improvement_data = []
-            for i in range(12):
-                month_start = start_date + timedelta(days=30*i)
-                month_end = month_start + timedelta(days=30)
+            if matching_counselors.exists():
+                # Get VPF cases assigned to this ESP teacher
+                vpf_cases_assigned = VPFCase.objects.filter(
+                    esp_teacher_assigned__in=matching_counselors
+                )
                 
-                # Count completed VPF in this month
-                completed_in_month = vpf_cases_assigned.filter(
-                    updated_at__range=[month_start, month_end],
-                    status='completed'
+                # Get scheduled sessions for this ESP teacher
+                scheduled_vpf_sessions = VPFSchedule.objects.filter(
+                    vpf_case__esp_teacher_assigned__in=matching_counselors,
+                    status='scheduled'
                 ).count()
                 
-                # Count pending/ongoing VPF in this month
-                pending_in_month = vpf_cases_assigned.filter(
-                    assigned_at__range=[month_start, month_end],
-                    status__in=['pending', 'ongoing']
-                ).count()
+                # Get completed VPF cases
+                completed_vpf_count = vpf_cases_assigned.filter(status='completed').count()
+                pending_vpf_count = vpf_cases_assigned.filter(status__in=['pending', 'ongoing']).count()
                 
-                # Calculate improvement rate
-                total_in_month = completed_in_month + pending_in_month
-                improvement_rate = int((completed_in_month / total_in_month * 100)) if total_in_month > 0 else 0
+                # Total VPF referrals assigned to this ESP teacher
+                total_vpf_referrals_count = vpf_cases_assigned.count()
                 
-                vpf_improvement_data.append({
-                    'month': month_start.strftime('%b'),
-                    'completed': completed_in_month,
-                    'pending': pending_in_month,
-                    'rate': improvement_rate
+                # VPF Improvement Rate Data (monthly trend)
+                vpf_improvement_data = []
+                start_date = timezone.now() - timedelta(days=365)
+                for i in range(12):
+                    month_start = start_date + timedelta(days=30*i)
+                    month_end = month_start + timedelta(days=30)
+                    
+                    # Count completed VPF in this month
+                    completed_in_month = vpf_cases_assigned.filter(
+                        updated_at__range=[month_start, month_end],
+                        status='completed'
+                    ).count()
+                    
+                    # Count pending/ongoing VPF in this month
+                    pending_in_month = vpf_cases_assigned.filter(
+                        created_at__range=[month_start, month_end],
+                        status__in=['pending', 'ongoing']
+                    ).count()
+                    
+                    # Calculate improvement rate
+                    total_in_month = completed_in_month + pending_in_month
+                    improvement_rate = int((completed_in_month / total_in_month * 100)) if total_in_month > 0 else 0
+                    
+                    vpf_improvement_data.append({
+                        'month': month_start.strftime('%b'),
+                        'completed': completed_in_month,
+                        'pending': pending_in_month,
+                        'rate': improvement_rate
+                    })
+                
+                context.update({
+                    'scheduled_vpf_sessions': scheduled_vpf_sessions,
+                    'completed_vpf': completed_vpf_count,
+                    'total_vpf_referrals': total_vpf_referrals_count,
+                    'pending_vpf': pending_vpf_count,
+                    'ongoing_vpf': vpf_cases_assigned.filter(status='ongoing').count(),
+                    'vpf_improvement_data': json.dumps(vpf_improvement_data),
                 })
-            
-            context.update({
-                'scheduled_vpf_sessions': scheduled_vpf_sessions,
-                'completed_vpf': completed_vpf_count,
-                'total_vpf_referrals': total_vpf_referrals_count,
-                'pending_vpf': pending_vpf_count,
-                'ongoing_vpf': vpf_cases_assigned.filter(status='ongoing').count(),
-                'vpf_improvement_data': json.dumps(vpf_improvement_data),
-            })
+            else:
+                # No matching counselor record found
+                context.update({
+                    'scheduled_vpf_sessions': 0,
+                    'completed_vpf': 0,
+                    'total_vpf_referrals': 0,
+                    'pending_vpf': 0,
+                    'ongoing_vpf': 0,
+                    'vpf_improvement_data': json.dumps([]),
+                })
         else:
-            # No matching counselor record found
+            # VPF models don't exist, use fallback
             context.update({
                 'scheduled_vpf_sessions': 0,
                 'completed_vpf': 0,
