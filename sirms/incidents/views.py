@@ -344,9 +344,11 @@ def all_reports(request):
             context = {
                 'reports': reports,
                 'user_role': user.role,
-                'total_reports': reports.count(),
-                'pending': reports.filter(status='pending').count(),
-                'classified': reports.filter(status='classified').count(),
+                'total_count': reports.count(),
+                'pending_count': reports.filter(status='pending').count(),
+                'under_review_count': reports.filter(status='under_review').count(),
+                'classified_count': reports.filter(status='classified').count(),
+                'resolved_count': reports.filter(status='resolved').count(),
             }
             
         elif user.role in ['principal', 'guidance']:
@@ -355,7 +357,11 @@ def all_reports(request):
             context = {
                 'reports': reports,
                 'user_role': user.role,
-                'total_reports': reports.count(),
+                'total_count': reports.count(),
+                'pending_count': reports.filter(status='pending').count(),
+                'under_review_count': reports.filter(status='under_review').count(),
+                'classified_count': reports.filter(status='classified').count(),
+                'resolved_count': reports.filter(status='resolved').count(),
             }
             
         else:
