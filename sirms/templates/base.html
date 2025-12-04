@@ -348,7 +348,7 @@
                     <span class="sidebar-text">VrF Schedule</span>
                 </a>
                 {% elif user.role == 'guidance' or user.role == 'maintenance' %}
-                
+
                 <!-- Counseling Section for Guidance -->
                 {% if user.role == 'guidance' %}
                 <a href="{% url 'major_case_review' %}" class="nav-item" data-tooltip="All Reports">
@@ -376,7 +376,7 @@
                     <span class="sidebar-text">Direct Report</span>
                 </a>
                 {% endif %}
-                
+
                 <div class="px-4 py-2 text-sm font-semibold text-white/70 sidebar-text mt-4">System Maintenance</div>
                 <a href="{% url 'manage_curriculum' %}" class="nav-item" data-tooltip="Manage Curriculum">
                     <i class="fas fa-book-open"></i>
