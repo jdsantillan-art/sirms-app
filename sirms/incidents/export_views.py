@@ -9,7 +9,7 @@ from django.contrib import messages
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from datetime import datetime
-from .models import IncidentReport, DOSchedule, CounselingSchedule, CaseEvaluation
+from .models import IncidentReport, DOSchedule, CounselingSession, CaseEvaluation
 
 
 @login_required
@@ -317,13 +317,12 @@ def export_completed_reports_excel(request):
         return redirect('dashboard')
     
     # Get all completed counseling sessions
-    completed_sessions = CounselingSchedule.objects.filter(
+    completed_sessions = CounselingSession.objects.filter(
         counselor=request.user,
         status='completed'
     ).select_related(
-        'student', 'evaluation', 'evaluation__report', 'evaluation__report__incident_type', 
-        'evaluation__report__reporter', 'counselor'
-    ).order_by('-completed_date')
+        'student', 'report', 'report__incident_type', 'report__reporter', 'counselor'
+    ).order_by('-created_at')
     
     # Create workbook
     wb = Workbook()
@@ -360,15 +359,14 @@ def export_completed_reports_excel(request):
     
     # Write data
     for row_idx, session in enumerate(completed_sessions, start=2):
-        if not session.evaluation or not session.evaluation.report:
+        if not session.report:
             continue
             
-        report = session.evaluation.report
-        evaluation = session.evaluation
+        report = session.report
         
         # Calculate days to complete
-        if session.completed_date and report.created_at:
-            days_to_complete = (session.completed_date.date() - report.created_at.date()).days
+        if session.created_at and report.created_at:
+            days_to_complete = (session.created_at.date() - report.created_at.date()).days
         else:
             days_to_complete = 0
         
@@ -380,11 +378,15 @@ def export_completed_reports_excel(request):
         if report.incident_type:
             type_category = "Prohibited Acts" if report.incident_type.severity == 'prohibited' else "School Policies"
         
-        # Get recommendations
-        recommendations = evaluation.recommendations if hasattr(evaluation, 'recommendations') else ''
-        
-        # Follow-up required
-        follow_up = 'Yes' if evaluation.requires_follow_up else 'No' if hasattr(evaluation, 'requires_follow_up') else 'N/A'
+        # Get recommendations from case evaluation if exists
+        recommendations = ''
+        follow_up = 'N/A'
+        try:
+            evaluation = CaseEvaluation.objects.get(report=report)
+            recommendations = evaluation.evaluation_notes
+            follow_up = 'Yes' if evaluation.recommendation == 'monitoring' else 'No'
+        except CaseEvaluation.DoesNotExist:
+            pass
         
         data = [
             report.case_id,
@@ -399,12 +401,12 @@ def export_completed_reports_excel(request):
             report.reporter.get_role_display() if report.reporter else '',
             session.scheduled_date.strftime('%Y-%m-%d') if session.scheduled_date else '',
             session.scheduled_date.strftime('%H:%M') if session.scheduled_date else '',
-            session.completed_date.strftime('%Y-%m-%d') if session.completed_date else '',
-            session.completed_date.strftime('%H:%M') if session.completed_date else '',
+            session.created_at.strftime('%Y-%m-%d') if session.created_at else '',
+            session.created_at.strftime('%H:%M') if session.created_at else '',
             days_to_complete,
             session.location or 'Not specified',
             session.counselor.get_full_name(),
-            session.notes or 'No notes',
+            session.remarks or 'No notes',
             recommendations,
             follow_up
         ]

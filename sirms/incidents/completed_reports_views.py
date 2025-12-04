@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from datetime import datetime, timedelta
-from .models import CounselingSchedule, CaseEvaluation, IncidentReport
+from .models import CounselingSession, CaseEvaluation, IncidentReport
 
 
 @login_required
@@ -22,37 +22,52 @@ def completed_reports(request):
         return redirect('dashboard')
     
     # Get all completed counseling sessions
-    completed_sessions = CounselingSchedule.objects.filter(
+    completed_sessions = CounselingSession.objects.filter(
         counselor=request.user,
         status='completed'
     ).select_related(
-        'student', 'evaluation', 'evaluation__report', 'evaluation__report__incident_type', 'counselor'
-    ).order_by('-completed_date')
+        'student', 'report', 'report__incident_type', 'counselor'
+    ).order_by('-created_at')
     
     # Get evaluated cases (completed evaluations)
     evaluated_cases = CaseEvaluation.objects.filter(
-        counselor=request.user,
-        status='evaluated'
+        evaluated_by=request.user
     ).select_related(
-        'report', 'report__incident_type', 'report__reported_student', 'counselor'
-    ).order_by('-evaluated_date')
+        'report', 'report__incident_type', 'report__reported_student', 'evaluated_by'
+    ).order_by('-evaluated_at')
     
     # Combine both into a unified list for display
     reports = []
     
     # Add completed sessions
     for session in completed_sessions:
-        if session.evaluation and session.evaluation.report:
+        if session.report:
             reports.append({
                 'type': 'session',
-                'report': session.evaluation.report,
+                'report': session.report,
                 'student': session.student,
                 'scheduled_date': session.scheduled_date,
-                'completed_date': session.completed_date or session.updated_at,
+                'completed_date': session.created_at,  # Use created_at as completion date
                 'counselor': session.counselor,
-                'notes': session.notes,
-                'location': session.location,
+                'notes': session.remarks,
+                'location': 'Guidance Office',  # Default location
             })
+    
+    # Add evaluated cases
+    for evaluation in evaluated_cases:
+        reports.append({
+            'type': 'evaluation',
+            'report': evaluation.report,
+            'student': evaluation.report.reported_student,
+            'scheduled_date': evaluation.evaluated_at,
+            'completed_date': evaluation.evaluated_at,
+            'counselor': evaluation.evaluated_by,
+            'notes': evaluation.evaluation_notes,
+            'location': 'Guidance Office',
+        })
+    
+    # Sort by completion date
+    reports.sort(key=lambda x: x['completed_date'], reverse=True)
     
     # Calculate statistics
     total_completed = len(reports)
