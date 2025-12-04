@@ -409,11 +409,123 @@ def advisee_records(request):
 
 @login_required
 def fact_check_reports(request):
-    """Fact check reports placeholder"""
+    """Fact check reports - DO can verify and classify incident reports"""
     try:
-        context = {'user_role': request.user.role}
-        return render(request, 'fact_check_reports.html', context)
-    except:
+        # Handle POST request for classification
+        if request.method == 'POST':
+            report_id = request.POST.get('report_id')
+            action = request.POST.get('action')
+            
+            if report_id and action == 'verify':
+                try:
+                    report = IncidentReport.objects.get(id=report_id)
+                    evidence_status = request.POST.get('evidence_status')
+                    
+                    if evidence_status == 'insufficient':
+                        # Request more evidence
+                        evidence_notes = request.POST.get('evidence_notes')
+                        report.status = 'needs_evidence'
+                        report.notes = f"Evidence needed: {evidence_notes}"
+                        report.save()
+                        
+                        # Create notification for reporter
+                        try:
+                            Notification.objects.create(
+                                user=report.reporter,
+                                title='Additional Evidence Required',
+                                message=f'Your report {report.case_id} needs additional evidence: {evidence_notes}',
+                                report=report
+                            )
+                        except:
+                            pass
+                        
+                        messages.success(request, f'Report {report.case_id} marked as needing more evidence.')
+                    else:
+                        # Classify the report
+                        severity = request.POST.get('severity')
+                        student_id = request.POST.get('student_id')
+                        notes = request.POST.get('notes', '')
+                        
+                        # Update report status and classification
+                        if severity == 'minor':
+                            report.status = 'classified'
+                            report.classification = 'minor'
+                        elif severity == 'major':
+                            report.status = 'classified'
+                            report.classification = 'major'
+                        
+                        # Assign student if provided
+                        if student_id:
+                            try:
+                                student = CustomUser.objects.get(id=student_id, role='student')
+                                report.reported_student = student
+                            except:
+                                pass
+                        
+                        if notes:
+                            report.notes = notes
+                        
+                        report.save()
+                        
+                        # Create notifications based on classification
+                        try:
+                            if severity == 'minor':
+                                # Notify DO users
+                                do_users = CustomUser.objects.filter(role='do')
+                                for do_user in do_users:
+                                    Notification.objects.create(
+                                        user=do_user,
+                                        title='Minor Case Classified',
+                                        message=f'Report {report.case_id} classified as minor case for DO handling.',
+                                        report=report
+                                    )
+                            elif severity == 'major':
+                                # Notify counselors
+                                counselors = CustomUser.objects.filter(role='counselor')
+                                for counselor in counselors:
+                                    Notification.objects.create(
+                                        user=counselor,
+                                        title='Major Case Referred',
+                                        message=f'Report {report.case_id} classified as major case requiring counseling.',
+                                        report=report
+                                    )
+                        except:
+                            pass
+                        
+                        messages.success(request, f'Report {report.case_id} successfully classified as {severity} case.')
+                    
+                except Exception as e:
+                    messages.error(request, f'Error processing report: {str(e)}')
+            
+            return redirect('fact_check_reports')
+        
+        # GET request - show pending reports
+        reports = IncidentReport.objects.filter(status='pending').order_by('-created_at')
+        
+        # Get statistics
+        total_pending = reports.count()
+        today_reports = reports.filter(created_at__date=timezone.now().date()).count()
+        urgent_reports = reports.filter(
+            incident_type__severity='prohibited'
+        ).count() if hasattr(reports.first(), 'incident_type') else 0
+        
+        # Get all students for the dropdown
+        students = CustomUser.objects.filter(role='student', is_active=True).order_by('first_name', 'last_name')
+        
+        context = {
+            'user_role': request.user.role,
+            'reports': reports,
+            'total_pending': total_pending,
+            'today_reports': today_reports,
+            'urgent_reports': urgent_reports,
+            'students': students,
+        }
+        
+        return render(request, 'do/fact_check_reports.html', context)
+        
+    except Exception as e:
+        print(f"Fact check reports error: {e}")
+        messages.error(request, 'Error loading fact check reports.')
         return redirect('dashboard')
 
 
