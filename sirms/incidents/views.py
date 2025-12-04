@@ -636,7 +636,7 @@ def major_case_review(request):
                 except Exception as e:
                     messages.error(request, f'Error processing case: {str(e)}')
             
-            return redirect('major_case
+            return redirect('major_case_review')
 
 
 @login_required
