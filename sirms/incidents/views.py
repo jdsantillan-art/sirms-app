@@ -821,6 +821,39 @@ def counselor_schedule(request):
         return redirect('dashboard')
     
     if request.method == 'POST':
+        # Check if this is a status update request
+        action = request.POST.get('action')
+        if action == 'update_status':
+            schedule_id = request.POST.get('schedule_id')
+            new_status = request.POST.get('status')
+            update_notes = request.POST.get('notes', '')
+            
+            schedule = get_object_or_404(CounselingSchedule, id=schedule_id, counselor=request.user)
+            old_status = schedule.status
+            schedule.status = new_status
+            
+            # Append notes if provided
+            if update_notes:
+                if schedule.notes:
+                    schedule.notes += f"\n\n[{timezone.now().strftime('%Y-%m-%d %H:%M')}] Status updated from '{old_status}' to '{new_status}': {update_notes}"
+                else:
+                    schedule.notes = f"[{timezone.now().strftime('%Y-%m-%d %H:%M')}] Status updated from '{old_status}' to '{new_status}': {update_notes}"
+            
+            schedule.save()
+            
+            # Notify student if status changed
+            if old_status != new_status:
+                Notification.objects.create(
+                    user=schedule.student,
+                    title='Counseling Session Status Updated',
+                    message=f'Your counseling session for case {schedule.evaluation.report.case_id} status has been updated to: {new_status}.',
+                    report=schedule.evaluation.report
+                )
+            
+            messages.success(request, f'Session status updated to {new_status}.')
+            return redirect('counselor_schedule')
+        
+        # Regular scheduling request
         evaluation_id = request.POST.get('evaluation_id')
         scheduled_date_str = request.POST.get('scheduled_date')
         location = request.POST.get('location', '')
