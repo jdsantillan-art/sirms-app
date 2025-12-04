@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block title %}Completed Reports - SIRMS{% endblock %}
+{% block page_title %}Completed Reports{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header with Export Button -->
+    <div class="mb-6 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="bg-green-600 p-3 rounded-lg">
+                <i class="fas fa-check-double text-white text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Completed Reports</h1>
+                <p class="text-sm text-gray-600">All completed counseling sessions and reports ready for export</p>
+            </div>
+        </div>
+        <button onclick="exportToExcel()" 
+            class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-semibold shadow-lg hover:shadow-xl">
+            <i class="fas fa-file-excel mr-2"></i>Export to Excel
+        </button>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg shadow-sm border p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Total Completed</p>
+                    <p class="text-2xl font-bold text-green-600">{{ total_completed }}</p>
+                </div>
+                <div class="bg-green-100 p-3 rounded-lg">
+                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm border p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Counseling Sessions</p>
+                    <p class="text-2xl font-bold text-blue-600">{{ total_sessions }}</p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <i class="fas fa-calendar-check text-blue-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm border p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Evaluated Cases</p>
+                    <p class="text-2xl font-bold text-purple-600">{{ total_evaluated }}</p>
+                </div>
+                <div class="bg-purple-100 p-3 rounded-lg">
+                    <i class="fas fa-clipboard-check text-purple-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm border p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">This Month</p>
+                    <p class="text-2xl font-bold text-orange-600">{{ this_month_count }}</p>
+                </div>
+                <div class="bg-orange-100 p-3 rounded-lg">
+                    <i class="fas fa-calendar-alt text-orange-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Completed Reports Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-5 border-b border-gray-200 bg-gray-50">
+            <h2 class="text-xl font-bold text-gray-900">
+                <i class="fas fa-list mr-2 text-green-600"></i>
+                Completed Counseling Reports
+            </h2>
+        </div>
+
+        {% if reports %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Case ID</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Student</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Incident Type</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Session Date</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Completed Date</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Counselor</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Status</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for item in reports %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3">
+                            <a href="{% url 'report_detail' item.report.case_id %}" 
+                               class="text-sm font-medium text-blue-600 hover:underline">
+                                {{ item.report.case_id }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="text-sm font-medium text-gray-900">
+                                {{ item.student.get_full_name }}
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                G{{ item.report.grade_level }} - {{ item.report.section_name }}
+                            </div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="text-sm text-gray-900">
+                                {{ item.report.incident_type.name|default:"Not specified"|truncatewords:4 }}
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                {{ item.report.incident_date|date:"M d, Y" }}
+                            </div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="text-sm text-gray-900">
+                                {{ item.scheduled_date|date:"M d, Y" }}
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                {{ item.scheduled_date|date:"h:i A" }}
+                            </div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="text-sm text-gray-900">
+                                {{ item.completed_date|date:"M d, Y" }}
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                {{ item.completed_date|date:"h:i A" }}
+                            </div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="text-sm text-gray-700">
+                                {{ item.counselor.get_full_name }}
+                            </div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                <i class="fas fa-check-circle mr-1"></i>Completed
+                            </span>
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="flex space-x-2">
+                                <a href="{% url 'report_detail' item.report.case_id %}"
+                                    class="inline-flex items-center px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                                    <i class="fas fa-eye mr-1"></i>View
+                                </a>
+                                <button onclick="printReport('{{ item.report.case_id }}')"
+                                    class="inline-flex items-center px-3 py-1 text-xs font-medium text-white bg-gray-600 rounded hover:bg-gray-700">
+                                    <i class="fas fa-print mr-1"></i>Print
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="p-12 text-center">
+            <div class="text-6xl mb-4">📋</div>
+            <div class="text-gray-500 text-lg mb-2">No completed reports yet</div>
+            <p class="text-gray-400">Completed counseling sessions will appear here</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Export to Excel
+    function exportToExcel() {
+        window.location.href = '{% url "export_completed_reports_excel" %}';
+    }
+
+    // Print individual report
+    function printReport(caseId) {
+        window.open(`/report/${caseId}/`, '_blank');
+    }
+</script>
+
+{% endblock %}

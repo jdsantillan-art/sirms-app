@@ -4,6 +4,7 @@ from . import oauth_views
 from . import direct_report_views
 from . import export_views
 from . import completed_sessions_views
+from . import completed_reports_views
 from . import incident_type_views
 from . import do_schedule_views
 from . import behavior_concerns_views
@@ -104,6 +105,10 @@ urlpatterns = [
     # Export URLs
     path('export-all-reports-excel/', export_views.export_all_reports_excel, name='export_all_reports_excel'),
     path('export-behavior-concerns-excel/', export_views.export_behavior_concerns_excel, name='export_behavior_concerns_excel'),
+    path('export-completed-reports-excel/', export_views.export_completed_reports_excel, name='export_completed_reports_excel'),
+    
+    # Counselor Completed Reports
+    path('completed-reports/', completed_reports_views.completed_reports, name='completed_reports'),
     
     # Maintenance URLs (Counselor only)
     path('manage-curriculum/', views.manage_curriculum, name='manage_curriculum'),
