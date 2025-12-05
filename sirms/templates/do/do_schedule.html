@@ -6,22 +6,22 @@
 {% block content %}
 <div class="max-w-7xl mx-auto">
     <!-- Header with Create Button and View Toggle -->
-    <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold text-gray-900">Parent Conferences & Interviews</h2>
-        <div class="flex items-center space-x-3">
+    <div class="flex justify-between items-center mb-3">
+        <h2 class="text-xl font-bold text-gray-900">Parent Conferences & Interviews</h2>
+        <div class="flex items-center space-x-2">
             <!-- View Toggle -->
             <div class="bg-white rounded-lg shadow-sm border flex">
-                <button id="listViewBtn" onclick="switchView('list')" class="px-4 py-2 rounded-l-lg flex items-center space-x-2 transition-colors bg-green-600 text-white">
-                    <i class="fas fa-list"></i>
+                <button id="listViewBtn" onclick="switchView('list')" class="px-3 py-1.5 rounded-l-lg flex items-center space-x-1.5 transition-colors bg-green-600 text-white text-sm">
+                    <i class="fas fa-list text-xs"></i>
                     <span>List</span>
                 </button>
-                <button id="calendarViewBtn" onclick="switchView('calendar')" class="px-4 py-2 rounded-r-lg flex items-center space-x-2 transition-colors hover:bg-gray-100">
-                    <i class="fas fa-calendar-alt"></i>
+                <button id="calendarViewBtn" onclick="switchView('calendar')" class="px-3 py-1.5 rounded-r-lg flex items-center space-x-1.5 transition-colors hover:bg-gray-100 text-sm">
+                    <i class="fas fa-calendar-alt text-xs"></i>
                     <span>Calendar</span>
                 </button>
             </div>
             <!-- Create Button -->
-            <a href="{% url 'create_do_schedule' %}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-sm">
+            <a href="{% url 'create_do_schedule' %}" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition-colors shadow-sm text-sm">
                 <i class="fas fa-plus"></i>
                 <span>Schedule Meeting</span>
             </a>
@@ -29,22 +29,22 @@
     </div>
 
     <!-- Statistics Cards -->
-    <div class="grid grid-cols-4 gap-4 mb-6">
-        <div class="bg-white rounded-lg shadow-sm border p-4">
-            <div class="text-2xl font-bold text-blue-600">{{ total_schedules }}</div>
-            <div class="text-gray-600 text-sm">Total Schedules</div>
+    <div class="grid grid-cols-4 gap-3 mb-4">
+        <div class="bg-white rounded-lg shadow-sm border p-3">
+            <div class="text-xl font-bold text-blue-600">{{ total_schedules }}</div>
+            <div class="text-gray-600 text-xs">Total</div>
         </div>
-        <div class="bg-white rounded-lg shadow-sm border p-4">
-            <div class="text-2xl font-bold text-orange-600">{{ scheduled_count }}</div>
-            <div class="text-gray-600 text-sm">Scheduled</div>
+        <div class="bg-white rounded-lg shadow-sm border p-3">
+            <div class="text-xl font-bold text-orange-600">{{ scheduled_count }}</div>
+            <div class="text-gray-600 text-xs">Scheduled</div>
         </div>
-        <div class="bg-white rounded-lg shadow-sm border p-4">
-            <div class="text-2xl font-bold text-green-600">{{ completed_count }}</div>
-            <div class="text-gray-600 text-sm">Completed</div>
+        <div class="bg-white rounded-lg shadow-sm border p-3">
+            <div class="text-xl font-bold text-green-600">{{ completed_count }}</div>
+            <div class="text-gray-600 text-xs">Completed</div>
         </div>
-        <div class="bg-white rounded-lg shadow-sm border p-4">
-            <div class="text-2xl font-bold text-red-600">{{ cancelled_count }}</div>
-            <div class="text-gray-600 text-sm">Cancelled</div>
+        <div class="bg-white rounded-lg shadow-sm border p-3">
+            <div class="text-xl font-bold text-red-600">{{ cancelled_count }}</div>
+            <div class="text-gray-600 text-xs">Cancelled</div>
         </div>
     </div>
 
@@ -173,62 +173,62 @@
     <div id="calendarView" class="hidden">
         <div class="bg-white rounded-lg shadow-sm border">
             <!-- Calendar Header -->
-            <div class="p-4 border-b bg-gradient-to-r from-green-600 to-teal-600 text-white">
+            <div class="px-3 py-2 border-b bg-gradient-to-r from-green-600 to-teal-600 text-white">
                 <div class="flex justify-between items-center">
-                    <button onclick="previousMonth()" class="p-2 hover:bg-white/20 rounded transition-colors">
-                        <i class="fas fa-chevron-left"></i>
+                    <button onclick="previousMonth()" class="p-1.5 hover:bg-white/20 rounded transition-colors">
+                        <i class="fas fa-chevron-left text-sm"></i>
                     </button>
-                    <h3 class="text-xl font-bold" id="currentMonth"></h3>
-                    <button onclick="nextMonth()" class="p-2 hover:bg-white/20 rounded transition-colors">
-                        <i class="fas fa-chevron-right"></i>
+                    <h3 class="text-base font-bold" id="currentMonth"></h3>
+                    <button onclick="nextMonth()" class="p-1.5 hover:bg-white/20 rounded transition-colors">
+                        <i class="fas fa-chevron-right text-sm"></i>
                     </button>
                 </div>
             </div>
             
             <!-- Calendar Grid -->
-            <div class="p-4">
+            <div class="p-3">
                 <!-- Day Headers -->
-                <div class="grid grid-cols-7 gap-2 mb-2">
-                    <div class="text-center font-semibold text-gray-700 text-sm py-2">Sun</div>
-                    <div class="text-center font-semibold text-gray-700 text-sm py-2">Mon</div>
-                    <div class="text-center font-semibold text-gray-700 text-sm py-2">Tue</div>
-                    <div class="text-center font-semibold text-gray-700 text-sm py-2">Wed</div>
-                    <div class="text-center font-semibold text-gray-700 text-sm py-2">Thu</div>
-                    <div class="text-center font-semibold text-gray-700 text-sm py-2">Fri</div>
-                    <div class="text-center font-semibold text-gray-700 text-sm py-2">Sat</div>
+                <div class="grid grid-cols-7 gap-1 mb-1">
+                    <div class="text-center font-semibold text-gray-700 text-xs py-1.5 bg-gray-100 rounded">Sun</div>
+                    <div class="text-center font-semibold text-gray-700 text-xs py-1.5 bg-gray-100 rounded">Mon</div>
+                    <div class="text-center font-semibold text-gray-700 text-xs py-1.5 bg-gray-100 rounded">Tue</div>
+                    <div class="text-center font-semibold text-gray-700 text-xs py-1.5 bg-gray-100 rounded">Wed</div>
+                    <div class="text-center font-semibold text-gray-700 text-xs py-1.5 bg-gray-100 rounded">Thu</div>
+                    <div class="text-center font-semibold text-gray-700 text-xs py-1.5 bg-gray-100 rounded">Fri</div>
+                    <div class="text-center font-semibold text-gray-700 text-xs py-1.5 bg-gray-100 rounded">Sat</div>
                 </div>
                 
                 <!-- Calendar Days -->
-                <div id="calendarGrid" class="grid grid-cols-7 gap-2">
+                <div id="calendarGrid" class="grid grid-cols-7 gap-1">
                     <!-- Generated by JavaScript -->
                 </div>
             </div>
 
             <!-- Legend -->
-            <div class="p-4 border-t bg-gray-50">
-                <div class="flex items-center justify-center space-x-6 text-sm">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-4 h-4 bg-green-500 rounded"></div>
-                        <span>Scheduled</span>
+            <div class="px-3 py-2 border-t bg-gray-50">
+                <div class="flex items-center justify-center space-x-4 text-xs">
+                    <div class="flex items-center space-x-1.5">
+                        <div class="w-3 h-3 bg-green-500 rounded"></div>
+                        <span class="text-gray-600">Scheduled</span>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <div class="w-4 h-4 bg-blue-500 rounded"></div>
-                        <span>Completed</span>
+                    <div class="flex items-center space-x-1.5">
+                        <div class="w-3 h-3 bg-blue-500 rounded"></div>
+                        <span class="text-gray-600">Completed</span>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <div class="w-4 h-4 bg-red-500 rounded"></div>
-                        <span>Cancelled</span>
+                    <div class="flex items-center space-x-1.5">
+                        <div class="w-3 h-3 bg-red-500 rounded"></div>
+                        <span class="text-gray-600">Cancelled</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Selected Day Details -->
-        <div id="dayDetails" class="mt-6 bg-white rounded-lg shadow-sm border hidden">
-            <div class="p-4 border-b bg-gray-50">
-                <h3 class="text-lg font-bold text-gray-900" id="selectedDate"></h3>
+        <div id="dayDetails" class="mt-4 bg-white rounded-lg shadow-sm border hidden">
+            <div class="px-3 py-2 border-b bg-gray-50">
+                <h3 class="text-base font-bold text-gray-900" id="selectedDate"></h3>
             </div>
-            <div class="p-4" id="daySchedules">
+            <div class="p-3 max-h-48 overflow-y-auto" id="daySchedules">
                 <!-- Populated by JavaScript -->
             </div>
         </div>
@@ -348,7 +348,7 @@ function renderCalendar() {
     // Add empty cells for days before month starts
     for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement('div');
-        emptyCell.className = 'h-24 bg-gray-50 rounded-lg';
+        emptyCell.className = 'h-16 bg-gray-50 rounded border border-gray-200';
         grid.appendChild(emptyCell);
     }
     
@@ -359,20 +359,21 @@ function renderCalendar() {
         const isToday = dateStr === new Date().toISOString().split('T')[0];
         
         const dayCell = document.createElement('div');
-        dayCell.className = `h-24 border-2 rounded-lg p-2 cursor-pointer transition-all hover:shadow-md ${isToday ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-green-300'}`;
+        dayCell.className = `h-16 border rounded p-1 cursor-pointer transition-all hover:shadow-sm overflow-hidden ${isToday ? 'border-green-500 bg-green-50 ring-2 ring-green-300' : 'border-gray-200 hover:border-green-300 bg-white'}`;
         dayCell.onclick = () => showDayDetails(dateStr, daySchedules);
         
-        let cellHTML = `<div class="font-semibold text-sm ${isToday ? 'text-green-600' : 'text-gray-700'}">${day}</div>`;
+        let cellHTML = `<div class="font-semibold text-xs ${isToday ? 'text-green-700' : 'text-gray-700'} mb-0.5">${day}</div>`;
         
         if (daySchedules.length > 0) {
-            cellHTML += '<div class="mt-1 space-y-1">';
-            daySchedules.slice(0, 2).forEach(schedule => {
+            cellHTML += '<div class="space-y-0.5">';
+            daySchedules.slice(0, 1).forEach(schedule => {
                 const color = schedule.status === 'completed' ? 'bg-blue-500' : 
                              schedule.status === 'cancelled' ? 'bg-red-500' : 'bg-green-500';
-                cellHTML += `<div class="${color} text-white text-xs px-1 py-0.5 rounded truncate">${schedule.time} ${schedule.type}</div>`;
+                const displayText = schedule.type.length > 12 ? schedule.type.substring(0, 10) + '...' : schedule.type;
+                cellHTML += `<div class="${color} text-white text-[10px] px-1 py-0.5 rounded truncate" title="${schedule.time} ${schedule.type}">${schedule.time}</div>`;
             });
-            if (daySchedules.length > 2) {
-                cellHTML += `<div class="text-xs text-gray-600">+${daySchedules.length - 2} more</div>`;
+            if (daySchedules.length > 1) {
+                cellHTML += `<div class="text-[10px] text-gray-600 font-medium">+${daySchedules.length - 1}</div>`;
             }
             cellHTML += '</div>';
         }

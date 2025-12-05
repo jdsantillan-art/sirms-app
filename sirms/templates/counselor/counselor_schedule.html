@@ -4,66 +4,85 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto">
-    <div class="mb-4 flex justify-between items-center">
+    <div class="mb-3 flex justify-between items-center">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Counseling Schedule Management</h1>
-            <p class="text-gray-600 text-sm">Schedule counseling sessions and manage appointments</p>
+            <h1 class="text-xl font-bold text-gray-900">Counseling Schedule Management</h1>
+            <p class="text-gray-600 text-xs">Schedule counseling sessions and manage appointments</p>
         </div>
         <div class="flex space-x-2">
-            <button onclick="showView('calendar')" id="calendarViewBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-semibold">
-                <i class="fas fa-calendar-alt mr-1"></i>Calendar View
+            <button onclick="showView('calendar')" id="calendarViewBtn" class="px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-semibold">
+                <i class="fas fa-calendar-alt mr-1"></i>Calendar
             </button>
-            <button onclick="showView('list')" id="listViewBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm font-semibold">
-                <i class="fas fa-list mr-1"></i>List View
+            <button onclick="showView('list')" id="listViewBtn" class="px-3 py-1.5 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm font-semibold">
+                <i class="fas fa-list mr-1"></i>List
             </button>
         </div>
     </div>
 
     <!-- Pending Cases to Schedule -->
     {% if pending_evaluations %}
-    <div class="bg-white rounded-lg shadow-sm border mb-6">
-        <div class="p-4 border-b bg-yellow-50">
-            <h2 class="text-lg font-bold text-gray-900">Pending Counseling Cases ({{ pending_evaluations|length }})</h2>
-            <p class="text-sm text-gray-600">These cases need to be scheduled</p>
+    <div class="bg-white rounded-lg shadow-sm border mb-4">
+        <div class="px-3 py-2 border-b bg-yellow-50">
+            <h2 class="text-base font-bold text-gray-900">Pending Counseling Cases ({{ pending_evaluations|length }})</h2>
         </div>
-        <div class="p-4">
-            {% for evaluation in pending_evaluations %}
-            <div class="border rounded-lg p-4 mb-3 hover:bg-gray-50 {% if selected_evaluation and selected_evaluation.id == evaluation.id %}bg-green-50 border-green-300{% endif %}">
-                <div class="flex justify-between items-start">
+        <div class="p-3">
+            <div class="space-y-2">
+                {% for evaluation in pending_evaluations %}
+                <div class="border rounded-lg p-3 hover:bg-gray-50 flex justify-between items-center {% if selected_evaluation and selected_evaluation.id == evaluation.id %}bg-green-50 border-green-300{% endif %}">
                     <div class="flex-1">
-                        <h3 class="font-bold text-gray-900">{{ evaluation.report.reported_student.get_full_name }}</h3>
-                        <p class="text-sm text-gray-600">Case: {{ evaluation.report.case_id }} | {{ evaluation.evaluation_notes }}</p>
-                        <p class="text-xs text-gray-500 mt-1">Evaluated: {{ evaluation.evaluated_at|date:"M d, Y" }}</p>
+                        <h3 class="font-semibold text-sm text-gray-900">{{ evaluation.report.reported_student.get_full_name }}</h3>
+                        <p class="text-xs text-gray-600">Case: {{ evaluation.report.case_id }}</p>
                     </div>
                     <button onclick="showScheduleModal('{{ evaluation.id }}', '{{ evaluation.report.reported_student.get_full_name }}', '{{ evaluation.report.case_id }}', '{{ evaluation.report.reported_student.id }}')"
-                        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-semibold">
-                        <i class="fas fa-calendar-plus mr-1"></i>Schedule Session
+                        class="px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700 text-xs font-semibold">
+                        <i class="fas fa-calendar-plus mr-1"></i>Schedule
                     </button>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
     {% endif %}
 
     <!-- Calendar View -->
     <div id="calendarView" class="bg-white rounded-lg shadow-sm border mb-6 hidden">
-        <div class="p-4 border-b">
+        <div class="px-3 py-2 border-b bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
             <div class="flex justify-between items-center">
-                <h2 class="text-lg font-bold text-gray-900">Schedule Calendar</h2>
-                <div class="flex space-x-2">
-                    <button onclick="changeMonth(-1)" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
-                        <i class="fas fa-chevron-left"></i>
+                <h2 class="text-base font-bold">Schedule Calendar</h2>
+                <div class="flex space-x-1">
+                    <button onclick="changeMonth(-1)" class="p-1.5 hover:bg-white/20 rounded transition-colors">
+                        <i class="fas fa-chevron-left text-sm"></i>
                     </button>
-                    <span id="currentMonth" class="px-4 py-1 font-semibold text-gray-900"></span>
-                    <button onclick="changeMonth(1)" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
-                        <i class="fas fa-chevron-right"></i>
+                    <span id="currentMonth" class="px-3 py-1 font-semibold text-sm"></span>
+                    <button onclick="changeMonth(1)" class="p-1.5 hover:bg-white/20 rounded transition-colors">
+                        <i class="fas fa-chevron-right text-sm"></i>
                     </button>
                 </div>
             </div>
         </div>
-        <div class="p-4">
-            <div id="calendar" class="grid grid-cols-7 gap-2"></div>
+        <div class="p-3">
+            <div id="calendar" class="grid grid-cols-7 gap-1"></div>
+        </div>
+        <!-- Legend -->
+        <div class="px-3 py-2 border-t bg-gray-50">
+            <div class="flex items-center justify-center space-x-4 text-xs">
+                <div class="flex items-center space-x-1.5">
+                    <div class="w-3 h-3 bg-blue-500 rounded"></div>
+                    <span class="text-gray-600">Scheduled</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                    <div class="w-3 h-3 bg-green-500 rounded"></div>
+                    <span class="text-gray-600">Completed</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                    <div class="w-3 h-3 bg-red-500 rounded"></div>
+                    <span class="text-gray-600">Missed</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                    <div class="w-3 h-3 bg-yellow-500 rounded"></div>
+                    <span class="text-gray-600">Rescheduled</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -394,7 +413,7 @@ function renderCalendar() {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     days.forEach(day => {
         const dayHeader = document.createElement('div');
-        dayHeader.className = 'text-center font-bold text-gray-700 text-sm py-2';
+        dayHeader.className = 'text-center font-semibold text-gray-700 text-xs py-1.5 bg-gray-100 rounded day-header';
         dayHeader.textContent = day;
         calendar.appendChild(dayHeader);
     });
@@ -406,55 +425,48 @@ function renderCalendar() {
     // Empty cells before first day
     for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement('div');
-        emptyCell.className = 'border border-gray-200 p-2 bg-gray-50 min-h-[80px]';
+        emptyCell.className = 'h-16 bg-gray-50 rounded border border-gray-200';
         calendar.appendChild(emptyCell);
     }
     
     // Days of month
     for (let day = 1; day <= daysInMonth; day++) {
-        const dayCell = document.createElement('div');
-        dayCell.className = 'border border-gray-200 p-2 min-h-[80px] hover:bg-gray-50 cursor-pointer';
-        
-        const dayNumber = document.createElement('div');
-        dayNumber.className = 'font-semibold text-gray-700 text-sm mb-1';
-        dayNumber.textContent = day;
-        dayCell.appendChild(dayNumber);
-        
-        // Check for schedules on this day
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const daySchedules = schedules.filter(s => {
             const scheduleDate = new Date(s.date);
             return scheduleDate.getDate() === day && 
                    scheduleDate.getMonth() === month && 
                    scheduleDate.getFullYear() === year;
         });
+        const isToday = dateStr === new Date().toISOString().split('T')[0];
         
-        daySchedules.forEach(schedule => {
-            const scheduleDiv = document.createElement('div');
-            scheduleDiv.className = 'text-xs p-1 mb-1 rounded cursor-pointer';
-            
-            if (schedule.status === 'scheduled') {
-                scheduleDiv.className += ' bg-blue-100 text-blue-800';
-            } else if (schedule.status === 'completed') {
-                scheduleDiv.className += ' bg-green-100 text-green-800';
-            } else if (schedule.status === 'missed') {
-                scheduleDiv.className += ' bg-red-100 text-red-800';
-            } else if (schedule.status === 'rescheduled') {
-                scheduleDiv.className += ' bg-yellow-100 text-yellow-800';
+        const dayCell = document.createElement('div');
+        dayCell.className = `h-16 border rounded p-1 cursor-pointer transition-all hover:shadow-sm overflow-hidden ${isToday ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-300' : 'border-gray-200 hover:border-blue-300 bg-white'}`;
+        
+        let cellHTML = `<div class="font-semibold text-xs ${isToday ? 'text-blue-700' : 'text-gray-700'} mb-0.5">${day}</div>`;
+        
+        if (daySchedules.length > 0) {
+            cellHTML += '<div class="space-y-0.5">';
+            daySchedules.slice(0, 1).forEach(schedule => {
+                const color = schedule.status === 'scheduled' ? 'bg-blue-500' : 
+                             schedule.status === 'completed' ? 'bg-green-500' : 
+                             schedule.status === 'missed' ? 'bg-red-500' : 
+                             schedule.status === 'rescheduled' ? 'bg-yellow-500' : 'bg-gray-500';
+                const time = schedule.date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                cellHTML += `<div class="${color} text-white text-[10px] px-1 py-0.5 rounded truncate" title="${schedule.student} - ${schedule.caseId}\n${schedule.location}">${time}</div>`;
+            });
+            if (daySchedules.length > 1) {
+                cellHTML += `<div class="text-[10px] text-gray-600 font-medium">+${daySchedules.length - 1}</div>`;
             }
-            
-            const time = schedule.date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-            scheduleDiv.innerHTML = `<div class="font-semibold">${time}</div><div class="truncate">${schedule.student}</div>`;
-            scheduleDiv.title = `${schedule.student} - ${schedule.caseId}\n${schedule.location}\n${schedule.notes}`;
-            
-            scheduleDiv.onclick = () => {
-                if (schedule.notes) {
-                    showNotesModal(schedule.student, schedule.notes);
-                }
-            };
-            
-            dayCell.appendChild(scheduleDiv);
-        });
+            cellHTML += '</div>';
+        }
         
+        dayCell.innerHTML = cellHTML;
+        dayCell.onclick = () => {
+            if (daySchedules.length > 0 && daySchedules[0].notes) {
+                showNotesModal(daySchedules[0].student, daySchedules[0].notes);
+            }
+        };
         calendar.appendChild(dayCell);
     }
 }
