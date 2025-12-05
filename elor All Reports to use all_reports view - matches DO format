@@ -1,0 +1,30 @@
+warning: in the working copy of 'sirms/templates/base.html', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/sirms/templates/base.html b/sirms/templates/base.html[m
+[1mindex d557171..3a01a5c 100644[m
+[1m--- a/sirms/templates/base.html[m
+[1m+++ b/sirms/templates/base.html[m
+[36m@@ -292,11 +292,11 @@[m
+ [m
+                 {% elif user.role == 'counselor' %}[m
+ [m
+[31m-                <a href="{% url 'major_case_review' %}" class="nav-item" data-tooltip="All Reports">[m
+[32m+[m[32m                <a href="{% url 'all_reports' %}" class="nav-item" data-tooltip="All Reports">[m
+                     <i class="fas fa-clipboard-list"></i>[m
+                     <span class="sidebar-text">All Reports</span>[m
+                 </a>[m
+[31m-                <a href="{% url 'case_evaluation' %}" class="nav-item">[m
+[32m+[m[32m                <a href="{% url 'case_evaluation' %}" class="nav-item"[m
+                     <i class="fas fa-clipboard-check"></i>[m
+                     <span class="sidebar-text">Referral Evaluation</span>[m
+                 </a>[m
+[36m@@ -378,8 +378,8 @@[m
+ [m
+                 <!-- Counseling Section for Guidance -->[m
+                 {% if user.role == 'guidance' %}[m
+[31m-                <a href="{% url 'all_reports' %}" class="nav-item" data-tooltip="All Reports">[m
+[31m-                    <i class="fas fa-clipboard-list"></i>[m
+[32m+[m[32m                <a href="{% url 'all_reports' %}" class="nav-item">[m
+[32m+[m[32m                    <i class="fas fa-chart-bar"></i>[m
+                     <span class="sidebar-text">All Reports</span>[m
+                 </a>[m
+                 <a href="{% url 'case_evaluation' %}" class="nav-item" data-tooltip="Referral Evaluation">[m

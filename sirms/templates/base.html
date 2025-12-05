@@ -292,11 +292,11 @@
 
                 {% elif user.role == 'counselor' %}
 
-                <a href="{% url 'major_case_review' %}" class="nav-item" data-tooltip="All Reports">
+                <a href="{% url 'all_reports' %}" class="nav-item" data-tooltip="All Reports">
                     <i class="fas fa-clipboard-list"></i>
                     <span class="sidebar-text">All Reports</span>
                 </a>
-                <a href="{% url 'case_evaluation' %}" class="nav-item">
+                <a href="{% url 'case_evaluation' %}" class="nav-item"
                     <i class="fas fa-clipboard-check"></i>
                     <span class="sidebar-text">Referral Evaluation</span>
                 </a>
@@ -378,8 +378,8 @@
 
                 <!-- Counseling Section for Guidance -->
                 {% if user.role == 'guidance' %}
-                <a href="{% url 'all_reports' %}" class="nav-item" data-tooltip="All Reports">
-                    <i class="fas fa-clipboard-list"></i>
+                <a href="{% url 'all_reports' %}" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
                     <span class="sidebar-text">All Reports</span>
                 </a>
                 <a href="{% url 'case_evaluation' %}" class="nav-item" data-tooltip="Referral Evaluation">
