@@ -1,3 +1,5 @@
+# Render deployment configuration
+# Auto-deploy enabled - triggers on push to main branch
 services:
   - type: web
     name: sirms
