@@ -172,16 +172,16 @@ def behavior_concerns(request):
     
     # GET request - display cases
     # Get cases classified as minor (handled by DO)
-    reports = IncidentReport.objects.filter(
-        status__in=['classified', 'under_review', 'resolved']
-    ).exclude(
-        status='evaluated'  # Exclude cases sent to guidance
-    ).select_related(
-        'reported_student', 'reporter', 'incident_type'
-    ).order_by('-created_at')
+    from .models import Classification
     
-    # Filter only cases that are classified as minor or handled by DO
-    # (You can add a field to track this, for now we use status)
+    reports = IncidentReport.objects.filter(
+        status__in=['classified', 'under_review', 'resolved'],
+        classification__severity='minor'  # Only minor cases (DO handles)
+    ).select_related(
+        'reported_student', 'reporter', 'incident_type', 'classification'
+    ).prefetch_related('classification').order_by('-created_at')
+    
+    # Filter only cases that are classified as minor (handled by DO)
     
     # Statistics
     total_cases = reports.count()

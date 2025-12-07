@@ -1025,17 +1025,14 @@ def fact_check_reports(request):
                         messages.success(request, f'Report {report.case_id} marked as needing more evidence.')
                     else:
                         # Classify the report
+                        from .models import Classification
+                        
                         severity = request.POST.get('severity')
                         student_id = request.POST.get('student_id')
                         notes = request.POST.get('notes', '')
                         
-                        # Update report status and classification
-                        if severity == 'minor':
-                            report.status = 'classified'
-                            report.classification = 'minor'
-                        elif severity == 'major':
-                            report.status = 'classified'
-                            report.classification = 'major'
+                        # Update report status
+                        report.status = 'classified'
                         
                         # Assign student if provided
                         if student_id:
@@ -1050,32 +1047,52 @@ def fact_check_reports(request):
                         
                         report.save()
                         
+                        # Create or update Classification object
+                        classification, created = Classification.objects.get_or_create(
+                            report=report,
+                            defaults={
+                                'classified_by': request.user,
+                                'severity': severity,
+                                'internal_notes': notes
+                            }
+                        )
+                        
+                        if not created:
+                            # Update existing classification
+                            classification.severity = severity
+                            classification.internal_notes = notes
+                            classification.classified_by = request.user
+                            classification.save()
+                        
                         # Create notifications based on classification
                         try:
                             if severity == 'minor':
+                                # Route to DO - Behavior Concerns
                                 # Notify DO users
                                 do_users = CustomUser.objects.filter(role='do')
                                 for do_user in do_users:
                                     Notification.objects.create(
                                         user=do_user,
-                                        title='Minor Case Classified',
-                                        message=f'Report {report.case_id} classified as minor case for DO handling.',
+                                        title='Minor Case Classified - Behavior Concern',
+                                        message=f'Report {report.case_id} has been classified as minor case and routed to Behavior Concerns for DO handling.',
                                         report=report
                                     )
                             elif severity == 'major':
-                                # Notify counselors
-                                counselors = CustomUser.objects.filter(role='counselor')
+                                # Route to Guidance - Referral Evaluation
+                                # Notify counselors/guidance
+                                counselors = CustomUser.objects.filter(role__in=['counselor', 'guidance'])
                                 for counselor in counselors:
                                     Notification.objects.create(
                                         user=counselor,
-                                        title='Major Case Referred',
-                                        message=f'Report {report.case_id} classified as major case requiring counseling.',
+                                        title='Major Case Referred - Referral Evaluation',
+                                        message=f'Report {report.case_id} has been classified as major case and routed to Referral Evaluation for counseling.',
                                         report=report
                                     )
-                        except:
+                        except Exception as e:
+                            print(f"Notification error: {e}")
                             pass
                         
-                        messages.success(request, f'Report {report.case_id} successfully classified as {severity} case.')
+                        messages.success(request, f'Report {report.case_id} successfully classified as {severity} case. Routed to {"Behavior Concerns" if severity == "minor" else "Referral Evaluation"}.')
                     
                 except Exception as e:
                     messages.error(request, f'Error processing report: {str(e)}')
@@ -1249,6 +1266,8 @@ def case_evaluation(request):
     if request.user.role not in ['counselor', 'guidance']:
         return redirect('dashboard')
     
+    from .models import Classification
+    
     if request.method == 'POST':
         report_id = request.POST.get('report_id')
         commission = request.POST.get('commission')
@@ -1377,12 +1396,15 @@ def case_evaluation(request):
             return redirect('case_evaluation')
     
     # Get cases ready for evaluation (not yet evaluated)
+    # Only show major cases (routed to Guidance/Referral Evaluation)
     cases_for_evaluation = IncidentReport.objects.filter(
         evaluation__isnull=True,
-        reported_student__isnull=False
-    ).exclude(
-        status__in=['closed', 'resolved']
-    ).order_by('-created_at')
+        reported_student__isnull=False,
+        classification__severity='major',  # Only major cases (Guidance handles)
+        status='classified'  # Only classified cases ready for evaluation
+    ).select_related(
+        'reported_student', 'reporter', 'incident_type', 'classification'
+    ).prefetch_related('classification').order_by('-created_at')
     
     return render(request, 'counselor/case_evaluation.html', {
         'cases': cases_for_evaluation,
