@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        {% if reports %}
+        {% if reports_with_students %}
         <div class="overflow-x-auto">
             <table class="min-w-full">
                 <thead class="bg-gray-50">
@@ -56,7 +56,8 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    {% for report in reports %}
+                    {% for item in reports_with_students %}
+                    {% with report=item.report %}
                     <tr class="hover:bg-gray-50 report-item"
                         data-priority="{% if report.incident_type.severity %}{{ report.incident_type.severity }}{% else %}minor{% endif %}"
                         data-date="{{ report.created_at|date:'Y-m-d' }}">
@@ -65,10 +66,12 @@
                             <div class="text-xs text-gray-500">G{{ report.grade_level }} - {{ report.section_name }}</div>
                         </td>
                         <td class="px-3 py-2">
-                            {% if report.reported_student %}
-                            <div class="text-sm font-medium text-gray-900">{{ report.reported_student.get_full_name }}</div>
+                            {% if item.involved_student_name %}
+                            <div class="text-sm font-medium text-gray-900">{{ item.involved_student_name }}</div>
+                            {% elif report.involved_students %}
+                            <div class="text-xs text-gray-500">{{ report.involved_students|truncatewords:3 }}</div>
                             {% else %}
-                            <div class="text-xs text-gray-500">{{ report.involved_students|truncatewords:3|default:"Not specified" }}</div>
+                            <div class="text-xs text-gray-400">Not specified</div>
                             {% endif %}
                         </td>
                         <td class="px-3 py-2">
@@ -112,12 +115,13 @@
                                 </a>
                                 <button
                                     class="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
-                                    onclick="showClassifyModal('{{ report.id }}', '{{ report.case_id }}', {% if report.reported_student %}'{{ report.reported_student.id }}', '{{ report.reported_student.get_full_name|escapejs }}'{% else %}null, null{% endif %})">
+                                    onclick="showClassifyModal('{{ report.id }}', '{{ report.case_id }}', {% if item.involved_student_id %}'{{ item.involved_student_id }}', '{{ item.involved_student_name|escapejs }}'{% else %}null, null{% endif %})">
                                     <i class="fas fa-check"></i>
                                 </button>
                             </div>
                         </td>
                     </tr>
+                    {% endwith %}
                     {% endfor %}
                 </tbody>
             </table>
@@ -214,7 +218,7 @@
                             <input type="hidden" name="student_id" id="selectedStudentId">
                             <datalist id="studentList">
                                 {% for student in students %}
-                                <option value="{{ student.get_full_name }} ({{ student.email }})" data-id="{{ student.id }}">
+                                <option value="{{ student.get_full_name }} ({{ student.email }})" data-id="{{ student.id }}" data-name="{{ student.get_full_name }}">
                                 {% endfor %}
                             </datalist>
                         </div>
@@ -315,19 +319,44 @@
         // Handle student display
         const assignedDisplay = document.getElementById('assignedStudentDisplay');
         const searchBox = document.getElementById('studentSearchBox');
+        const studentSearch = document.getElementById('studentSearch');
+        const selectedStudentId = document.getElementById('selectedStudentId');
         
         if (studentId && studentName) {
-            // Student already assigned - show name, hide search
-            document.getElementById('assignedStudentName').textContent = studentName;
-            document.getElementById('assignedStudentId').value = studentId;
-            assignedDisplay.style.display = 'block';
-            searchBox.style.display = 'none';
+            // Student found from involved_students or involved_parties - auto-fill search field
+            // Find the option in datalist that matches this student
+            const datalist = document.getElementById('studentList');
+            const options = datalist.querySelectorAll('option');
+            let foundOption = null;
+            
+            for (let option of options) {
+                const optionId = option.getAttribute('data-id');
+                if (optionId === studentId) {
+                    foundOption = option.value;
+                    break;
+                }
+            }
+            
+            if (foundOption) {
+                // Auto-fill the search field with the student name
+                studentSearch.value = foundOption;
+                selectedStudentId.value = studentId;
+                // Show search box (not assigned display) so user can see and modify if needed
+                assignedDisplay.style.display = 'none';
+                searchBox.style.display = 'block';
+            } else {
+                // If not found in datalist, show as assigned
+                document.getElementById('assignedStudentName').textContent = studentName;
+                document.getElementById('assignedStudentId').value = studentId;
+                assignedDisplay.style.display = 'block';
+                searchBox.style.display = 'none';
+            }
         } else {
             // No student - show search, hide assigned
             assignedDisplay.style.display = 'none';
             searchBox.style.display = 'block';
-            document.getElementById('studentSearch').value = '';
-            document.getElementById('selectedStudentId').value = '';
+            studentSearch.value = '';
+            selectedStudentId.value = '';
         }
         
         document.getElementById('classifyModal').classList.remove('hidden');
@@ -414,6 +443,17 @@
             if (option.value === selectedValue) {
                 hiddenInput.value = option.getAttribute('data-id');
                 return;
+            }
+        }
+        
+        // Also try partial match by name (in case format is slightly different)
+        if (selectedValue) {
+            for (let option of options) {
+                const optionName = option.getAttribute('data-name');
+                if (optionName && selectedValue.includes(optionName)) {
+                    hiddenInput.value = option.getAttribute('data-id');
+                    return;
+                }
             }
         }
         

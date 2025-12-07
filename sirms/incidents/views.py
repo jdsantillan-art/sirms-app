@@ -1083,7 +1083,7 @@ def fact_check_reports(request):
             return redirect('fact_check_reports')
         
         # GET request - show pending reports
-        reports = IncidentReport.objects.filter(status='pending').order_by('-created_at')
+        reports = IncidentReport.objects.filter(status='pending').order_by('-created_at').select_related('reported_student').prefetch_related('involved_parties')
         
         # Get statistics
         total_pending = reports.count()
@@ -1095,9 +1095,60 @@ def fact_check_reports(request):
         # Get all students for the dropdown
         students = CustomUser.objects.filter(role='student', is_active=True).order_by('first_name', 'last_name')
         
+        # For each report, find involved students from involved_parties or involved_students field
+        reports_with_students = []
+        for report in reports:
+            involved_student = None
+            involved_student_id = None
+            involved_student_name = None
+            
+            # First check if reported_student is already set
+            if report.reported_student:
+                involved_student = report.reported_student
+                involved_student_id = report.reported_student.id
+                involved_student_name = report.reported_student.get_full_name()
+            else:
+                # Check involved_parties for student
+                involved_parties = report.involved_parties.filter(party_type='student', student__isnull=False)
+                if involved_parties.exists():
+                    # Get the first student from involved parties
+                    first_party = involved_parties.first()
+                    if first_party.student:
+                        involved_student = first_party.student
+                        involved_student_id = first_party.student.id
+                        involved_student_name = first_party.student.get_full_name()
+                # If still no student, try to parse involved_students text field
+                elif report.involved_students:
+                    # Try to find student by name or email from involved_students field
+                    involved_students_text = report.involved_students.strip()
+                    # Try to match by name (first name + last name)
+                    name_parts = involved_students_text.split()
+                    if len(name_parts) >= 2:
+                        first_name = name_parts[0]
+                        last_name = name_parts[-1]
+                        try:
+                            student_match = CustomUser.objects.filter(
+                                role='student',
+                                first_name__icontains=first_name,
+                                last_name__icontains=last_name
+                            ).first()
+                            if student_match:
+                                involved_student = student_match
+                                involved_student_id = student_match.id
+                                involved_student_name = student_match.get_full_name()
+                        except:
+                            pass
+            
+            reports_with_students.append({
+                'report': report,
+                'involved_student_id': involved_student_id,
+                'involved_student_name': involved_student_name,
+            })
+        
         context = {
             'user_role': request.user.role,
-            'reports': reports,
+            'reports': reports,  # Keep for backward compatibility
+            'reports_with_students': reports_with_students,
             'total_pending': total_pending,
             'today_reports': today_reports,
             'urgent_reports': urgent_reports,

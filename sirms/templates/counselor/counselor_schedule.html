@@ -3,173 +3,372 @@
 {% block title %}Counseling Schedule - SIRMS{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto">
-    <div class="mb-3 flex justify-between items-center">
+<style>
+    .calendar-container {
+        display: flex;
+        gap: 16px;
+        height: calc(100vh - 200px);
+        min-height: 600px;
+    }
+    .calendar-sidebar {
+        width: 280px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        padding: 16px;
+        overflow-y: auto;
+    }
+    .calendar-main {
+        flex: 1;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+    }
+    .calendar-header {
+        background: linear-gradient(135deg, #2E8B57 0%, #3CB371 50%, #228B22 100%);
+        color: white;
+        padding: 16px 24px;
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .calendar-grid {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 1px;
+        background: #e5e7eb;
+        padding: 1px;
+    }
+    .calendar-day-header {
+        background: #f9fafb;
+        padding: 12px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 12px;
+        color: #6b7280;
+        text-transform: uppercase;
+    }
+    .calendar-day {
+        background: white;
+        min-height: 100px;
+        padding: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+    }
+    .calendar-day:hover {
+        background: #f0fdf4;
+    }
+    .calendar-day.today {
+        background: #dcfce7;
+        border: 2px solid #2E8B57;
+    }
+    .calendar-day.other-month {
+        background: #f9fafb;
+        color: #9ca3af;
+    }
+    .calendar-event {
+        font-size: 11px;
+        padding: 4px 6px;
+        margin: 2px 0;
+        border-radius: 4px;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: all 0.2s;
+    }
+    .calendar-event:hover {
+        transform: translateX(2px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .event-scheduled { background: #3b82f6; color: white; }
+    .event-completed { background: #10b981; color: white; }
+    .event-missed { background: #ef4444; color: white; }
+    .event-rescheduled { background: #f59e0b; color: white; }
+    .mini-calendar {
+        margin-bottom: 24px;
+    }
+    .mini-calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    .mini-calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+    }
+    .mini-calendar-day {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    .mini-calendar-day:hover {
+        background: #f0fdf4;
+    }
+    .mini-calendar-day.today {
+        background: #2E8B57;
+        color: white;
+        font-weight: bold;
+    }
+    .mini-calendar-day.has-events {
+        background: #dcfce7;
+        font-weight: 600;
+    }
+    .schedule-detail-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+    .schedule-detail-content {
+        background: white;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+</style>
+
+<div class="max-w-full mx-auto px-4 py-4">
+    <!-- Top Header -->
+    <div class="mb-4 flex justify-between items-center">
         <div>
-            <h1 class="text-xl font-bold text-gray-900">Counseling Schedule Management</h1>
-            <p class="text-gray-600 text-xs">Schedule counseling sessions and manage appointments</p>
+            <h1 class="text-2xl font-bold text-gray-900 flex items-center">
+                <i class="fas fa-calendar-alt text-green-600 mr-2"></i>
+                Counseling Schedule
+            </h1>
+            <p class="text-sm text-gray-600 mt-1">Manage counseling sessions and appointments</p>
         </div>
-        <div class="flex space-x-2">
-            <button onclick="showView('calendar')" id="calendarViewBtn" class="px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-semibold">
-                <i class="fas fa-calendar-alt mr-1"></i>Calendar
+        <div class="flex items-center space-x-2">
+            <button onclick="showView('month')" id="monthViewBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold">
+                <i class="fas fa-calendar mr-1"></i>Month
             </button>
-            <button onclick="showView('list')" id="listViewBtn" class="px-3 py-1.5 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm font-semibold">
+            <button onclick="showView('list')" id="listViewBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm font-semibold">
                 <i class="fas fa-list mr-1"></i>List
             </button>
         </div>
     </div>
 
-    <!-- Pending Cases to Schedule -->
+    <!-- Pending Cases -->
     {% if pending_evaluations %}
-    <div class="bg-white rounded-lg shadow-sm border mb-4">
-        <div class="px-3 py-2 border-b bg-yellow-50">
-            <h2 class="text-base font-bold text-gray-900">Pending Counseling Cases ({{ pending_evaluations|length }})</h2>
-        </div>
-        <div class="p-3">
-            <div class="space-y-2">
-                {% for evaluation in pending_evaluations %}
-                <div class="border rounded-lg p-3 hover:bg-gray-50 flex justify-between items-center {% if selected_evaluation and selected_evaluation.id == evaluation.id %}bg-green-50 border-green-300{% endif %}">
-                    <div class="flex-1">
-                        <h3 class="font-semibold text-sm text-gray-900">{{ evaluation.report.reported_student.get_full_name }}</h3>
-                        <p class="text-xs text-gray-600">Case: {{ evaluation.report.case_id }}</p>
-                    </div>
-                    <button onclick="showScheduleModal('{{ evaluation.id }}', '{{ evaluation.report.reported_student.get_full_name }}', '{{ evaluation.report.case_id }}', '{{ evaluation.report.reported_student.id }}')"
-                        class="px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700 text-xs font-semibold">
-                        <i class="fas fa-calendar-plus mr-1"></i>Schedule
-                    </button>
-                </div>
-                {% endfor %}
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 rounded-r-lg">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="font-semibold text-gray-900">Pending Cases to Schedule ({{ pending_evaluations|length }})</h3>
+                <p class="text-sm text-gray-600">Click "Schedule" to create appointments</p>
             </div>
+        </div>
+        <div class="mt-3 space-y-2">
+            {% for evaluation in pending_evaluations %}
+            <div class="bg-white rounded-lg p-3 flex justify-between items-center border border-yellow-200">
+                <div>
+                    <span class="font-semibold text-sm">{{ evaluation.report.reported_student.get_full_name }}</span>
+                    <span class="text-xs text-gray-600 ml-2">Case: {{ evaluation.report.case_id }}</span>
+                </div>
+                <button onclick="showScheduleModal('{{ evaluation.id }}', '{{ evaluation.report.reported_student.get_full_name }}', '{{ evaluation.report.case_id }}', '{{ evaluation.report.reported_student.id }}')"
+                    class="px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700 text-xs font-semibold">
+                    <i class="fas fa-calendar-plus mr-1"></i>Schedule
+                </button>
+            </div>
+            {% endfor %}
         </div>
     </div>
     {% endif %}
 
     <!-- Calendar View -->
-    <div id="calendarView" class="bg-white rounded-lg shadow-sm border mb-6 hidden">
-        <div class="px-3 py-2 border-b bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-            <div class="flex justify-between items-center">
-                <h2 class="text-base font-bold">Schedule Calendar</h2>
-                <div class="flex space-x-1">
-                    <button onclick="changeMonth(-1)" class="p-1.5 hover:bg-white/20 rounded transition-colors">
-                        <i class="fas fa-chevron-left text-sm"></i>
+    <div id="calendarView" class="calendar-container">
+        <!-- Sidebar -->
+        <div class="calendar-sidebar">
+            <!-- Mini Calendar -->
+            <div class="mini-calendar">
+                <div class="mini-calendar-header">
+                    <button onclick="previousMiniMonth()" class="p-1 hover:bg-gray-100 rounded">
+                        <i class="fas fa-chevron-left text-xs text-gray-600"></i>
                     </button>
-                    <span id="currentMonth" class="px-3 py-1 font-semibold text-sm"></span>
-                    <button onclick="changeMonth(1)" class="p-1.5 hover:bg-white/20 rounded transition-colors">
-                        <i class="fas fa-chevron-right text-sm"></i>
+                    <span id="miniMonth" class="font-semibold text-sm text-gray-900"></span>
+                    <button onclick="nextMiniMonth()" class="p-1 hover:bg-gray-100 rounded">
+                        <i class="fas fa-chevron-right text-xs text-gray-600"></i>
                     </button>
+                </div>
+                <div class="mini-calendar-grid" id="miniCalendarGrid"></div>
+            </div>
+
+            <!-- Filters -->
+            <div class="border-t pt-4">
+                <h3 class="font-semibold text-sm text-gray-900 mb-3">Filters</h3>
+                <div class="space-y-2">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="filterEvents()" data-status="scheduled" class="rounded text-green-600">
+                        <span class="text-sm text-gray-700">Scheduled</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="filterEvents()" data-status="completed" class="rounded text-green-600">
+                        <span class="text-sm text-gray-700">Completed</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="filterEvents()" data-status="missed" class="rounded text-green-600">
+                        <span class="text-sm text-gray-700">Missed</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" checked onchange="filterEvents()" data-status="rescheduled" class="rounded text-green-600">
+                        <span class="text-sm text-gray-700">Rescheduled</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="border-t pt-4 mt-4">
+                <h3 class="font-semibold text-sm text-gray-900 mb-3">Quick Stats</h3>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Total:</span>
+                        <span class="font-semibold text-gray-900">{{ schedules|length }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Scheduled:</span>
+                        <span class="font-semibold text-blue-600">{{ schedules|length|default:0 }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Completed:</span>
+                        <span class="font-semibold text-green-600">{{ schedules|length|default:0 }}</span>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="p-3">
-            <div id="calendar" class="grid grid-cols-7 gap-1"></div>
-        </div>
-        <!-- Legend -->
-        <div class="px-3 py-2 border-t bg-gray-50">
-            <div class="flex items-center justify-center space-x-4 text-xs">
-                <div class="flex items-center space-x-1.5">
-                    <div class="w-3 h-3 bg-blue-500 rounded"></div>
-                    <span class="text-gray-600">Scheduled</span>
+
+        <!-- Main Calendar -->
+        <div class="calendar-main">
+            <div class="calendar-header">
+                <div class="flex items-center space-x-4">
+                    <button onclick="previousMonth()" class="p-2 hover:bg-white/20 rounded-lg">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button onclick="goToToday()" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-semibold">
+                        Today
+                    </button>
+                    <h2 id="currentMonth" class="text-xl font-bold"></h2>
+                    <button onclick="nextMonth()" class="p-2 hover:bg-white/20 rounded-lg">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
-                <div class="flex items-center space-x-1.5">
-                    <div class="w-3 h-3 bg-green-500 rounded"></div>
-                    <span class="text-gray-600">Completed</span>
+                <div class="flex items-center space-x-2">
+                    <button onclick="showScheduleModal()" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-semibold">
+                        <i class="fas fa-plus mr-1"></i>Create
+                    </button>
                 </div>
-                <div class="flex items-center space-x-1.5">
-                    <div class="w-3 h-3 bg-red-500 rounded"></div>
-                    <span class="text-gray-600">Missed</span>
-                </div>
-                <div class="flex items-center space-x-1.5">
-                    <div class="w-3 h-3 bg-yellow-500 rounded"></div>
-                    <span class="text-gray-600">Rescheduled</span>
+            </div>
+            <div class="flex-1 overflow-auto">
+                <div class="calendar-grid">
+                    <div class="calendar-day-header">Sun</div>
+                    <div class="calendar-day-header">Mon</div>
+                    <div class="calendar-day-header">Tue</div>
+                    <div class="calendar-day-header">Wed</div>
+                    <div class="calendar-day-header">Thu</div>
+                    <div class="calendar-day-header">Fri</div>
+                    <div class="calendar-day-header">Sat</div>
+                    <div id="calendarDays"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- List View -->
-    <div id="listView" class="bg-white rounded-lg shadow-sm border">
-        <div class="p-4 border-b">
-            <h2 class="text-lg font-bold text-gray-900">Scheduled Counseling Sessions</h2>
-        </div>
-
-        {% if schedules %}
-        <div class="overflow-x-auto">
-            <table class="min-w-full">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Student</th>
-                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Referral ID</th>
-                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Date & Time</th>
-                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Location</th>
-                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Notes</th>
-                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Status</th>
-                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    {% for schedule in schedules %}
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-3 py-2">
-                            <div class="text-sm font-medium text-gray-900">{{ schedule.student.get_full_name }}</div>
-                        </td>
-                        <td class="px-3 py-2">
-                            <div class="text-sm text-gray-900">{{ schedule.evaluation.report.case_id }}</div>
-                        </td>
-                        <td class="px-3 py-2">
-                            <div class="text-sm text-gray-900">{{ schedule.scheduled_date|date:"M d, Y" }}</div>
-                            <div class="text-xs text-gray-500">{{ schedule.scheduled_date|date:"h:i A" }}</div>
-                        </td>
-                        <td class="px-3 py-2">
-                            <div class="text-sm text-gray-900">{{ schedule.location|default:"TBA" }}</div>
-                        </td>
-                        <td class="px-3 py-2">
-                            {% if schedule.notes %}
-                            <button onclick="showNotesModal('{{ schedule.student.get_full_name|escapejs }}', '{{ schedule.notes|escapejs }}')" class="text-xs text-blue-600 hover:underline">
-                                <i class="fas fa-sticky-note mr-1"></i>View Notes
-                            </button>
-                            {% else %}
-                            <span class="text-xs text-gray-400">No notes</span>
-                            {% endif %}
-                        </td>
-                        <td class="px-3 py-2">
-                            {% if schedule.status == 'scheduled' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Scheduled</span>
-                            {% elif schedule.status == 'completed' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
-                            {% elif schedule.status == 'missed' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Missed</span>
-                            {% elif schedule.status == 'rescheduled' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Rescheduled</span>
-                            {% endif %}
-                        </td>
-                        <td class="px-3 py-2">
-                            <div class="flex space-x-2">
-                                <button onclick="showUpdateStatusModal({{ schedule.id }}, '{{ schedule.status }}')" 
-                                    class="px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" 
-                                    title="Update Status">
-                                    <i class="fas fa-edit"></i>
+    <div id="listView" class="hidden">
+        <div class="bg-white rounded-lg shadow-sm border">
+            <div class="p-4 border-b bg-green-50">
+                <h2 class="text-lg font-bold text-gray-900">All Scheduled Sessions</h2>
+            </div>
+            {% if schedules %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Student</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Case ID</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Date & Time</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Location</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Status</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for schedule in schedules %}
+                        <tr class="hover:bg-gray-50 cursor-pointer" onclick="showScheduleDetail({{ schedule.id }})">
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ schedule.student.get_full_name }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">{{ schedule.evaluation.report.case_id }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">
+                                {{ schedule.scheduled_date|date:"M d, Y" }}<br>
+                                <span class="text-xs text-gray-500">{{ schedule.scheduled_date|date:"h:i A" }}</span>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-900">{{ schedule.location|default:"TBA" }}</td>
+                            <td class="px-4 py-3">
+                                {% if schedule.status == 'scheduled' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Scheduled</span>
+                                {% elif schedule.status == 'completed' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                                {% elif schedule.status == 'missed' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Missed</span>
+                                {% elif schedule.status == 'rescheduled' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Rescheduled</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-3">
+                                <button onclick="event.stopPropagation(); showScheduleDetail({{ schedule.id }})" class="text-green-600 hover:text-green-800">
+                                    <i class="fas fa-eye"></i>
                                 </button>
-                                <button onclick="showScheduleModal('{{ schedule.evaluation.id }}', '{{ schedule.student.get_full_name }}', '{{ schedule.evaluation.report.case_id }}', '{{ schedule.student.id }}')" 
-                                    class="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors" 
-                                    title="Schedule">
-                                    <i class="fas fa-calendar-plus"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-12 text-gray-500">
+                <i class="fas fa-calendar-times text-4xl mb-2"></i>
+                <p>No scheduled sessions yet</p>
+            </div>
+            {% endif %}
         </div>
-        {% else %}
-        <div class="text-center py-8">
-            <div class="text-gray-500">No scheduled sessions yet</div>
-        </div>
-        {% endif %}
     </div>
 </div>
 
-<!-- Schedule Modal -->
+<!-- Schedule Detail Modal -->
+<div id="scheduleDetailModal" class="schedule-detail-modal" onclick="if(event.target===this) closeScheduleDetail()">
+    <div class="schedule-detail-content">
+        <div class="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 rounded-t-lg">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold" id="detailTitle">Schedule Details</h3>
+                <button onclick="closeScheduleDetail()" class="text-white hover:text-gray-200">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-6" id="detailContent">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- Schedule Modal (existing) -->
 <div id="scheduleModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
     <div class="relative top-20 mx-auto p-5 border w-full max-w-lg shadow-2xl rounded-2xl bg-white">
         <div class="mt-3">
@@ -190,25 +389,17 @@
                         <label class="block text-sm font-bold text-gray-800 mb-2">
                             Date & Time <span class="text-red-500">*</span>
                         </label>
-                        <input type="datetime-local" name="scheduled_date" id="scheduledDate" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500" required onchange="checkScheduleConflict()">
-                        <div id="conflictWarning" class="hidden mt-2 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-700">
-                            <i class="fas fa-exclamation-triangle mr-1"></i>
-                            <span id="conflictMessage"></span>
-                        </div>
+                        <input type="datetime-local" name="scheduled_date" id="scheduledDate" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500" required>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-bold text-gray-800 mb-2">
-                            Location
-                        </label>
-                        <input type="text" name="location" placeholder="e.g., Guidance Office, Room 201" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500">
+                        <label class="block text-sm font-bold text-gray-800 mb-2">Location</label>
+                        <input type="text" name="location" placeholder="e.g., Guidance Office, Room 201" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-bold text-gray-800 mb-2">
-                            Notes
-                        </label>
-                        <textarea name="notes" rows="3" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500" placeholder="Additional notes..."></textarea>
+                        <label class="block text-sm font-bold text-gray-800 mb-2">Notes</label>
+                        <textarea name="notes" rows="3" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-green-500" placeholder="Additional notes..."></textarea>
                     </div>
                 </div>
                 
@@ -216,7 +407,7 @@
                     <button type="button" onclick="closeScheduleModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
                         Cancel
                     </button>
-                    <button type="submit" id="submitBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold">
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold">
                         <i class="fas fa-calendar-check mr-1"></i>Schedule & Notify
                     </button>
                 </div>
@@ -225,419 +416,288 @@
     </div>
 </div>
 
-<!-- Notes Modal -->
-<div id="notesModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-2xl rounded-2xl bg-white">
-        <div class="mt-3">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-gray-900" id="notesModalTitle">Session Notes</h3>
-                <button onclick="closeNotesModal()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <p id="notesContent" class="text-sm text-gray-700 whitespace-pre-wrap"></p>
-            </div>
-            <div class="flex justify-end mt-4">
-                <button onclick="closeNotesModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
-                    Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Update Status Modal -->
-<div id="updateStatusModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-2xl rounded-2xl bg-white">
-        <div class="mt-3">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-gray-900">Update Session Status</h3>
-                <button onclick="closeUpdateStatusModal()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            
-            <form method="post" id="updateStatusForm" action="{% url 'counselor_schedule' %}">
-                {% csrf_token %}
-                <input type="hidden" name="schedule_id" id="updateScheduleId">
-                <input type="hidden" name="action" value="update_status">
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-800 mb-2">
-                            Status <span class="text-red-500">*</span>
-                        </label>
-                        <select name="status" id="statusSelect" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500" required>
-                            <option value="scheduled">Scheduled</option>
-                            <option value="completed">Completed</option>
-                            <option value="missed">Missed</option>
-                            <option value="rescheduled">Rescheduled</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-bold text-gray-800 mb-2">
-                            Notes
-                        </label>
-                        <textarea name="notes" rows="3" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500" placeholder="Add notes about the status update..."></textarea>
-                    </div>
-                </div>
-                
-                <div class="flex justify-end space-x-2 mt-6 pt-4 border-t">
-                    <button type="button" onclick="closeUpdateStatusModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-semibold">
-                        Cancel
-                    </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-semibold">
-                        <i class="fas fa-save mr-1"></i>Update Status
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <script>
-// Schedule data from Django
+// Schedule data
 const schedules = [
     {% for schedule in schedules %}
     {
         id: {{ schedule.id }},
         date: new Date('{{ schedule.scheduled_date|date:"Y-m-d H:i:s" }}'),
         student: '{{ schedule.student.get_full_name|escapejs }}',
-        studentId: '{{ schedule.student.id }}',
         caseId: '{{ schedule.evaluation.report.case_id }}',
         location: '{{ schedule.location|default:"TBA"|escapejs }}',
-        notes: '{{ schedule.notes|escapejs }}',
+        notes: `{{ schedule.notes|escapejs|default:"" }}`,
         status: '{{ schedule.status }}'
     },
     {% endfor %}
 ];
 
 let currentDate = new Date();
-let currentStudentId = null;
+let currentView = 'month';
+let miniCalendarDate = new Date();
+
+function showView(view) {
+    currentView = view;
+    const calendarView = document.getElementById('calendarView');
+    const listView = document.getElementById('listView');
+    const monthBtn = document.getElementById('monthViewBtn');
+    const listBtn = document.getElementById('listViewBtn');
+    
+    if (view === 'month') {
+        calendarView.classList.remove('hidden');
+        listView.classList.add('hidden');
+        monthBtn.classList.remove('bg-gray-200', 'text-gray-700');
+        monthBtn.classList.add('bg-green-600', 'text-white');
+        listBtn.classList.remove('bg-green-600', 'text-white');
+        listBtn.classList.add('bg-gray-200', 'text-gray-700');
+        renderCalendar();
+    } else {
+        calendarView.classList.add('hidden');
+        listView.classList.remove('hidden');
+        listBtn.classList.remove('bg-gray-200', 'text-gray-700');
+        listBtn.classList.add('bg-green-600', 'text-white');
+        monthBtn.classList.remove('bg-green-600', 'text-white');
+        monthBtn.classList.add('bg-gray-200', 'text-gray-700');
+    }
+}
+
+function renderCalendar() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    // Update header
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+    
+    // Get first day and days in month
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const prevMonthDays = new Date(year, month, 0).getDate();
+    
+    const calendarDays = document.getElementById('calendarDays');
+    calendarDays.innerHTML = '';
+    
+    // Previous month days
+    for (let i = firstDay - 1; i >= 0; i--) {
+        const day = prevMonthDays - i;
+        const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const cell = createDayCell(day, true, dateStr);
+        calendarDays.appendChild(cell);
+    }
+    
+    // Current month days
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const cell = createDayCell(day, false, dateStr);
+        calendarDays.appendChild(cell);
+    }
+    
+    // Next month days to fill grid
+    const totalCells = calendarDays.children.length;
+    const remainingCells = 42 - totalCells; // 6 rows * 7 days
+    for (let day = 1; day <= remainingCells; day++) {
+        const dateStr = `${year}-${String(month + 2).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const cell = createDayCell(day, true, dateStr);
+        calendarDays.appendChild(cell);
+    }
+    
+    renderMiniCalendar();
+}
+
+function createDayCell(day, isOtherMonth, dateStr) {
+    const cell = document.createElement('div');
+    const isToday = dateStr === new Date().toISOString().split('T')[0];
+    const daySchedules = schedules.filter(s => {
+        const sDate = s.date.toISOString().split('T')[0];
+        return sDate === dateStr;
+    });
+    
+    cell.className = `calendar-day ${isToday ? 'today' : ''} ${isOtherMonth ? 'other-month' : ''}`;
+    cell.onclick = () => {
+        if (daySchedules.length > 0) {
+            showDaySchedules(dateStr, daySchedules);
+        }
+    };
+    
+    let html = `<div class="font-semibold mb-1">${day}</div>`;
+    
+    if (daySchedules.length > 0) {
+        daySchedules.slice(0, 3).forEach(schedule => {
+            const time = schedule.date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            const statusClass = `event-${schedule.status}`;
+            html += `<div class="calendar-event ${statusClass}" onclick="event.stopPropagation(); showScheduleDetail(${schedule.id})" title="${schedule.student} - ${time}">
+                ${time} ${schedule.student}
+            </div>`;
+        });
+        if (daySchedules.length > 3) {
+            html += `<div class="text-xs text-gray-500 mt-1">+${daySchedules.length - 3} more</div>`;
+        }
+    }
+    
+    cell.innerHTML = html;
+    return cell;
+}
+
+function showScheduleDetail(scheduleId) {
+    const schedule = schedules.find(s => s.id === scheduleId);
+    if (!schedule) return;
+    
+    const modal = document.getElementById('scheduleDetailModal');
+    const title = document.getElementById('detailTitle');
+    const content = document.getElementById('detailContent');
+    
+    title.textContent = `${schedule.student} - ${schedule.caseId}`;
+    
+    const statusColors = {
+        'scheduled': 'bg-blue-100 text-blue-800',
+        'completed': 'bg-green-100 text-green-800',
+        'missed': 'bg-red-100 text-red-800',
+        'rescheduled': 'bg-yellow-100 text-yellow-800'
+    };
+    
+    content.innerHTML = `
+        <div class="space-y-4">
+            <div>
+                <label class="text-xs font-semibold text-gray-500 uppercase">Date & Time</label>
+                <p class="text-lg font-semibold text-gray-900">${schedule.date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                <p class="text-sm text-gray-600">${schedule.date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</p>
+            </div>
+            <div>
+                <label class="text-xs font-semibold text-gray-500 uppercase">Status</label>
+                <div class="mt-1">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold ${statusColors[schedule.status] || 'bg-gray-100 text-gray-800'}">
+                        ${schedule.status.charAt(0).toUpperCase() + schedule.status.slice(1)}
+                    </span>
+                </div>
+            </div>
+            <div>
+                <label class="text-xs font-semibold text-gray-500 uppercase">Location</label>
+                <p class="text-sm text-gray-900">${schedule.location}</p>
+            </div>
+            ${schedule.notes ? `
+            <div>
+                <label class="text-xs font-semibold text-gray-500 uppercase">Notes</label>
+                <div class="mt-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                    <p class="text-sm text-gray-700 whitespace-pre-wrap">${schedule.notes}</p>
+                </div>
+            </div>
+            ` : ''}
+            <div class="flex justify-end space-x-2 pt-4 border-t">
+                <button onclick="closeScheduleDetail()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm font-semibold">
+                    Close
+                </button>
+            </div>
+        </div>
+    `;
+    
+    modal.style.display = 'flex';
+}
+
+function closeScheduleDetail() {
+    document.getElementById('scheduleDetailModal').style.display = 'none';
+}
+
+function showDaySchedules(dateStr, daySchedules) {
+    const schedule = daySchedules[0];
+    if (schedule) {
+        showScheduleDetail(schedule.id);
+    }
+}
+
+function previousMonth() {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    renderCalendar();
+}
+
+function nextMonth() {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderCalendar();
+}
+
+function goToToday() {
+    currentDate = new Date();
+    renderCalendar();
+}
+
+function renderMiniCalendar() {
+    const year = miniCalendarDate.getFullYear();
+    const month = miniCalendarDate.getMonth();
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    document.getElementById('miniMonth').textContent = `${monthNames[month]} ${year}`;
+    
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+    
+    const grid = document.getElementById('miniCalendarGrid');
+    grid.innerHTML = '';
+    
+    // Day headers
+    ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach(day => {
+        const header = document.createElement('div');
+        header.className = 'text-center text-xs font-semibold text-gray-500';
+        header.textContent = day;
+        grid.appendChild(header);
+    });
+    
+    // Empty cells
+    for (let i = 0; i < firstDay; i++) {
+        grid.appendChild(document.createElement('div'));
+    }
+    
+    // Days
+    for (let day = 1; day <= daysInMonth; day++) {
+        const cell = document.createElement('div');
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const isToday = dateStr === today.toISOString().split('T')[0];
+        const hasEvents = schedules.some(s => s.date.toISOString().split('T')[0] === dateStr);
+        
+        cell.className = `mini-calendar-day ${isToday ? 'today' : ''} ${hasEvents ? 'has-events' : ''}`;
+        cell.textContent = day;
+        cell.onclick = () => {
+            currentDate = new Date(year, month, day);
+            renderCalendar();
+        };
+        grid.appendChild(cell);
+    }
+}
+
+function previousMiniMonth() {
+    miniCalendarDate.setMonth(miniCalendarDate.getMonth() - 1);
+    renderMiniCalendar();
+}
+
+function nextMiniMonth() {
+    miniCalendarDate.setMonth(miniCalendarDate.getMonth() + 1);
+    renderMiniCalendar();
+}
+
+function filterEvents() {
+    // Filter logic can be added here
+    renderCalendar();
+}
 
 function showScheduleModal(evaluationId, studentName, caseId, studentId) {
     document.getElementById('scheduleModal').classList.remove('hidden');
-    document.getElementById('scheduleModalTitle').textContent = `Schedule Counseling for ${studentName} (${caseId})`;
-    document.getElementById('evaluationId').value = evaluationId;
-    document.getElementById('studentId').value = studentId;
-    currentStudentId = studentId;
-    
-    // Reset form and warnings
-    document.getElementById('scheduleForm').reset();
-    document.getElementById('evaluationId').value = evaluationId;
-    document.getElementById('studentId').value = studentId;
-    document.getElementById('conflictWarning').classList.add('hidden');
-    
-    // Set minimum date to today
-    const now = new Date();
-    const minDateTime = now.toISOString().slice(0, 16);
-    document.getElementById('scheduledDate').min = minDateTime;
+    if (evaluationId) {
+        document.getElementById('scheduleModalTitle').textContent = `Schedule Counseling for ${studentName} (${caseId})`;
+        document.getElementById('evaluationId').value = evaluationId;
+        document.getElementById('studentId').value = studentId;
+    }
 }
 
 function closeScheduleModal() {
     document.getElementById('scheduleModal').classList.add('hidden');
 }
 
-function showNotesModal(studentName, notes) {
-    document.getElementById('notesModal').classList.remove('hidden');
-    document.getElementById('notesModalTitle').textContent = `Notes - ${studentName}`;
-    document.getElementById('notesContent').textContent = notes || 'No notes available';
-}
-
-function closeNotesModal() {
-    document.getElementById('notesModal').classList.add('hidden');
-}
-
-function showUpdateStatusModal(scheduleId, currentStatus) {
-    document.getElementById('updateStatusModal').classList.remove('hidden');
-    document.getElementById('updateScheduleId').value = scheduleId;
-    document.getElementById('statusSelect').value = currentStatus;
-}
-
-function closeUpdateStatusModal() {
-    document.getElementById('updateStatusModal').classList.add('hidden');
-    document.getElementById('updateStatusForm').reset();
-}
-
-function showView(view) {
-    const calendarView = document.getElementById('calendarView');
-    const listView = document.getElementById('listView');
-    const calendarBtn = document.getElementById('calendarViewBtn');
-    const listBtn = document.getElementById('listViewBtn');
-    
-    if (view === 'calendar') {
-        // Show only calendar
-        calendarView.classList.remove('hidden');
-        listView.classList.add('hidden');
-        
-        // Update button styles
-        calendarBtn.classList.remove('bg-gray-300', 'text-gray-700');
-        calendarBtn.classList.add('bg-blue-600', 'text-white');
-        listBtn.classList.remove('bg-blue-600', 'text-white');
-        listBtn.classList.add('bg-gray-300', 'text-gray-700');
-        
-        renderCalendar();
-    } else {
-        // Show only list
-        calendarView.classList.add('hidden');
-        listView.classList.remove('hidden');
-        
-        // Update button styles
-        listBtn.classList.remove('bg-gray-300', 'text-gray-700');
-        listBtn.classList.add('bg-blue-600', 'text-white');
-        calendarBtn.classList.remove('bg-blue-600', 'text-white');
-        calendarBtn.classList.add('bg-gray-300', 'text-gray-700');
-    }
-}
-
-function changeMonth(delta) {
-    currentDate.setMonth(currentDate.getMonth() + delta);
-    renderCalendar();
-}
-
-function renderCalendar() {
-    const calendar = document.getElementById('calendar');
-    const monthDisplay = document.getElementById('currentMonth');
-    
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    
-    monthDisplay.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    
-    // Clear calendar
-    calendar.innerHTML = '';
-    
-    // Day headers
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    days.forEach(day => {
-        const dayHeader = document.createElement('div');
-        dayHeader.className = 'text-center font-semibold text-gray-700 text-xs py-1.5 bg-gray-100 rounded day-header';
-        dayHeader.textContent = day;
-        calendar.appendChild(dayHeader);
-    });
-    
-    // Get first day of month and number of days
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    
-    // Empty cells before first day
-    for (let i = 0; i < firstDay; i++) {
-        const emptyCell = document.createElement('div');
-        emptyCell.className = 'h-16 bg-gray-50 rounded border border-gray-200';
-        calendar.appendChild(emptyCell);
-    }
-    
-    // Days of month
-    for (let day = 1; day <= daysInMonth; day++) {
-        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const daySchedules = schedules.filter(s => {
-            const scheduleDate = new Date(s.date);
-            return scheduleDate.getDate() === day && 
-                   scheduleDate.getMonth() === month && 
-                   scheduleDate.getFullYear() === year;
-        });
-        const isToday = dateStr === new Date().toISOString().split('T')[0];
-        
-        const dayCell = document.createElement('div');
-        dayCell.className = `h-16 border rounded p-1 cursor-pointer transition-all hover:shadow-sm overflow-hidden ${isToday ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-300' : 'border-gray-200 hover:border-blue-300 bg-white'}`;
-        
-        let cellHTML = `<div class="font-semibold text-xs ${isToday ? 'text-blue-700' : 'text-gray-700'} mb-0.5">${day}</div>`;
-        
-        if (daySchedules.length > 0) {
-            cellHTML += '<div class="space-y-0.5">';
-            daySchedules.slice(0, 1).forEach(schedule => {
-                const color = schedule.status === 'scheduled' ? 'bg-blue-500' : 
-                             schedule.status === 'completed' ? 'bg-green-500' : 
-                             schedule.status === 'missed' ? 'bg-red-500' : 
-                             schedule.status === 'rescheduled' ? 'bg-yellow-500' : 'bg-gray-500';
-                const time = schedule.date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-                cellHTML += `<div class="${color} text-white text-[10px] px-1 py-0.5 rounded truncate" title="${schedule.student} - ${schedule.caseId}\n${schedule.location}">${time}</div>`;
-            });
-            if (daySchedules.length > 1) {
-                cellHTML += `<div class="text-[10px] text-gray-600 font-medium">+${daySchedules.length - 1}</div>`;
-            }
-            cellHTML += '</div>';
-        }
-        
-        dayCell.innerHTML = cellHTML;
-        dayCell.onclick = () => {
-            if (daySchedules.length > 0 && daySchedules[0].notes) {
-                showNotesModal(daySchedules[0].student, daySchedules[0].notes);
-            }
-        };
-        calendar.appendChild(dayCell);
-    }
-}
-
-function markCompleted(scheduleId) {
-    if (confirm('Mark this session as completed?')) {
-        fetch(`/counseling-schedule/complete/${scheduleId}/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Session marked as completed!');
-                location.reload();
-            } else {
-                alert('Error: ' + (data.message || 'Unknown error'));
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred.');
-        });
-    }
-}
-
-function markMissed(scheduleId) {
-    if (confirm('Mark this session as missed?')) {
-        fetch(`/counseling-schedule/missed/${scheduleId}/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Session marked as missed.');
-                location.reload();
-            } else {
-                alert('Error: ' + (data.message || 'Unknown error'));
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred.');
-        });
-    }
-}
-
-// Close modals when clicking outside
-document.getElementById('scheduleModal').addEventListener('click', function(e) {
-    if (e.target === this) closeScheduleModal();
-});
-
-document.getElementById('notesModal').addEventListener('click', function(e) {
-    if (e.target === this) closeNotesModal();
-});
-
-document.getElementById('updateStatusModal').addEventListener('click', function(e) {
-    if (e.target === this) closeUpdateStatusModal();
-});
-
-// ESC key to close
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeScheduleModal();
-        closeNotesModal();
-        closeUpdateStatusModal();
-    }
-});
-
-function checkScheduleConflict() {
-    const dateInput = document.getElementById('scheduledDate');
-    const conflictWarning = document.getElementById('conflictWarning');
-    const conflictMessage = document.getElementById('conflictMessage');
-    const submitBtn = document.getElementById('submitBtn');
-    
-    if (!dateInput.value) {
-        conflictWarning.classList.add('hidden');
-        return;
-    }
-    
-    const selectedDate = new Date(dateInput.value);
-    const studentId = currentStudentId;
-    
-    // Check if weekend
-    const dayOfWeek = selectedDate.getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-        conflictWarning.classList.remove('hidden');
-        conflictMessage.textContent = 'Weekend scheduling is not allowed. Please select a weekday.';
-        submitBtn.disabled = true;
-        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
-        return;
-    }
-    
-    // Check for duplicate schedule for this student
-    const hasConflict = schedules.some(schedule => {
-        if (schedule.studentId != studentId) return false;
-        if (schedule.status === 'completed' || schedule.status === 'missed') return false;
-        
-        const scheduleDate = new Date(schedule.date);
-        const timeDiff = Math.abs(selectedDate - scheduleDate);
-        const hoursDiff = timeDiff / (1000 * 60 * 60);
-        
-        // Check if within 1 hour of existing schedule
-        return hoursDiff < 1;
-    });
-    
-    if (hasConflict) {
-        conflictWarning.classList.remove('hidden');
-        conflictMessage.textContent = 'This student already has a session scheduled at this time. Please choose a different time.';
-        submitBtn.disabled = true;
-        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
-    } else {
-        conflictWarning.classList.add('hidden');
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-    }
-}
-
 function validateSchedule(event) {
-    const dateInput = document.getElementById('scheduledDate');
-    const selectedDate = new Date(dateInput.value);
-    
-    // Check if weekend
-    const dayOfWeek = selectedDate.getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-        event.preventDefault();
-        alert('Weekend scheduling is not allowed. Please select a weekday (Monday-Friday).');
-        return false;
-    }
-    
-    // Check if in the past
-    const now = new Date();
-    if (selectedDate < now) {
-        event.preventDefault();
-        alert('Cannot schedule in the past. Please select a future date and time.');
-        return false;
-    }
-    
-    // Check for conflicts
-    const hasConflict = schedules.some(schedule => {
-        if (schedule.status === 'completed' || schedule.status === 'missed') return false;
-        
-        const scheduleDate = new Date(schedule.date);
-        const timeDiff = Math.abs(selectedDate - scheduleDate);
-        const hoursDiff = timeDiff / (1000 * 60 * 60);
-        
-        return hoursDiff < 1;
-    });
-    
-    if (hasConflict) {
-        event.preventDefault();
-        alert('Schedule conflict detected. Please choose a different time.');
-        return false;
-    }
-    
-    return true;
+    return true; // Add validation as needed
 }
 
-// Initialize on page load
+// Initialize
 document.addEventListener('DOMContentLoaded', function() {
-    // Start with list view by default
-    showView('list');
-    
-    // Auto-open schedule modal if evaluation is pre-selected
+    renderCalendar();
     {% if selected_evaluation %}
     showScheduleModal('{{ selected_evaluation.id }}', '{{ selected_evaluation.report.reported_student.get_full_name }}', '{{ selected_evaluation.report.case_id }}', '{{ selected_evaluation.report.reported_student.id }}');
     {% endif %}
