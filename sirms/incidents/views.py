@@ -181,6 +181,19 @@ def dashboard(request):
                     'reports': count
                 })
             
+            # Violation type data - Prohibited Acts vs Other School Policies
+            try:
+                prohibited_count = reports.filter(incident_type__severity='prohibited').count()
+                school_policy_count = reports.filter(incident_type__severity='school_policy').count()
+            except:
+                prohibited_count = 0
+                school_policy_count = 0
+            
+            violation_type_data = [
+                {'name': 'Prohibited Acts', 'value': prohibited_count},
+                {'name': 'Other School Policies', 'value': school_policy_count}
+            ]
+            
             context.update({
                 'total_reports': reports.count(),
                 'pending': reports.filter(status='pending').count(),
@@ -191,6 +204,7 @@ def dashboard(request):
                 'trend_data': json.dumps(trend_data),
                 'grade_data': json.dumps(grade_data),
                 'month_data': json.dumps(month_data),
+                'violation_type_data': json.dumps(violation_type_data),
             })
         elif user.role == 'counselor':
             # Get reports for counselor (major cases or classified)
@@ -259,6 +273,23 @@ def dashboard(request):
                 'trend_data': json.dumps(trend_data),
                 'grade_data': json.dumps(grade_data),
                 'month_data': json.dumps(month_data),
+            })
+            
+            # Violation type data for counselor
+            try:
+                prohibited_count = reports.filter(incident_type__severity='prohibited').count()
+                school_policy_count = reports.filter(incident_type__severity='school_policy').count()
+            except:
+                prohibited_count = 0
+                school_policy_count = 0
+            
+            violation_type_data = [
+                {'name': 'Prohibited Acts', 'value': prohibited_count},
+                {'name': 'Other School Policies', 'value': school_policy_count}
+            ]
+            
+            context.update({
+                'violation_type_data': json.dumps(violation_type_data),
             })
         elif user.role == 'principal':
             reports = IncidentReport.objects.all()
@@ -1747,10 +1778,24 @@ def get_dashboard_analytics(request):
                 'reports': month_count
             })
         
+        # Violation type data - Prohibited Acts vs Other School Policies
+        try:
+            prohibited_count = reports.filter(incident_type__severity='prohibited').count()
+            school_policy_count = reports.filter(incident_type__severity='school_policy').count()
+        except:
+            prohibited_count = 0
+            school_policy_count = 0
+        
+        violation_type_data = [
+            {'name': 'Prohibited Acts', 'value': prohibited_count},
+            {'name': 'Other School Policies', 'value': school_policy_count}
+        ]
+        
         response_data = {
             'trend_data': trend_data,
             'grade_data': grade_data,
             'month_data': month_data,
+            'violation_type_data': violation_type_data,
         }
         
     elif user.role == 'esp_teacher':
