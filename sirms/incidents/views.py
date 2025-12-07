@@ -207,23 +207,13 @@ def dashboard(request):
                 'violation_type_data': json.dumps(violation_type_data),
             })
         elif user.role == 'counselor':
-            # Get reports for counselor (major cases or classified)
-            try:
-                from .models import Classification
-                # Get reports that have been classified as major
-                major_classifications = Classification.objects.filter(severity='major').values_list('report_id', flat=True)
-                reports = IncidentReport.objects.filter(
-                    Q(id__in=major_classifications) | Q(status='classified')
-                )
-            except:
-                # Fallback if Classification model doesn't exist
-                reports = IncidentReport.objects.filter(status='classified')
-            
-            # Calculate analytics data (monthly view)
+            # Use same data as DO - all reports for analytics
+            reports = IncidentReport.objects.all()
+            # Calculate analytics data for initial load (monthly view)
             end_date = timezone.now()
             start_date = end_date - timedelta(days=365)
             
-            # Trend data
+            # Trend data (12 months)
             trend_data = []
             for i in range(12):
                 period_start = start_date + timedelta(days=30 * i)
@@ -246,7 +236,7 @@ def dashboard(request):
                     'count': count
                 })
             
-            # Month data
+            # Month data (for monthly distribution)
             month_data = []
             month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
                           'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -257,6 +247,19 @@ def dashboard(request):
                     'month': month_names[month_num - 1],
                     'reports': count
                 })
+            
+            # Violation type data - Prohibited Acts vs Other School Policies
+            try:
+                prohibited_count = reports.filter(incident_type__severity='prohibited').count()
+                school_policy_count = reports.filter(incident_type__severity='school_policy').count()
+            except:
+                prohibited_count = 0
+                school_policy_count = 0
+            
+            violation_type_data = [
+                {'name': 'Prohibited Acts', 'value': prohibited_count},
+                {'name': 'Other School Policies', 'value': school_policy_count}
+            ]
             
             context.update({
                 'total_prohibited_acts': 0,
@@ -273,22 +276,6 @@ def dashboard(request):
                 'trend_data': json.dumps(trend_data),
                 'grade_data': json.dumps(grade_data),
                 'month_data': json.dumps(month_data),
-            })
-            
-            # Violation type data for counselor
-            try:
-                prohibited_count = reports.filter(incident_type__severity='prohibited').count()
-                school_policy_count = reports.filter(incident_type__severity='school_policy').count()
-            except:
-                prohibited_count = 0
-                school_policy_count = 0
-            
-            violation_type_data = [
-                {'name': 'Prohibited Acts', 'value': prohibited_count},
-                {'name': 'Other School Policies', 'value': school_policy_count}
-            ]
-            
-            context.update({
                 'violation_type_data': json.dumps(violation_type_data),
             })
         elif user.role == 'principal':
@@ -1714,19 +1701,8 @@ def get_dashboard_analytics(request):
     response_data = {}
     
     if user.role == 'do' or user.role == 'counselor':
-        # Get reports for DO/Counselor
-        if user.role == 'do':
-            reports = IncidentReport.objects.filter(created_at__gte=start_date)
-        else:  # counselor
-            try:
-                from .models import Classification
-                major_classifications = Classification.objects.filter(severity='major').values_list('report_id', flat=True)
-                reports = IncidentReport.objects.filter(
-                    Q(id__in=major_classifications) | Q(status='classified'),
-                    created_at__gte=start_date
-                )
-            except:
-                reports = IncidentReport.objects.filter(status='classified', created_at__gte=start_date)
+        # Use same data for both DO and Counselor - all reports
+        reports = IncidentReport.objects.filter(created_at__gte=start_date)
         
         # 1. Trend Cases (Wave graph) - Monthly/Quarterly/Yearly trend
         trend_data = []
