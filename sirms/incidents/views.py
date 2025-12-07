@@ -460,32 +460,8 @@ def all_reports(request):
     try:
         user = request.user
         
-        if user.role == 'counselor':
-            # Counselors see major cases and cases assigned to them
-            reports = IncidentReport.objects.filter(
-                Q(classification='major') | 
-                Q(status='classified') |
-                Q(status='under_review')
-            ).order_by('-created_at')
-            
-            # Add filtering for counselor-specific cases
-            counselor_reports = reports.filter(
-                Q(notes__icontains='counseling') |
-                Q(incident_type__severity='prohibited') |
-                Q(classification='major')
-            )
-            
-            context = {
-                'reports': counselor_reports,
-                'user_role': user.role,
-                'total_reports': counselor_reports.count(),
-                'pending_evaluation': counselor_reports.filter(status='classified').count(),
-                'under_review': counselor_reports.filter(status='under_review').count(),
-                'completed': counselor_reports.filter(status__in=['resolved', 'closed']).count(),
-            }
-            
-        elif user.role == 'do':
-            # DO sees all reports for fact-checking and minor cases
+        if user.role == 'do' or user.role == 'counselor' or user.role == 'guidance':
+            # DO, Counselor, and Guidance see all reports (same content)
             reports = IncidentReport.objects.all().order_by('-created_at')
             context = {
                 'reports': reports,
@@ -497,8 +473,8 @@ def all_reports(request):
                 'resolved_count': reports.filter(status='resolved').count(),
             }
             
-        elif user.role in ['principal', 'guidance']:
-            # Principal and guidance see all reports
+        elif user.role == 'principal':
+            # Principal sees all reports
             reports = IncidentReport.objects.all().order_by('-created_at')
             context = {
                 'reports': reports,
