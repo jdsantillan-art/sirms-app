@@ -142,6 +142,45 @@ def dashboard(request):
             })
         elif user.role == 'do':
             reports = IncidentReport.objects.all()
+            # Calculate analytics data for initial load (monthly view)
+            end_date = timezone.now()
+            start_date = end_date - timedelta(days=365)
+            
+            # Trend data (12 months)
+            trend_data = []
+            for i in range(12):
+                period_start = start_date + timedelta(days=30 * i)
+                period_end = min(period_start + timedelta(days=30), end_date)
+                count = reports.filter(
+                    created_at__gte=period_start,
+                    created_at__lt=period_end
+                ).count()
+                trend_data.append({
+                    'month': period_start.strftime('%b'),
+                    'reports': count
+                })
+            
+            # Grade data
+            grade_data = []
+            for grade in range(7, 13):
+                count = reports.filter(grade_level=str(grade)).count()
+                grade_data.append({
+                    'grade': f'Grade {grade}',
+                    'count': count
+                })
+            
+            # Month data (for monthly distribution)
+            month_data = []
+            month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            year_reports = reports.filter(created_at__gte=start_date)
+            for month_num in range(1, 13):
+                count = year_reports.filter(created_at__month=month_num).count()
+                month_data.append({
+                    'month': month_names[month_num - 1],
+                    'reports': count
+                })
+            
             context.update({
                 'total_reports': reports.count(),
                 'pending': reports.filter(status='pending').count(),
@@ -149,8 +188,62 @@ def dashboard(request):
                 'minor_cases_count': 0,
                 'major_cases_count': 0,
                 'recent_reports': reports.order_by('-created_at')[:10],
+                'trend_data': json.dumps(trend_data),
+                'grade_data': json.dumps(grade_data),
+                'month_data': json.dumps(month_data),
             })
         elif user.role == 'counselor':
+            # Get reports for counselor (major cases or classified)
+            try:
+                from .models import Classification
+                # Get reports that have been classified as major
+                major_classifications = Classification.objects.filter(severity='major').values_list('report_id', flat=True)
+                reports = IncidentReport.objects.filter(
+                    Q(id__in=major_classifications) | Q(status='classified')
+                )
+            except:
+                # Fallback if Classification model doesn't exist
+                reports = IncidentReport.objects.filter(status='classified')
+            
+            # Calculate analytics data (monthly view)
+            end_date = timezone.now()
+            start_date = end_date - timedelta(days=365)
+            
+            # Trend data
+            trend_data = []
+            for i in range(12):
+                period_start = start_date + timedelta(days=30 * i)
+                period_end = min(period_start + timedelta(days=30), end_date)
+                count = reports.filter(
+                    created_at__gte=period_start,
+                    created_at__lt=period_end
+                ).count()
+                trend_data.append({
+                    'month': period_start.strftime('%b'),
+                    'reports': count
+                })
+            
+            # Grade data
+            grade_data = []
+            for grade in range(7, 13):
+                count = reports.filter(grade_level=str(grade)).count()
+                grade_data.append({
+                    'grade': f'Grade {grade}',
+                    'count': count
+                })
+            
+            # Month data
+            month_data = []
+            month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            year_reports = reports.filter(created_at__gte=start_date)
+            for month_num in range(1, 13):
+                count = year_reports.filter(created_at__month=month_num).count()
+                month_data.append({
+                    'month': month_names[month_num - 1],
+                    'reports': count
+                })
+            
             context.update({
                 'total_prohibited_acts': 0,
                 'total_osp': 0,
@@ -163,6 +256,9 @@ def dashboard(request):
                 'pending_evaluations': 0,
                 'recent_cases': [],
                 'upcoming_sessions': [],
+                'trend_data': json.dumps(trend_data),
+                'grade_data': json.dumps(grade_data),
+                'month_data': json.dumps(month_data),
             })
         elif user.role == 'principal':
             reports = IncidentReport.objects.all()
@@ -182,13 +278,45 @@ def dashboard(request):
                 'recent_reports': reports.order_by('-created_at')[:5],
             })
         elif user.role == 'esp_teacher':
-            context.update({
-                'scheduled_vpf_sessions': 0,
-                'completed_vpf': 0,
-                'total_vpf_referrals': 0,
-                'pending_vpf': 0,
-                'ongoing_vpf': 0,
-            })
+            try:
+                from .models import VPFCase, VPFSchedule
+                vpf_cases = VPFCase.objects.filter(assigned_to=user)
+                
+                # Calculate VRF trend data (monthly view)
+                end_date = timezone.now()
+                start_date = end_date - timedelta(days=365)
+                
+                vrf_trend_data = []
+                for i in range(12):
+                    period_start = start_date + timedelta(days=30 * i)
+                    period_end = min(period_start + timedelta(days=30), end_date)
+                    count = vpf_cases.filter(
+                        created_at__gte=period_start,
+                        created_at__lt=period_end
+                    ).count()
+                    vrf_trend_data.append({
+                        'month': period_start.strftime('%b'),
+                        'reports': count
+                    })
+                
+                context.update({
+                    'scheduled_vpf_sessions': VPFSchedule.objects.filter(esp_teacher=user, status='scheduled').count() if 'VPFSchedule' in dir() else 0,
+                    'completed_vpf': vpf_cases.filter(status='completed').count(),
+                    'total_vpf_referrals': vpf_cases.count(),
+                    'pending_vpf': vpf_cases.filter(status='pending').count(),
+                    'ongoing_vpf': vpf_cases.filter(status='ongoing').count(),
+                    'vrf_trend_data': json.dumps(vrf_trend_data),
+                })
+            except Exception as e:
+                print(f"ESP dashboard error: {e}")
+                context.update({
+                    'scheduled_vpf_sessions': 0,
+                    'completed_vpf': 0,
+                    'total_vpf_referrals': 0,
+                    'pending_vpf': 0,
+                    'ongoing_vpf': 0,
+                    'vrf_trend_data': json.dumps([]),
+                })
         elif user.role in ['guidance', 'maintenance']:
             context.update({
                 'total_users': CustomUser.objects.count(),
@@ -384,6 +512,17 @@ def all_reports(request):
 @login_required
 def notifications(request):
     try:
+        # Handle marking notification as read via POST
+        if request.method == 'POST':
+            notification_id = request.POST.get('notification_id')
+            if notification_id:
+                try:
+                    notification = Notification.objects.get(id=notification_id, user=request.user)
+                    notification.is_read = True
+                    notification.save()
+                except Notification.DoesNotExist:
+                    pass
+        
         user_notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
         return render(request, 'notifications.html', {'notifications': user_notifications})
     except:
@@ -400,11 +539,187 @@ def account_settings(request):
 # Additional required functions for URLs
 @login_required
 def analytics_dashboard(request):
-    """Analytics dashboard placeholder"""
+    """Analytics dashboard with real data"""
+    from django.utils import timezone
+    from django.db.models import Count, Q
+    from datetime import datetime, timedelta
+    import json
+    
     try:
-        context = {'user_role': request.user.role}
+        user = request.user
+        
+        # Only allow DO and Guidance (counselor) roles
+        if user.role not in ['do', 'counselor']:
+            return redirect('dashboard')
+        
+        # Calculate school year start (June of current year or previous year)
+        now = timezone.now()
+        if now.month >= 6:
+            school_year_start = datetime(now.year, 6, 1).date()
+        else:
+            school_year_start = datetime(now.year - 1, 6, 1).date()
+        
+        # Case Trend Analysis - Last 12 months (school year months)
+        school_months = ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May']
+        trend_data = []
+        
+        for i, month_name in enumerate(school_months):
+            month_num = (6 + i) if (6 + i) <= 12 else (6 + i - 12)
+            year_offset = 0 if (6 + i) <= 12 else 1
+            
+            month_start = school_year_start.replace(month=month_num, day=1)
+            if year_offset == 1:
+                month_start = month_start.replace(year=month_start.year + 1)
+            
+            # Get last day of month
+            if month_num == 12:
+                month_end = month_start.replace(day=31)
+            else:
+                next_month = month_start.replace(month=month_num + 1) if month_num < 12 else month_start.replace(year=month_start.year + 1, month=1)
+                month_end = next_month - timedelta(days=1)
+            
+            # Convert to datetime for query
+            from datetime import time as dt_time
+            month_start_dt = timezone.make_aware(datetime.combine(month_start, dt_time.min))
+            month_end_dt = timezone.make_aware(datetime.combine(month_end, dt_time.max))
+            
+            month_reports = IncidentReport.objects.filter(
+                created_at__range=[month_start_dt, month_end_dt]
+            ).count()
+            
+            trend_data.append({
+                'month': month_name,
+                'reports': month_reports
+            })
+        
+        # Reports by Grade Level - Bar Chart
+        grade_data = []
+        for grade in range(7, 13):
+            count = IncidentReport.objects.filter(grade_level=str(grade)).count()
+            grade_data.append({
+                'grade': f'G{grade}',
+                'count': count
+            })
+        
+        # Prohibited Acts vs Other School Policies - Pie Chart
+        prohibited_count = IncidentReport.objects.filter(
+            incident_type__severity='prohibited'
+        ).count()
+        
+        school_policy_count = IncidentReport.objects.filter(
+            incident_type__severity='school_policy'
+        ).count()
+        
+        violation_type_data = [
+            {'name': 'Prohibited Acts', 'value': prohibited_count},
+            {'name': 'Other School Policies', 'value': school_policy_count}
+        ]
+        
+        # Stacked data for Major vs Minor (if needed)
+        stacked_data = []
+        for i, month_name in enumerate(school_months):
+            month_num = (6 + i) if (6 + i) <= 12 else (6 + i - 12)
+            year_offset = 0 if (6 + i) <= 12 else 1
+            
+            month_start = school_year_start.replace(month=month_num, day=1)
+            if year_offset == 1:
+                month_start = month_start.replace(year=month_start.year + 1)
+            
+            if month_num == 12:
+                month_end = month_start.replace(day=31)
+            else:
+                next_month = month_start.replace(month=month_num + 1) if month_num < 12 else month_start.replace(year=month_start.year + 1, month=1)
+                month_end = next_month - timedelta(days=1)
+            
+            from datetime import time as dt_time
+            month_start_dt = timezone.make_aware(datetime.combine(month_start, dt_time.min))
+            month_end_dt = timezone.make_aware(datetime.combine(month_end, dt_time.max))
+            
+            # Get major and minor counts
+            major = IncidentReport.objects.filter(
+                created_at__range=[month_start_dt, month_end_dt],
+                classification__severity='major'
+            ).count()
+            
+            minor = IncidentReport.objects.filter(
+                created_at__range=[month_start_dt, month_end_dt],
+                classification__severity='minor'
+            ).count()
+            
+            stacked_data.append({
+                'month': month_name,
+                'major': major,
+                'minor': minor
+            })
+        
+        # Role-specific metrics
+        if user.role == 'do':
+            total_reports = IncidentReport.objects.count()
+            pending = IncidentReport.objects.filter(status='pending').count()
+            classified_today = IncidentReport.objects.filter(
+                status='classified',
+                created_at__date=timezone.now().date()
+            ).count()
+            major_cases_count = IncidentReport.objects.filter(
+                classification__severity='major'
+            ).count()
+            
+            context = {
+                'user': user,
+                'user_role': user.role,
+                'total_reports': total_reports,
+                'pending': pending,
+                'classified_today': classified_today,
+                'major_cases_count': major_cases_count,
+                'trend_data': json.dumps(trend_data),
+                'grade_data': json.dumps(grade_data),
+                'violation_type_data': json.dumps(violation_type_data),
+                'stacked_data': json.dumps(stacked_data),
+            }
+        elif user.role == 'counselor':
+            major_cases = IncidentReport.objects.filter(
+                classification__severity='major'
+            ).count()
+            
+            from .models import CounselingSchedule
+            scheduled_sessions = CounselingSchedule.objects.filter(
+                status='scheduled'
+            ).count()
+            
+            completed_sessions = CounselingSchedule.objects.filter(
+                status='completed'
+            ).count()
+            
+            counseling_success_rate = 0
+            if scheduled_sessions + completed_sessions > 0:
+                counseling_success_rate = round((completed_sessions / (scheduled_sessions + completed_sessions)) * 100)
+            
+            from .models import CaseEvaluation
+            pending_evaluations = CaseEvaluation.objects.filter(
+                status='pending'
+            ).count()
+            
+            context = {
+                'user': user,
+                'user_role': user.role,
+                'major_cases': major_cases,
+                'scheduled_sessions': scheduled_sessions,
+                'counseling_success_rate': counseling_success_rate,
+                'pending_evaluations': pending_evaluations,
+                'trend_data': json.dumps(trend_data),
+                'grade_data': json.dumps(grade_data),
+                'violation_type_data': json.dumps(violation_type_data),
+                'stacked_data': json.dumps(stacked_data),
+                'resolution_data': json.dumps([]),
+            }
+        else:
+            context = {'user_role': user.role}
+        
         return render(request, 'analytics_dashboard.html', context)
-    except:
+    except Exception as e:
+        print(f"Analytics dashboard error: {e}")
+        import traceback
+        traceback.print_exc()
         return redirect('dashboard')
 
 
@@ -1344,9 +1659,153 @@ def get_tracks(request):
     return JsonResponse({'tracks': []})
 
 
+@login_required
 def get_dashboard_analytics(request):
-    """Get dashboard analytics API placeholder"""
-    return JsonResponse({'analytics': []})
+    """API endpoint for dynamic dashboard analytics based on time filter"""
+    time_filter = request.GET.get('filter', 'monthly')
+    user = request.user
+    
+    # Calculate date range based on filter
+    end_date = timezone.now()
+    if time_filter == 'monthly':
+        start_date = end_date - timedelta(days=365)  # Last 12 months
+        periods = 12
+        period_days = 30
+    elif time_filter == 'quarterly':
+        start_date = end_date - timedelta(days=730)  # Last 8 quarters (2 years)
+        periods = 8
+        period_days = 90
+    else:  # yearly
+        start_date = end_date - timedelta(days=1825)  # Last 5 years
+        periods = 5
+        period_days = 365
+    
+    response_data = {}
+    
+    if user.role == 'do' or user.role == 'counselor':
+        # Get reports for DO/Counselor
+        if user.role == 'do':
+            reports = IncidentReport.objects.filter(created_at__gte=start_date)
+        else:  # counselor
+            try:
+                from .models import Classification
+                major_classifications = Classification.objects.filter(severity='major').values_list('report_id', flat=True)
+                reports = IncidentReport.objects.filter(
+                    Q(id__in=major_classifications) | Q(status='classified'),
+                    created_at__gte=start_date
+                )
+            except:
+                reports = IncidentReport.objects.filter(status='classified', created_at__gte=start_date)
+        
+        # 1. Trend Cases (Wave graph) - Monthly/Quarterly/Yearly trend
+        trend_data = []
+        for i in range(periods):
+            period_start = start_date + timedelta(days=period_days * i)
+            period_end = min(period_start + timedelta(days=period_days), end_date)
+            
+            period_reports = reports.filter(
+                created_at__gte=period_start,
+                created_at__lt=period_end
+            ).count()
+            
+            # Format label based on filter type
+            if time_filter == 'quarterly':
+                quarter = (period_start.month - 1) // 3 + 1
+                label = f'Q{quarter} {period_start.year}'
+            elif time_filter == 'yearly':
+                label = str(period_start.year)
+            else:  # monthly
+                label = period_start.strftime('%b')
+            
+            trend_data.append({
+                'month': label,
+                'reports': period_reports
+            })
+        
+        # 2. Grade Most Reported (Bar Graph) - Based on grade_level field
+        grade_data = []
+        for grade in range(7, 13):
+            count = reports.filter(grade_level=str(grade)).count()
+            grade_data.append({
+                'grade': f'Grade {grade}',
+                'count': count
+            })
+        
+        # 3. What Month Most Report (Line graph) - Monthly distribution
+        month_data = []
+        month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        
+        # Get reports from the last year for month analysis
+        year_start = end_date - timedelta(days=365)
+        year_reports = reports.filter(created_at__gte=year_start)
+        
+        for month_num in range(1, 13):
+            month_count = year_reports.filter(created_at__month=month_num).count()
+            month_data.append({
+                'month': month_names[month_num - 1],
+                'reports': month_count
+            })
+        
+        response_data = {
+            'trend_data': trend_data,
+            'grade_data': grade_data,
+            'month_data': month_data,
+        }
+        
+    elif user.role == 'esp_teacher':
+        try:
+            from .models import VPFCase, VPFSchedule
+            
+            # Get VPF cases for this ESP teacher
+            vpf_cases = VPFCase.objects.filter(assigned_to=user)
+            
+            # 1. Status Distribution (Donut Chart) - Completed, Pending, Ongoing
+            completed = vpf_cases.filter(status='completed').count()
+            pending = vpf_cases.filter(status='pending').count()
+            ongoing = vpf_cases.filter(status='ongoing').count()
+            
+            # 2. Most Incident refers to ESP For VRF (Wave/Line graph) - Trend over time
+            vrf_trend_data = []
+            for i in range(periods):
+                period_start = start_date + timedelta(days=period_days * i)
+                period_end = min(period_start + timedelta(days=period_days), end_date)
+                
+                period_count = vpf_cases.filter(
+                    created_at__gte=period_start,
+                    created_at__lt=period_end
+                ).count()
+                
+                # Format label
+                if time_filter == 'quarterly':
+                    quarter = (period_start.month - 1) // 3 + 1
+                    label = f'Q{quarter} {period_start.year}'
+                elif time_filter == 'yearly':
+                    label = str(period_start.year)
+                else:  # monthly
+                    label = period_start.strftime('%b')
+                
+                vrf_trend_data.append({
+                    'month': label,
+                    'reports': period_count
+                })
+            
+            response_data = {
+                'status_data': {
+                    'completed': completed,
+                    'pending': pending,
+                    'ongoing': ongoing
+                },
+                'vrf_trend_data': vrf_trend_data,
+            }
+        except Exception as e:
+            print(f"ESP analytics error: {e}")
+            response_data = {
+                'status_data': {'completed': 0, 'pending': 0, 'ongoing': 0},
+                'vrf_trend_data': [],
+            }
+    
+    return JsonResponse(response_data)
 
 
 def get_grades(request):
@@ -1369,9 +1828,37 @@ def get_teachers(request):
 def schedule_notification_detail(request, notification_id):
     """Schedule notification detail placeholder"""
     try:
+        # Mark notification as read when viewed
+        notification = Notification.objects.get(id=notification_id, user=request.user)
+        if not notification.is_read:
+            notification.is_read = True
+            notification.save()
+        
         context = {'notification_id': notification_id}
         return render(request, 'schedule_notification_detail.html', context)
     except:
+        return redirect('notifications')
+
+
+@login_required
+def mark_notification_read(request, notification_id):
+    """Mark notification as read and redirect to appropriate destination"""
+    try:
+        notification = Notification.objects.get(id=notification_id, user=request.user)
+        
+        # Mark as read
+        if not notification.is_read:
+            notification.is_read = True
+            notification.save()
+        
+        # Redirect to appropriate destination
+        if 'Session Scheduled' in notification.title or 'Appointment Scheduled' in notification.title:
+            return redirect('schedule_notification_detail', notification_id=notification_id)
+        elif notification.report:
+            return redirect('report_detail', case_id=notification.report.case_id)
+        else:
+            return redirect('notifications')
+    except Notification.DoesNotExist:
         return redirect('notifications')
 
 
