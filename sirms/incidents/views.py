@@ -1686,50 +1686,167 @@ def get_dashboard_analytics(request):
     # Calculate date range based on filter
     end_date = timezone.now()
     if time_filter == 'monthly':
-        start_date = end_date - timedelta(days=365)  # Last 12 months
+        # Last 12 months - use actual calendar months
+        start_date = end_date - timedelta(days=365)
         periods = 12
-        period_days = 30
+        # Use actual month boundaries instead of fixed 30-day periods
+        use_calendar_months = True
     elif time_filter == 'quarterly':
-        start_date = end_date - timedelta(days=730)  # Last 8 quarters (2 years)
+        # Last 8 quarters (2 years) - use actual quarters
+        start_date = end_date - timedelta(days=730)
         periods = 8
-        period_days = 90
+        use_calendar_quarters = True
     else:  # yearly
-        start_date = end_date - timedelta(days=1825)  # Last 5 years
+        # Last 5 years - use actual calendar years
+        start_date = end_date - timedelta(days=1825)
         periods = 5
-        period_days = 365
+        use_calendar_years = True
     
     response_data = {}
     
     if user.role == 'do' or user.role == 'counselor':
-        # Use same data for both DO and Counselor - all reports
-        reports = IncidentReport.objects.filter(created_at__gte=start_date)
+        # Use same data for both DO and Counselor - all reports filtered by time period
+        # Calculate actual date range based on filter
+        if time_filter == 'monthly':
+            # Get last 12 actual calendar months
+            from datetime import date
+            current_date = end_date.date()
+            actual_start_date = None
+            for i in range(12):
+                month_offset = 11 - i
+                target_month = current_date.month - month_offset
+                target_year = current_date.year
+                while target_month <= 0:
+                    target_month += 12
+                    target_year -= 1
+                if i == 0:
+                    actual_start_date = timezone.make_aware(datetime.combine(date(target_year, target_month, 1), datetime.min.time()))
+        elif time_filter == 'quarterly':
+            # Get last 8 actual calendar quarters
+            from datetime import date
+            current_date = end_date.date()
+            current_quarter = (current_date.month - 1) // 3 + 1
+            current_year = current_date.year
+            target_quarter = current_quarter - 7
+            target_year = current_year
+            while target_quarter <= 0:
+                target_quarter += 4
+                target_year -= 1
+            quarter_start_month = (target_quarter - 1) * 3 + 1
+            actual_start_date = timezone.make_aware(datetime.combine(date(target_year, quarter_start_month, 1), datetime.min.time()))
+        else:  # yearly
+            # Get last 5 actual calendar years
+            from datetime import date
+            target_year = end_date.year - 4
+            actual_start_date = timezone.make_aware(datetime.combine(date(target_year, 1, 1), datetime.min.time()))
+        
+        reports = IncidentReport.objects.filter(created_at__gte=actual_start_date) if actual_start_date else IncidentReport.objects.filter(created_at__gte=start_date)
         
         # 1. Trend Cases (Wave graph) - Monthly/Quarterly/Yearly trend
+        # Use actual calendar periods (months/quarters/years) instead of fixed day counts
         trend_data = []
-        for i in range(periods):
-            period_start = start_date + timedelta(days=period_days * i)
-            period_end = min(period_start + timedelta(days=period_days), end_date)
-            
-            period_reports = reports.filter(
-                created_at__gte=period_start,
-                created_at__lt=period_end
-            ).count()
-            
-            # Format label based on filter type
-            if time_filter == 'quarterly':
-                quarter = (period_start.month - 1) // 3 + 1
-                label = f'Q{quarter} {period_start.year}'
-            elif time_filter == 'yearly':
-                label = str(period_start.year)
-            else:  # monthly
-                label = period_start.strftime('%b')
-            
-            trend_data.append({
-                'month': label,
-                'reports': period_reports
-            })
         
-        # 2. Grade Most Reported (Bar Graph) - Based on grade_level field
+        if time_filter == 'monthly':
+            # Get last 12 actual calendar months
+            from datetime import date
+            current_date = end_date.date()
+            for i in range(periods):
+                # Calculate month and year (going backwards from current month)
+                month_offset = periods - 1 - i
+                target_month = current_date.month - month_offset
+                target_year = current_date.year
+                
+                # Handle year rollover
+                while target_month <= 0:
+                    target_month += 12
+                    target_year -= 1
+                
+                # Get first and last day of the month
+                if target_month == 12:
+                    next_month = 1
+                    next_year = target_year + 1
+                else:
+                    next_month = target_month + 1
+                    next_year = target_year
+                
+                period_start = timezone.make_aware(datetime.combine(date(target_year, target_month, 1), datetime.min.time()))
+                period_end = timezone.make_aware(datetime.combine(date(next_year, next_month, 1), datetime.min.time()))
+                
+                period_reports = IncidentReport.objects.filter(
+                    created_at__gte=period_start,
+                    created_at__lt=period_end
+                ).count()
+                
+                label = period_start.strftime('%b')
+                trend_data.insert(0, {  # Insert at beginning to maintain chronological order
+                    'month': label,
+                    'reports': period_reports
+                })
+        
+        elif time_filter == 'quarterly':
+            # Get last 8 actual calendar quarters
+            from datetime import date
+            current_date = end_date.date()
+            for i in range(periods):
+                # Calculate quarter (going backwards from current quarter)
+                quarter_offset = periods - 1 - i
+                current_quarter = (current_date.month - 1) // 3 + 1
+                current_year = current_date.year
+                
+                target_quarter = current_quarter - quarter_offset
+                target_year = current_year
+                
+                # Handle year rollover
+                while target_quarter <= 0:
+                    target_quarter += 4
+                    target_year -= 1
+                
+                # Get quarter start and end months
+                quarter_start_month = (target_quarter - 1) * 3 + 1
+                quarter_end_month = target_quarter * 3 + 1
+                quarter_end_year = target_year
+                
+                if quarter_end_month > 12:
+                    quarter_end_month = 1
+                    quarter_end_year += 1
+                
+                period_start = timezone.make_aware(datetime.combine(date(target_year, quarter_start_month, 1), datetime.min.time()))
+                period_end = timezone.make_aware(datetime.combine(date(quarter_end_year, quarter_end_month, 1), datetime.min.time()))
+                
+                period_reports = IncidentReport.objects.filter(
+                    created_at__gte=period_start,
+                    created_at__lt=period_end
+                ).count()
+                
+                label = f'Q{target_quarter} {target_year}'
+                trend_data.insert(0, {
+                    'month': label,
+                    'reports': period_reports
+                })
+        
+        else:  # yearly
+            # Get last 5 actual calendar years
+            from datetime import date
+            current_year = end_date.year
+            for i in range(periods):
+                target_year = current_year - (periods - 1 - i)
+                
+                period_start = timezone.make_aware(datetime.combine(date(target_year, 1, 1), datetime.min.time()))
+                period_end = timezone.make_aware(datetime.combine(date(target_year + 1, 1, 1), datetime.min.time()))
+                
+                period_reports = IncidentReport.objects.filter(
+                    created_at__gte=period_start,
+                    created_at__lt=period_end
+                ).count()
+                
+                label = str(target_year)
+                trend_data.insert(0, {
+                    'month': label,
+                    'reports': period_reports
+                })
+        
+        # 2. Grade Most Reported (Bar Graph) - Filtered by selected time period
+        # Use the same filtered reports based on time period
         grade_data = []
         for grade in range(7, 13):
             count = reports.filter(grade_level=str(grade)).count()
@@ -1738,23 +1855,12 @@ def get_dashboard_analytics(request):
                 'count': count
             })
         
-        # 3. What Month Most Report (Line graph) - Monthly distribution
-        month_data = []
-        month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        # 3. What Month Most Report (Line graph) - Use trend_data based on filter
+        # The trend_data already contains the correct data for the selected filter
+        month_data = trend_data.copy()  # Use the same trend data calculated above
         
-        # Get reports from the last year for month analysis
-        year_start = end_date - timedelta(days=365)
-        year_reports = reports.filter(created_at__gte=year_start)
-        
-        for month_num in range(1, 13):
-            month_count = year_reports.filter(created_at__month=month_num).count()
-            month_data.append({
-                'month': month_names[month_num - 1],
-                'reports': month_count
-            })
-        
-        # Violation type data - Prohibited Acts vs Other School Policies
+        # Violation type data - Prohibited Acts vs Other School Policies - Filtered by time period
+        # Use the same filtered reports based on time period
         try:
             prohibited_count = reports.filter(incident_type__severity='prohibited').count()
             school_policy_count = reports.filter(incident_type__severity='school_policy').count()
