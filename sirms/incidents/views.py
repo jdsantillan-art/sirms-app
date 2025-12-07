@@ -261,14 +261,48 @@ def dashboard(request):
                 {'name': 'Other School Policies', 'value': school_policy_count}
             ]
             
+            # Calculate real counter card data for counselor
+            try:
+                # Prohibited Acts - count reports with prohibited severity
+                total_prohibited_acts = reports.filter(incident_type__severity='prohibited').count()
+                
+                # OSP Cases - count reports with school_policy severity
+                total_osp = reports.filter(incident_type__severity='school_policy').count()
+                
+                # Scheduled Sessions - count from CounselingSchedule
+                try:
+                    from .models import CounselingSchedule
+                    scheduled_sessions_count = CounselingSchedule.objects.filter(
+                        counselor=user,
+                        status='scheduled'
+                    ).count()
+                except:
+                    scheduled_sessions_count = 0
+                
+                # Completed Sessions - count from CounselingSchedule
+                try:
+                    from .models import CounselingSchedule
+                    completed_sessions_count = CounselingSchedule.objects.filter(
+                        counselor=user,
+                        status='completed'
+                    ).count()
+                except:
+                    completed_sessions_count = 0
+            except Exception as e:
+                print(f"Error calculating counselor counters: {e}")
+                total_prohibited_acts = 0
+                total_osp = 0
+                scheduled_sessions_count = 0
+                completed_sessions_count = 0
+            
             context.update({
-                'total_prohibited_acts': 0,
-                'total_osp': 0,
-                'scheduled_sessions': 0,
+                'total_prohibited_acts': total_prohibited_acts,
+                'total_osp': total_osp,
+                'scheduled_sessions': scheduled_sessions_count,
+                'completed_sessions': completed_sessions_count,
                 'completed_vpf': 0,
                 'total_vpf_referrals': 0,
                 'counseling_success_rate': 0,
-                'completed_sessions': 0,
                 'major_cases': 0,
                 'pending_evaluations': 0,
                 'recent_cases': [],
@@ -463,14 +497,62 @@ def all_reports(request):
         if user.role == 'do' or user.role == 'counselor' or user.role == 'guidance':
             # DO, Counselor, and Guidance see all reports (same content)
             reports = IncidentReport.objects.all().order_by('-created_at')
+            
+            # Handle filter parameters from counter card clicks
+            filter_type = request.GET.get('type', '')
+            filter_scheduled = request.GET.get('scheduled', '')
+            filter_completed = request.GET.get('completed', '')
+            
+            # Apply filters based on counter card clicks
+            if filter_type == 'prohibited':
+                reports = reports.filter(incident_type__severity='prohibited')
+            elif filter_type == 'school_policy':
+                reports = reports.filter(incident_type__severity='school_policy')
+            elif filter_scheduled == 'true':
+                # Filter reports that have scheduled counseling sessions
+                try:
+                    from .models import CounselingSchedule, CaseEvaluation
+                    scheduled_evaluations = CounselingSchedule.objects.filter(
+                        status='scheduled',
+                        counselor=user
+                    ).values_list('evaluation_id', flat=True)
+                    if scheduled_evaluations:
+                        report_ids = CaseEvaluation.objects.filter(
+                            id__in=scheduled_evaluations
+                        ).values_list('report_id', flat=True)
+                        reports = reports.filter(id__in=report_ids)
+                    else:
+                        reports = reports.none()
+                except Exception as e:
+                    print(f"Error filtering scheduled reports: {e}")
+                    reports = reports.none()
+            elif filter_completed == 'true':
+                # Filter reports that have completed counseling sessions
+                try:
+                    from .models import CounselingSchedule, CaseEvaluation
+                    completed_evaluations = CounselingSchedule.objects.filter(
+                        status='completed',
+                        counselor=user
+                    ).values_list('evaluation_id', flat=True)
+                    if completed_evaluations:
+                        report_ids = CaseEvaluation.objects.filter(
+                            id__in=completed_evaluations
+                        ).values_list('report_id', flat=True)
+                        reports = reports.filter(id__in=report_ids)
+                    else:
+                        reports = reports.none()
+                except Exception as e:
+                    print(f"Error filtering completed reports: {e}")
+                    reports = reports.none()
+            
             context = {
                 'reports': reports,
                 'user_role': user.role,
-                'total_count': reports.count(),
-                'pending_count': reports.filter(status='pending').count(),
-                'under_review_count': reports.filter(status='under_review').count(),
-                'classified_count': reports.filter(status='classified').count(),
-                'resolved_count': reports.filter(status='resolved').count(),
+                'total_count': IncidentReport.objects.all().count(),
+                'pending_count': IncidentReport.objects.filter(status='pending').count(),
+                'under_review_count': IncidentReport.objects.filter(status='under_review').count(),
+                'classified_count': IncidentReport.objects.filter(status='classified').count(),
+                'resolved_count': IncidentReport.objects.filter(status='resolved').count(),
             }
             
         elif user.role == 'principal':
@@ -773,12 +855,96 @@ def report_detail(request, case_id):
 
 @login_required
 def counseling_schedule(request):
-    """Counseling schedule placeholder"""
-    try:
-        context = {'user_role': request.user.role}
-        return render(request, 'counseling_schedule.html', context)
-    except:
+    """Display counseling schedules set by DO, Guidance, and ESP teachers for the reporter"""
+    from django.utils import timezone
+    from .models import DOSchedule, CounselingSchedule, VPFSchedule
+    
+    # Only allow students and teachers to view their schedules
+    if request.user.role not in ['student', 'teacher']:
+        messages.error(request, 'You do not have permission to access this page.')
         return redirect('dashboard')
+    
+    # Get all schedules where the current user is the reporter
+    # 1. DO Schedules - where report.reporter = current_user
+    do_schedules = DOSchedule.objects.filter(
+        report__reporter=request.user
+    ).select_related('report', 'discipline_officer', 'student').order_by('scheduled_date')
+    
+    # 2. Counseling Schedules (from Guidance) - where evaluation.report.reporter = current_user
+    counseling_schedules = CounselingSchedule.objects.filter(
+        evaluation__report__reporter=request.user
+    ).select_related('evaluation__report', 'counselor', 'student').order_by('scheduled_date')
+    
+    # 3. VPF Schedules (from ESP) - where vpf_case.report.reporter = current_user
+    vpf_schedules = VPFSchedule.objects.filter(
+        vpf_case__report__reporter=request.user
+    ).select_related('vpf_case__report', 'esp_teacher', 'vpf_case__student').order_by('scheduled_date')
+    
+    # Combine all schedules into a unified list with type information
+    all_schedules = []
+    
+    # Add DO schedules
+    for schedule in do_schedules:
+        all_schedules.append({
+            'type': 'DO',
+            'schedule': schedule,
+            'scheduled_date': schedule.scheduled_date,
+            'status': schedule.status,
+            'location': schedule.location,
+            'notes': schedule.notes or schedule.purpose,
+            'scheduled_by': schedule.discipline_officer.get_full_name() if schedule.discipline_officer else 'Discipline Officer',
+            'student': schedule.student,
+            'report': schedule.report,
+            'schedule_type': schedule.get_schedule_type_display(),
+        })
+    
+    # Add Counseling schedules
+    for schedule in counseling_schedules:
+        all_schedules.append({
+            'type': 'Counseling',
+            'schedule': schedule,
+            'scheduled_date': schedule.scheduled_date,
+            'status': schedule.status,
+            'location': schedule.location,
+            'notes': schedule.notes,
+            'scheduled_by': schedule.counselor.get_full_name() if schedule.counselor else 'Guidance Counselor',
+            'student': schedule.student,
+            'report': schedule.evaluation.report if schedule.evaluation else None,
+            'schedule_type': 'Counseling Session',
+        })
+    
+    # Add VPF schedules
+    for schedule in vpf_schedules:
+        all_schedules.append({
+            'type': 'VPF',
+            'schedule': schedule,
+            'scheduled_date': schedule.scheduled_date,
+            'status': schedule.status,
+            'location': schedule.location,
+            'notes': schedule.notes,
+            'scheduled_by': schedule.esp_teacher.get_full_name() if schedule.esp_teacher else 'ESP Teacher',
+            'student': schedule.vpf_case.student if schedule.vpf_case else None,
+            'report': schedule.vpf_case.report if schedule.vpf_case else None,
+            'schedule_type': 'VPF Session',
+        })
+    
+    # Sort by scheduled date
+    all_schedules.sort(key=lambda x: x['scheduled_date'])
+    
+    # Separate upcoming and past schedules
+    now = timezone.now()
+    upcoming_schedules = [s for s in all_schedules if s['scheduled_date'] >= now and s['status'] in ['scheduled', 'rescheduled']]
+    past_schedules = [s for s in all_schedules if s['scheduled_date'] < now or s['status'] in ['completed', 'missed', 'cancelled', 'no_show']]
+    
+    context = {
+        'user_role': request.user.role,
+        'all_schedules': all_schedules,
+        'upcoming_schedules': upcoming_schedules,
+        'past_schedules': past_schedules,
+        'total_schedules': len(all_schedules),
+    }
+    
+    return render(request, 'counseling_schedule.html', context)
 
 
 @login_required

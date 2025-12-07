@@ -324,7 +324,7 @@
             </div>
         </div>
         {% elif user.role == 'counselor' %}
-        <div class="bg-white rounded-xl p-4 shadow-md border-l-4 border-red-500 hover:shadow-lg transition-shadow">
+        <a href="{% url 'all_reports' %}?type=prohibited" class="bg-white rounded-xl p-4 shadow-md border-l-4 border-red-500 hover:shadow-lg transition-shadow cursor-pointer">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Prohibited Acts</p>
@@ -334,8 +334,8 @@
                     <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
                 </div>
             </div>
-        </div>
-        <div class="bg-white rounded-xl p-4 shadow-md border-l-4 border-amber-500 hover:shadow-lg transition-shadow">
+        </a>
+        <a href="{% url 'all_reports' %}?type=school_policy" class="bg-white rounded-xl p-4 shadow-md border-l-4 border-amber-500 hover:shadow-lg transition-shadow cursor-pointer">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">OSP Cases</p>
@@ -345,8 +345,8 @@
                     <i class="fas fa-gavel text-amber-600 text-xl"></i>
                 </div>
             </div>
-        </div>
-        <div class="bg-white rounded-xl p-4 shadow-md border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+        </a>
+        <a href="{% url 'all_reports' %}?scheduled=true" class="bg-white rounded-xl p-4 shadow-md border-l-4 border-blue-500 hover:shadow-lg transition-shadow cursor-pointer">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Scheduled</p>
@@ -356,8 +356,8 @@
                     <i class="fas fa-calendar-check text-blue-600 text-xl"></i>
                 </div>
             </div>
-        </div>
-        <div class="bg-white rounded-xl p-4 shadow-md border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+        </a>
+        <a href="{% url 'all_reports' %}?completed=true" class="bg-white rounded-xl p-4 shadow-md border-l-4 border-green-500 hover:shadow-lg transition-shadow cursor-pointer">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Completed</p>
@@ -367,7 +367,7 @@
                     <i class="fas fa-check-double text-green-600 text-xl"></i>
                 </div>
             </div>
-        </div>
+        </a>
         {% elif user.role == 'esp_teacher' %}
         <div class="bg-white rounded-xl p-4 shadow-md border-l-4 border-emerald-500 hover:shadow-lg transition-shadow">
             <div class="flex items-center justify-between">

@@ -6,78 +6,248 @@
 {% block content %}
 <div class="max-w-7xl mx-auto">
     <!-- Header -->
-    <div class="mb-4">
+    <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-900">Counseling Schedule</h1>
-        <p class="text-sm text-gray-600">View your counseling sessions</p>
+        <p class="text-sm text-gray-600">View schedules set by DO, Guidance, and ESP teachers for your reports</p>
     </div>
 
-    <!-- Sessions List -->
-    <div class="bg-white rounded-lg shadow-sm border">
-        {% if sessions %}
-        <div class="overflow-x-auto">
-            <table class="min-w-full">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Student</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Case ID</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Scheduled Date</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Status</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500">Remarks</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    {% for session in sessions %}
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-3">
-                            <div class="text-sm font-medium text-gray-900">{{ session.student.get_full_name }}</div>
-                        </td>
-                        <td class="px-4 py-3">
-                            {% if session.report %}
-                            <a href="{% url 'report_detail' session.report.case_id %}" class="text-sm text-blue-600 hover:underline">
-                                {{ session.report.case_id }}
-                            </a>
-                            {% else %}
-                            <span class="text-sm text-gray-500">N/A</span>
-                            {% endif %}
-                        </td>
-                        <td class="px-4 py-3">
-                            <div class="text-sm text-gray-900">{{ session.scheduled_date|date:"M d, Y" }}</div>
-                            <div class="text-xs text-gray-500">{{ session.scheduled_date|date:"h:i A" }}</div>
-                        </td>
-                        <td class="px-4 py-3">
-                            {% if session.status == 'scheduled' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Scheduled</span>
-                            {% elif session.status == 'completed' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
-                            {% elif session.status == 'cancelled' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Cancelled</span>
-                            {% elif session.status == 'referred_to_teacher' %}
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Referred</span>
-                            {% endif %}
-                        </td>
-                        <td class="px-4 py-3">
-                            <div class="text-sm text-gray-700">
-                                {% if session.remarks %}
-                                {{ session.remarks|truncatewords:10 }}
-                                {% else %}
-                                <span class="text-gray-400">No remarks</span>
-                                {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <!-- Statistics Cards -->
+    {% if total_schedules > 0 %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white rounded-lg shadow-sm border p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Total Schedules</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ total_schedules }}</p>
+                </div>
+                <div class="bg-blue-100 rounded-full p-3">
+                    <i class="fas fa-calendar-alt text-blue-600 text-xl"></i>
+                </div>
+            </div>
         </div>
-        {% else %}
+        <div class="bg-white rounded-lg shadow-sm border p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Upcoming</p>
+                    <p class="text-2xl font-bold text-green-600">{{ upcoming_schedules|length }}</p>
+                </div>
+                <div class="bg-green-100 rounded-full p-3">
+                    <i class="fas fa-clock text-green-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Past</p>
+                    <p class="text-2xl font-bold text-gray-600">{{ past_schedules|length }}</p>
+                </div>
+                <div class="bg-gray-100 rounded-full p-3">
+                    <i class="fas fa-history text-gray-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Upcoming Schedules -->
+    {% if upcoming_schedules %}
+    <div class="mb-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            <i class="fas fa-calendar-check text-green-600"></i> Upcoming Schedules
+        </h2>
+        <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Case ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Scheduled By</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for item in upcoming_schedules %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if item.type == 'DO' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+                                    <i class="fas fa-user-shield"></i> DO
+                                </span>
+                                {% elif item.type == 'Counseling' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                    <i class="fas fa-comments"></i> Guidance
+                                </span>
+                                {% elif item.type == 'VPF' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                                    <i class="fas fa-hands-praying"></i> ESP
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">
+                                    {% if item.student %}
+                                    {{ item.student.get_full_name }}
+                                    {% else %}
+                                    <span class="text-gray-400">N/A</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if item.report %}
+                                <a href="{% url 'report_detail' item.report.case_id %}" class="text-sm text-blue-600 hover:underline font-medium">
+                                    {{ item.report.case_id }}
+                                </a>
+                                {% else %}
+                                <span class="text-sm text-gray-500">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">{{ item.scheduled_by }}</div>
+                                <div class="text-xs text-gray-500">{{ item.schedule_type }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">{{ item.scheduled_date|date:"M d, Y" }}</div>
+                                <div class="text-xs text-gray-500">{{ item.scheduled_date|date:"h:i A" }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">
+                                    {% if item.location %}
+                                    <i class="fas fa-map-marker-alt text-gray-400"></i> {{ item.location }}
+                                    {% else %}
+                                    <span class="text-gray-400">TBA</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if item.status == 'scheduled' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Scheduled</span>
+                                {% elif item.status == 'rescheduled' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Rescheduled</span>
+                                {% else %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">{{ item.status|title }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Past Schedules -->
+    {% if past_schedules %}
+    <div class="mb-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            <i class="fas fa-history text-gray-600"></i> Past Schedules
+        </h2>
+        <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Case ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Scheduled By</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for item in past_schedules %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if item.type == 'DO' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+                                    <i class="fas fa-user-shield"></i> DO
+                                </span>
+                                {% elif item.type == 'Counseling' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                    <i class="fas fa-comments"></i> Guidance
+                                </span>
+                                {% elif item.type == 'VPF' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                                    <i class="fas fa-hands-praying"></i> ESP
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">
+                                    {% if item.student %}
+                                    {{ item.student.get_full_name }}
+                                    {% else %}
+                                    <span class="text-gray-400">N/A</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if item.report %}
+                                <a href="{% url 'report_detail' item.report.case_id %}" class="text-sm text-blue-600 hover:underline font-medium">
+                                    {{ item.report.case_id }}
+                                </a>
+                                {% else %}
+                                <span class="text-sm text-gray-500">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">{{ item.scheduled_by }}</div>
+                                <div class="text-xs text-gray-500">{{ item.schedule_type }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">{{ item.scheduled_date|date:"M d, Y" }}</div>
+                                <div class="text-xs text-gray-500">{{ item.scheduled_date|date:"h:i A" }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if item.status == 'completed' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                                {% elif item.status == 'missed' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Missed</span>
+                                {% elif item.status == 'cancelled' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Cancelled</span>
+                                {% elif item.status == 'no_show' %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">No Show</span>
+                                {% else %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">{{ item.status|title }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm text-gray-700">
+                                    {% if item.notes %}
+                                    {{ item.notes|truncatewords:15 }}
+                                    {% else %}
+                                    <span class="text-gray-400">No notes</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Empty State -->
+    {% if not upcoming_schedules and not past_schedules %}
+    <div class="bg-white rounded-lg shadow-sm border">
         <div class="text-center py-12">
             <div class="bg-gray-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-calendar-alt text-gray-400 text-2xl"></i>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">No Counseling Sessions</h3>
-            <p class="text-gray-600">No counseling sessions have been scheduled yet.</p>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">No Counseling Schedules</h3>
+            <p class="text-gray-600 mb-4">No schedules have been set by DO, Guidance, or ESP teachers for your reports yet.</p>
+            <p class="text-sm text-gray-500">When a schedule is created for a report you filed, it will appear here.</p>
         </div>
-        {% endif %}
     </div>
+    {% endif %}
 </div>
 {% endblock %}
