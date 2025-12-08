@@ -384,38 +384,9 @@
         }
     });
 
-    // Teacher assignment data - organized by curriculum type
-    const teacherAssignments = {
-        {% for teacher in teacher_assignments %}
-    '{{ teacher.grade_level }}_{{ teacher.section_name }}': '{{ teacher.teacher_name }}',
-        {% endfor %}
-    };
-
-    // Define sections for each curriculum and grade
-    const curriculumStructure = {
-        'Junior High School': {
-            '7': ['Section 1 (STE)', 'Section 2 (STE)', 'Section 1 (SPA)', 'Section 2 (SPA)',
-                'Section 1 (ICT)', 'Section 2 (ICT)', 'Section 1 (RBEC)', 'Section 2 (RBEC)', 'Section 3 (RBEC)',
-                'Section 1 (STVEP)', 'Section 2 (STVEP)', 'Section 3 (STVEP)', 'Section 4 (STVEP)', 'Section 5 (STVEP)',
-                'Section 6 (STVEP)', 'Section 7 (STVEP)', 'Section 8 (STVEP)', 'Section 9 (STVEP)', 'Section 10 (STVEP)'],
-            '8': ['Section 1 (STE)', 'Section 2 (STE)', 'Section 1 (SPA)', 'Section 2 (SPA)',
-                'Section 1 (ICT)', 'Section 2 (ICT)', 'Section 1 (RBEC)', 'Section 2 (RBEC)', 'Section 3 (RBEC)',
-                'Section 1 (STVEP)', 'Section 2 (STVEP)', 'Section 3 (STVEP)', 'Section 4 (STVEP)', 'Section 5 (STVEP)',
-                'Section 6 (STVEP)', 'Section 7 (STVEP)', 'Section 8 (STVEP)', 'Section 9 (STVEP)', 'Section 10 (STVEP)'],
-            '9': ['Section 1 (STE)', 'Section 2 (STE)', 'Section 1 (SPA)', 'Section 2 (SPA)',
-                'Section 1 (ICT)', 'Section 2 (ICT)', 'Section 1 (RBEC)', 'Section 2 (RBEC)', 'Section 3 (RBEC)',
-                'Section 1 (STVEP)', 'Section 2 (STVEP)', 'Section 3 (STVEP)', 'Section 4 (STVEP)', 'Section 5 (STVEP)',
-                'Section 6 (STVEP)', 'Section 7 (STVEP)', 'Section 8 (STVEP)', 'Section 9 (STVEP)', 'Section 10 (STVEP)'],
-            '10': ['Section 1 (STE)', 'Section 2 (STE)', 'Section 1 (SPA)', 'Section 2 (SPA)',
-                'Section 1 (ICT)', 'Section 2 (ICT)', 'Section 1 (RBEC)', 'Section 2 (RBEC)', 'Section 3 (RBEC)',
-                'Section 1 (STVEP)', 'Section 2 (STVEP)', 'Section 3 (STVEP)', 'Section 4 (STVEP)', 'Section 5 (STVEP)',
-                'Section 6 (STVEP)', 'Section 7 (STVEP)', 'Section 8 (STVEP)', 'Section 9 (STVEP)', 'Section 10 (STVEP)']
-        },
-        'Senior High School': {
-            '11': ['STEM', 'Arts & Design', 'TVL – ICT', 'TVL – SMAW', 'TVL – EIM', 'TVL – Dressmaking', 'TVL – FBS', 'TVL – Bread & Pastry', 'TVL – CSS'],
-            '12': ['STEM', 'Arts & Design', 'TVL – ICT', 'TVL – SMAW', 'TVL – EIM', 'TVL – Dressmaking', 'TVL – FBS', 'TVL – Bread & Pastry', 'TVL – CSS']
-        }
-    };
+    // Load section structure and teacher lookup from database (passed as JSON)
+    const curriculumStructure = {{ section_structure_json|safe }};
+    const teacherLookup = {{ teacher_lookup_json|safe }};
 
     // Initialize dropdowns with empty options
     gradeLevelSelect.innerHTML = '<option value="">Select Grade Level</option>';
@@ -454,10 +425,24 @@
         teacherNameInput.value = '';
 
         if (selectedCurriculum && selectedGrade && curriculumStructure[selectedCurriculum] && curriculumStructure[selectedCurriculum][selectedGrade]) {
-            curriculumStructure[selectedCurriculum][selectedGrade].forEach(section => {
+            // Get sections for this curriculum and grade from database
+            const sections = curriculumStructure[selectedCurriculum][selectedGrade];
+            sections.forEach(sectionData => {
                 const option = document.createElement('option');
-                option.value = section;
-                option.text = section;
+                // For JHS: "Section 1 (STE)", for SHS: strand name (e.g., "STEM", "TVL – SMAW")
+                if (selectedCurriculum === 'Junior High School') {
+                    // JHS: Save as "Section X (TRACK)"
+                    option.value = `${sectionData.section_name} (${sectionData.track_code})`;
+                    option.text = `${sectionData.section_name} (${sectionData.track_code})`;
+                    option.dataset.trackCode = sectionData.track_code;
+                    option.dataset.sectionName = sectionData.section_name;
+                } else {
+                    // Senior High - section IS the strand, so save the track_code as section_name
+                    option.value = sectionData.track_code;  // Save strand as section_name
+                    option.text = sectionData.track_code;   // Display strand
+                    option.dataset.trackCode = sectionData.track_code;
+                    option.dataset.sectionName = sectionData.track_code;  // For SHS, section_name = strand
+                }
                 sectionNameSelect.appendChild(option);
             });
         }
@@ -465,34 +450,36 @@
 
     // Update teacher when section is selected
     sectionNameSelect.addEventListener('change', function () {
+        const selectedCurriculum = curriculumSelect.options[curriculumSelect.selectedIndex].text;
         const gradeLevel = gradeLevelSelect.value;
-        const sectionName = this.value;
+        const selectedOption = this.options[this.selectedIndex];
+        const sectionName = selectedOption.dataset.sectionName;
+        const trackCode = selectedOption.dataset.trackCode;
 
-        if (gradeLevel && sectionName) {
-            let lookupKey = `${gradeLevel}_${sectionName}`;
-
+        if (gradeLevel && sectionName && trackCode) {
+            // Build lookup key: curriculum_grade_section_track
+            // For SHS, sectionName might be the strand itself, so use it directly
+            let lookupKey;
+            if (selectedCurriculum === 'Senior High School') {
+                // For SHS, section_name in DB might be "Section 1" but we're using strand
+                // Try both: with "Section 1" and with strand as section_name
+                lookupKey = `${selectedCurriculum}_${gradeLevel}_Section 1_${trackCode}`;
+                if (!teacherLookup[lookupKey]) {
+                    // Try with strand as section_name
+                    lookupKey = `${selectedCurriculum}_${gradeLevel}_${trackCode}_${trackCode}`;
+                }
+            } else {
+                lookupKey = `${selectedCurriculum}_${gradeLevel}_${sectionName}_${trackCode}`;
+            }
+            
             // Check if teacher exists for this combination
-            const teacherName = teacherAssignments[lookupKey];
+            const teacherName = teacherLookup[lookupKey];
             if (teacherName) {
                 teacherNameInput.value = teacherName;
             } else {
-                // If not found, try to find by extracting track code for JHS
-                if (sectionName.includes('(') && sectionName.includes(')')) {
-                    const trackCode = sectionName.match(/\(([^)]+)\)/)[1];
-                    const sectionNumber = sectionName.split(' ')[1];
-                    const altKey = `${gradeLevel}_Section ${sectionNumber}`;
-                    const altTeacher = teacherAssignments[altKey];
-                    if (altTeacher) {
-                        teacherNameInput.value = altTeacher;
-                    } else {
-                        teacherNameInput.value = 'Teacher not assigned';
-                    }
-                } else {
-                    teacherNameInput.value = 'Teacher not assigned';
-                }
+                teacherNameInput.value = 'Teacher not assigned';
             }
         }
-    });
     });
 
     // Toggle between student and teacher fields based on party type

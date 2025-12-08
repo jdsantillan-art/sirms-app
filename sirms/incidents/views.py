@@ -456,16 +456,65 @@ def report_incident(request):
         
         # Get context data
         try:
+            import json
+            # Get all teacher assignments
+            teacher_assignments = TeacherAssignment.objects.all().select_related('curriculum')
+            
+            # Build section structure from database with teacher info
+            section_structure = {}
+            teacher_lookup = {}  # For quick teacher lookup: {curriculum_grade_section: teacher_name}
+            
+            for assignment in teacher_assignments:
+                if assignment.curriculum:
+                    curriculum_name = assignment.curriculum.name
+                    grade_level = assignment.grade_level
+                    
+                    if curriculum_name not in section_structure:
+                        section_structure[curriculum_name] = {}
+                    if grade_level not in section_structure[curriculum_name]:
+                        section_structure[curriculum_name][grade_level] = []
+                    
+                    # Build section entry with track and teacher info
+                    section_entry = {
+                        'section_name': assignment.section_name,
+                        'track_code': assignment.track_code,
+                        'teacher_name': assignment.teacher_name
+                    }
+                    
+                    # Add section if not already in list (check by section_name and track)
+                    section_key = f"{assignment.section_name}_{assignment.track_code}"
+                    existing = [s for s in section_structure[curriculum_name][grade_level] 
+                               if s.get('section_name') == assignment.section_name and s.get('track_code') == assignment.track_code]
+                    if not existing:
+                        section_structure[curriculum_name][grade_level].append(section_entry)
+                    
+                    # Build lookup key for teacher
+                    lookup_key = f"{curriculum_name}_{grade_level}_{assignment.section_name}_{assignment.track_code}"
+                    teacher_lookup[lookup_key] = assignment.teacher_name
+            
+            # Sort sections for each grade
+            for curriculum in section_structure:
+                for grade in section_structure[curriculum]:
+                    section_structure[curriculum][grade].sort(key=lambda x: (x.get('track_code', ''), x.get('section_name', '')))
+            
             context = {
                 'form': form,
                 'incident_types': IncidentType.objects.all().order_by('severity', 'name'),
-                'teacher_assignments': TeacherAssignment.objects.all(),
+                'teacher_assignments': teacher_assignments,
+                'section_structure': section_structure,  # Pass structured section data
+                'section_structure_json': json.dumps(section_structure),  # JSON for JavaScript
+                'teacher_lookup_json': json.dumps(teacher_lookup),  # JSON for teacher lookup
             }
-        except:
+        except Exception as e:
+            print(f"Error building context: {e}")
+            import json
             context = {
                 'form': form,
                 'incident_types': [],
                 'teacher_assignments': [],
+                'section_structure': {},
+                'section_structure_json': json.dumps({}),
+                'teacher_lookup_json': json.dumps({}),
             }
         
         return render(request, 'report_incident.html', context)
