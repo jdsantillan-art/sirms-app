@@ -121,7 +121,9 @@ AUTHENTICATION_BACKENDS = [
 # Google OAuth Configuration
 GOOGLE_OAUTH_CLIENT_ID = os.environ.get('GOOGLE_OAUTH_CLIENT_ID', '')
 GOOGLE_OAUTH_CLIENT_SECRET = os.environ.get('GOOGLE_OAUTH_CLIENT_SECRET', '')
-GOOGLE_OAUTH_REDIRECT_URI = os.environ.get('GOOGLE_OAUTH_REDIRECT_URI', 'http://127.0.0.1:8000/auth/callback/')
+# Use SITE_URL to construct redirect URI if not explicitly set
+SITE_URL = os.environ.get('SITE_URL', 'http://localhost:8000')
+GOOGLE_OAUTH_REDIRECT_URI = os.environ.get('GOOGLE_OAUTH_REDIRECT_URI', f'{SITE_URL.rstrip("/")}/auth/callback/')
 
 # Email format validation for DMLMHS
 DMLMHS_EMAIL_DOMAIN = '@gmail.com'
@@ -148,5 +150,4 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'DMLMHS SIRMS <noreply@dmlmhs.edu.ph>')
 
-# Site URL for email links
-SITE_URL = os.environ.get('SITE_URL', 'http://localhost:8000')
+# Site URL for email links (defined above for OAuth redirect URI)

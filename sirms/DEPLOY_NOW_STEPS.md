@@ -91,6 +91,26 @@ The `render.yaml` file automatically sets:
 
 ---
 
+## 🔧 Required: Google OAuth Configuration
+
+**IMPORTANT:** You must configure Google OAuth for authentication to work.
+
+1. **Go to Google Cloud Console:** https://console.cloud.google.com/
+2. **Create/Select Project** → APIs & Services → Credentials
+3. **Create OAuth 2.0 Client ID:**
+   - Application type: Web application
+   - Authorized redirect URIs: `https://sirms.onrender.com/auth/callback/` (replace with your Render URL)
+   - **CRITICAL:** Make sure the redirect URI matches your production URL exactly!
+4. **Add Environment Variables in Render Dashboard:**
+   - Go to Render Dashboard → Your Service → Environment
+   - Add these variables:
+     ```
+     GOOGLE_OAUTH_CLIENT_ID=your-client-id.apps.googleusercontent.com
+     GOOGLE_OAUTH_CLIENT_SECRET=your-client-secret
+     SITE_URL=https://sirms.onrender.com
+     ```
+   - **Note:** `SITE_URL` is now auto-set in render.yaml, but you can override it if needed
+
 ## 🔧 Optional: Add Email Configuration
 
 If you want email notifications, add these in Render Dashboard → Your Service → Environment:
@@ -103,7 +123,6 @@ EMAIL_USE_TLS=True
 EMAIL_HOST_USER=your-email@gmail.com
 EMAIL_HOST_PASSWORD=your-app-password
 DEFAULT_FROM_EMAIL=DMLMHS SIRMS <noreply@dmlmhs.edu.ph>
-SITE_URL=https://sirms.onrender.com
 ```
 
 ---
