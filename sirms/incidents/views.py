@@ -1125,36 +1125,78 @@ def fact_check_reports(request):
                 involved_student_id = report.reported_student.id
                 involved_student_name = report.reported_student.get_full_name()
             else:
-                # Check involved_parties for student
-                involved_parties = report.involved_parties.filter(party_type='student', student__isnull=False)
+                # Check involved_parties for student (from direct reports or regular reports)
+                involved_parties = report.involved_parties.filter(party_type='student')
                 if involved_parties.exists():
-                    # Get the first student from involved parties
+                    # Get the first student party
                     first_party = involved_parties.first()
+                    # Check if student is directly linked
                     if first_party.student:
                         involved_student = first_party.student
                         involved_student_id = first_party.student.id
                         involved_student_name = first_party.student.get_full_name()
-                # If still no student, try to parse involved_students text field
-                elif report.involved_students:
-                    # Try to find student by name or email from involved_students field
-                    involved_students_text = report.involved_students.strip()
-                    # Try to match by name (first name + last name)
-                    name_parts = involved_students_text.split()
-                    if len(name_parts) >= 2:
-                        first_name = name_parts[0]
-                        last_name = name_parts[-1]
-                        try:
+                    # If no direct link, try to find student from name_if_unknown (from direct reports)
+                    elif first_party.name_if_unknown:
+                        name_text = first_party.name_if_unknown.strip()
+                        # Try to find by email/username first
+                        student_match = CustomUser.objects.filter(
+                            role='student',
+                            email__iexact=name_text
+                        ).first()
+                        if not student_match:
                             student_match = CustomUser.objects.filter(
                                 role='student',
-                                first_name__icontains=first_name,
-                                last_name__icontains=last_name
+                                username__iexact=name_text
                             ).first()
-                            if student_match:
-                                involved_student = student_match
-                                involved_student_id = student_match.id
-                                involved_student_name = student_match.get_full_name()
-                        except:
-                            pass
+                        # If not found, try by name
+                        if not student_match:
+                            name_parts = name_text.split()
+                            if len(name_parts) >= 2:
+                                try:
+                                    student_match = CustomUser.objects.filter(
+                                        role='student',
+                                        first_name__icontains=name_parts[0],
+                                        last_name__icontains=name_parts[-1]
+                                    ).first()
+                                except:
+                                    pass
+                        if student_match:
+                            involved_student = student_match
+                            involved_student_id = student_match.id
+                            involved_student_name = student_match.get_full_name()
+                
+                # If still no student, try to parse involved_students text field
+                if not involved_student and report.involved_students:
+                    # Try to find student by name or email from involved_students field
+                    involved_students_text = report.involved_students.strip()
+                    # Try to match by email/username first
+                    student_match = CustomUser.objects.filter(
+                        role='student',
+                        email__iexact=involved_students_text
+                    ).first()
+                    if not student_match:
+                        student_match = CustomUser.objects.filter(
+                            role='student',
+                            username__iexact=involved_students_text
+                        ).first()
+                    # If not found, try by name (first name + last name)
+                    if not student_match:
+                        name_parts = involved_students_text.split()
+                        if len(name_parts) >= 2:
+                            first_name = name_parts[0]
+                            last_name = name_parts[-1]
+                            try:
+                                student_match = CustomUser.objects.filter(
+                                    role='student',
+                                    first_name__icontains=first_name,
+                                    last_name__icontains=last_name
+                                ).first()
+                            except:
+                                pass
+                    if student_match:
+                        involved_student = student_match
+                        involved_student_id = student_match.id
+                        involved_student_name = student_match.get_full_name()
             
             reports_with_students.append({
                 'report': report,
