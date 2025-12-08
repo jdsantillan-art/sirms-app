@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <form method="post" enctype="multipart/form-data" id="incident-form" class="p-4">
+        <form method="post" enctype="multipart/form-data" id="incident-form" class="p-4" onsubmit="handleFormSubmit(event)">
             {% csrf_token %}
 
             <!-- Success/Info Messages -->
@@ -320,10 +320,14 @@
                     <i class="fas fa-lock mr-1 text-emerald-600"></i>
                     Confidential & Recorded
                 </p>
-                <button type="submit"
-                    class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold px-5 py-2 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-2 text-sm">
+                <button type="submit" id="submit-btn"
+                    class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold px-5 py-2 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                     <i class="fas fa-save"></i>
-                    <span>Record Direct Report</span>
+                    <span id="submit-text">Record Direct Report</span>
+                    <span id="submit-loading" class="hidden">
+                        <i class="fas fa-spinner fa-spin mr-1"></i>
+                        Processing...
+                    </span>
                 </button>
             </div>
         </form>
@@ -511,6 +515,39 @@
                 if(studentFields) studentFields.style.display = 'none';
                 if(teacherFields) teacherFields.style.display = 'none';
             }
+        });
+    }
+    
+    // Prevent double submission
+    function handleFormSubmit(event) {
+        const submitBtn = document.getElementById('submit-btn');
+        const submitText = document.getElementById('submit-text');
+        const submitLoading = document.getElementById('submit-loading');
+        
+        // Disable button and show loading state
+        if (submitBtn && !submitBtn.disabled) {
+            submitBtn.disabled = true;
+            if (submitText) submitText.classList.add('hidden');
+            if (submitLoading) submitLoading.classList.remove('hidden');
+            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            submitBtn.classList.remove('hover:from-emerald-700', 'hover:to-teal-700', 'hover:shadow-xl', 'hover:-translate-y-0.5');
+        }
+        
+        // Form will continue to submit normally
+        return true;
+    }
+    
+    // Also prevent double-click on submit button
+    const submitBtn = document.getElementById('submit-btn');
+    if (submitBtn) {
+        let isSubmitting = false;
+        submitBtn.addEventListener('click', function(e) {
+            if (isSubmitting) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+            isSubmitting = true;
         });
     }
 });

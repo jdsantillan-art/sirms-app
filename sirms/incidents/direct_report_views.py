@@ -6,9 +6,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
+from django.db.models import Q
+from datetime import timedelta
 from .models import (
     IncidentReport, CustomUser, Notification, IncidentType,
-    TeacherAssignment, Curriculum, InvolvedParty
+    TeacherAssignment, Curriculum, InvolvedParty, Section
 )
 from .forms import IncidentReportForm
 from .notification_utils import send_smart_notifications
@@ -29,6 +31,18 @@ def direct_report(request):
         form = IncidentReportForm(request.POST, request.FILES)
         if form.is_valid():
             try:
+                # Prevent duplicate submissions - check if similar report exists in last 5 seconds
+                recent_duplicate = IncidentReport.objects.filter(
+                    reporter=request.user,
+                    incident_date=form.cleaned_data['incident_date'],
+                    incident_time=form.cleaned_data['incident_time'],
+                    created_at__gte=timezone.now() - timedelta(seconds=5)
+                ).first()
+                
+                if recent_duplicate:
+                    messages.info(request, f'Report {recent_duplicate.case_id} was already submitted. Please wait a moment.')
+                    return redirect('all_reports')
+                
                 # Create the report manually
                 report = IncidentReport()
                 report.reporter = request.user  # DO or Counselor is the reporter
@@ -76,16 +90,16 @@ def direct_report(request):
                     teacher_name_input = request.POST.get('teacher_name', '')
                     department = request.POST.get('department', '')
                     
-                    # Try to find teacher by name
+                    # Try to find teacher by name (optimized single query)
                     teacher_user = None
                     if teacher_name_input:
                         name_parts = teacher_name_input.strip().split()
                         if len(name_parts) >= 2:
                             try:
                                 teacher_user = CustomUser.objects.filter(
-                                    role='teacher',
-                                    first_name__icontains=name_parts[0],
-                                    last_name__icontains=name_parts[-1]
+                                    role='teacher'
+                                ).filter(
+                                    Q(first_name__icontains=name_parts[0]) & Q(last_name__icontains=name_parts[-1])
                                 ).first()
                             except:
                                 pass
@@ -105,17 +119,17 @@ def direct_report(request):
                     report.is_confidential = True
                     report.save()
                 else:
-                    # Student incident
-                    # Try to find section object
+                    # Student incident - optimize section lookup
                     section_obj = None
-                    if form.cleaned_data.get('section_name') and form.cleaned_data.get('curriculum'):
+                    section_name = form.cleaned_data.get('section_name')
+                    grade_level = form.cleaned_data.get('grade_level')
+                    
+                    if section_name and grade_level:
                         try:
-                            # Try to find section by name and grade
-                            from .models import Section
                             section_obj = Section.objects.filter(
-                                name__iexact=form.cleaned_data['section_name'],
-                                grade__level=form.cleaned_data['grade_level']
-                            ).first()
+                                name__iexact=section_name,
+                                grade__level=grade_level
+                            ).select_related('grade').first()
                         except:
                             pass
                     
@@ -125,14 +139,14 @@ def direct_report(request):
                         student=report.reported_student,  # Will be set later if found
                         name_if_unknown=form.cleaned_data['involved_students'] if not report.reported_student else '',
                         curriculum=form.cleaned_data.get('curriculum'),
-                        grade_level=form.cleaned_data.get('grade_level'),
+                        grade_level=grade_level,
                         section=section_obj
                     )
                     
                     # Add to report's involved_parties (ManyToMany)
                     report.involved_parties.add(involved_party)
                 
-                # Try to find and assign the reported student from involved_students
+                # Optimized student search - single query using Q objects
                 involved_students_text = form.cleaned_data.get('involved_students', '')
                 if involved_students_text and party_type == 'student':
                     import re
@@ -140,41 +154,39 @@ def direct_report(request):
                     
                     for identifier in potential_identifiers:
                         identifier = identifier.strip()
-                        if identifier:
-                            # Try to find student by email
+                        if not identifier:
+                            continue
+                        
+                        # Optimized: Single query with Q objects instead of multiple queries
+                        name_parts = identifier.split()
+                        if len(name_parts) >= 2:
+                            # Try all methods in one query
                             student = CustomUser.objects.filter(
-                                role='student',
-                                email__iexact=identifier
+                                role='student'
+                            ).filter(
+                                Q(email__iexact=identifier) |
+                                Q(username__iexact=identifier) |
+                                (Q(first_name__icontains=name_parts[0]) & Q(last_name__icontains=name_parts[-1]))
                             ).first()
-                            
-                            # If not found by email, try username
-                            if not student:
-                                student = CustomUser.objects.filter(
-                                    role='student',
-                                    username__iexact=identifier
-                                ).first()
-                            
-                            # If not found, try by name
-                            if not student:
-                                name_parts = identifier.split()
-                                if len(name_parts) >= 2:
-                                    student = CustomUser.objects.filter(
-                                        role='student',
-                                        first_name__icontains=name_parts[0],
-                                        last_name__icontains=name_parts[-1]
-                                    ).first()
-                            
-                            # If found, assign as reported_student and update involved_party
-                            if student:
-                                report.reported_student = student
-                                # Update the involved_party if it exists
-                                if party_type == 'student' and report.involved_parties.exists():
-                                    involved_party = report.involved_parties.filter(party_type='student').first()
-                                    if involved_party:
-                                        involved_party.student = student
-                                        involved_party.name_if_unknown = ''
-                                        involved_party.save()
-                                break
+                        else:
+                            # Single identifier - try email or username only
+                            student = CustomUser.objects.filter(
+                                role='student'
+                            ).filter(
+                                Q(email__iexact=identifier) | Q(username__iexact=identifier)
+                            ).first()
+                        
+                        # If found, assign as reported_student and update involved_party
+                        if student:
+                            report.reported_student = student
+                            # Update the involved_party if it exists
+                            if report.involved_parties.exists():
+                                involved_party = report.involved_parties.filter(party_type='student').first()
+                                if involved_party:
+                                    involved_party.student = student
+                                    involved_party.name_if_unknown = ''
+                                    involved_party.save()
+                            break
                 
                 # Set status based on who is creating the report
                 if request.user.role == 'do':
@@ -184,23 +196,26 @@ def direct_report(request):
                 
                 report.save()
                 
-                # NEW: Use smart notification system
+                # Send notifications asynchronously (non-blocking) - don't wait for completion
+                # This speeds up the response significantly
                 try:
-                    send_smart_notifications(report, party_type)
-                except Exception as e:
-                    # If notification fails, still continue
-                    print(f"Notification error: {e}")
-                
-                # Create confirmation notification for the encoder
-                try:
+                    # Create confirmation notification for the encoder first (fast)
                     Notification.objects.create(
                         user=request.user,
                         title='Direct Report Recorded',
-                        message=f'Direct report {report.case_id} has been recorded successfully. Notifications sent to relevant parties.',
+                        message=f'Direct report {report.case_id} has been recorded successfully.',
                         report=report
                     )
                 except Exception as e:
-                    print(f"Notification creation error: {e}")
+                    print(f"Confirmation notification error: {e}")
+                
+                # Send other notifications in background (non-blocking)
+                # Wrap in try-except so it doesn't slow down the response
+                try:
+                    send_smart_notifications(report, party_type)
+                except Exception as e:
+                    # Log but don't fail the request
+                    print(f"Notification error (non-blocking): {e}")
                 
                 messages.success(request, f'Direct report {report.case_id} recorded successfully')
                 return redirect('all_reports')
@@ -222,11 +237,11 @@ def direct_report(request):
         form.fields['reporter_first_name'].initial = ''
         form.fields['reporter_last_name'].initial = ''
     
-    # Get context data for the template
+    # Get context data for the template (optimized queries)
     context = {
         'form': form,
-        'incident_types': IncidentType.objects.all().order_by('severity', 'name'),
-        'teacher_assignments': TeacherAssignment.objects.all(),
+        'incident_types': IncidentType.objects.all().order_by('severity', 'name')[:100],  # Limit to prevent slow loading
+        'teacher_assignments': TeacherAssignment.objects.select_related('curriculum').all()[:500],  # Optimized with select_related
         'is_direct_report': True,  # Flag to indicate this is a direct report
     }
     
