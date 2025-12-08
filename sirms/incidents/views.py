@@ -1863,12 +1863,172 @@ def manage_curriculum(request):
 
 @login_required
 def manage_teachers(request):
-    """Manage teachers placeholder"""
-    try:
-        context = {'user_role': request.user.role}
-        return render(request, 'maintenance/manage_teachers.html', context)
-    except:
+    """Manage teachers and teacher assignments"""
+    # Only counselors and guidance can access
+    if request.user.role not in ['counselor', 'guidance']:
+        messages.error(request, 'You do not have permission to access this page.')
         return redirect('dashboard')
+    
+    from .teacher_utils import generate_teacher_email, format_teacher_name
+    from django.contrib.auth.hashers import make_password
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        
+        # Teacher CRUD operations
+        if action == 'add_teacher':
+            first_name = request.POST.get('first_name', '').strip()
+            last_name = request.POST.get('last_name', '').strip()
+            email = request.POST.get('email', '').strip()
+            username = request.POST.get('username', '').strip()
+            password = request.POST.get('password', '').strip()
+            
+            if first_name and last_name and username and password:
+                # Auto-generate email if not provided
+                if not email:
+                    email = generate_teacher_email(first_name, last_name)
+                
+                if not CustomUser.objects.filter(username=username).exists():
+                    if not CustomUser.objects.filter(email=email).exists():
+                        teacher = CustomUser.objects.create_user(
+                            username=username,
+                            email=email,
+                            password=password,
+                            first_name=first_name,
+                            last_name=last_name,
+                            role='teacher'
+                        )
+                        messages.success(request, f'Teacher "{teacher.get_full_name()}" added successfully with email: {email}')
+                    else:
+                        messages.error(request, f'Email "{email}" is already in use.')
+                else:
+                    messages.error(request, f'Username "{username}" is already taken.')
+            else:
+                messages.error(request, 'First name, last name, username, and password are required.')
+                
+        elif action == 'edit_teacher':
+            teacher_id = request.POST.get('teacher_id')
+            first_name = request.POST.get('first_name', '').strip()
+            last_name = request.POST.get('last_name', '').strip()
+            email = request.POST.get('email', '').strip()
+            
+            if teacher_id and first_name and last_name and email:
+                try:
+                    teacher = CustomUser.objects.get(id=teacher_id, role='teacher')
+                    teacher.first_name = first_name
+                    teacher.last_name = last_name
+                    teacher.email = email
+                    teacher.save()
+                    messages.success(request, f'Teacher "{teacher.get_full_name()}" updated successfully.')
+                except CustomUser.DoesNotExist:
+                    messages.error(request, 'Teacher not found.')
+            else:
+                messages.error(request, 'All fields are required.')
+                
+        elif action == 'toggle_teacher':
+            teacher_id = request.POST.get('teacher_id')
+            if teacher_id:
+                try:
+                    teacher = CustomUser.objects.get(id=teacher_id, role='teacher')
+                    teacher.is_active = not teacher.is_active
+                    teacher.save()
+                    status = 'activated' if teacher.is_active else 'deactivated'
+                    messages.success(request, f'Teacher "{teacher.get_full_name()}" {status} successfully.')
+                except CustomUser.DoesNotExist:
+                    messages.error(request, 'Teacher not found.')
+                    
+        elif action == 'delete_teacher':
+            teacher_id = request.POST.get('teacher_id')
+            if teacher_id:
+                try:
+                    teacher = CustomUser.objects.get(id=teacher_id, role='teacher')
+                    teacher_name = teacher.get_full_name()
+                    teacher.delete()
+                    messages.success(request, f'Teacher "{teacher_name}" deleted successfully.')
+                except CustomUser.DoesNotExist:
+                    messages.error(request, 'Teacher not found.')
+        
+        # Teacher Assignment operations
+        elif action == 'add_assignment':
+            teacher_name = request.POST.get('teacher_name', '').strip()
+            curriculum_id = request.POST.get('curriculum_id')
+            track_code = request.POST.get('track_code', '').strip()
+            grade_level = request.POST.get('grade_level', '').strip()
+            section_name = request.POST.get('section_name', '').strip()
+            
+            if teacher_name and curriculum_id and track_code and grade_level and section_name:
+                try:
+                    curriculum = Curriculum.objects.get(id=curriculum_id)
+                    if not TeacherAssignment.objects.filter(
+                        teacher_name=teacher_name,
+                        curriculum=curriculum,
+                        track_code=track_code,
+                        grade_level=grade_level,
+                        section_name=section_name
+                    ).exists():
+                        TeacherAssignment.objects.create(
+                            teacher_name=teacher_name,
+                            curriculum=curriculum,
+                            track_code=track_code,
+                            grade_level=grade_level,
+                            section_name=section_name
+                        )
+                        messages.success(request, f'Assignment added for {teacher_name}.')
+                    else:
+                        messages.error(request, 'This assignment already exists.')
+                except Curriculum.DoesNotExist:
+                    messages.error(request, 'Curriculum not found.')
+            else:
+                messages.error(request, 'All assignment fields are required.')
+                
+        elif action == 'edit_assignment':
+            assignment_id = request.POST.get('assignment_id')
+            teacher_name = request.POST.get('teacher_name', '').strip()
+            curriculum_id = request.POST.get('curriculum_id')
+            track_code = request.POST.get('track_code', '').strip()
+            grade_level = request.POST.get('grade_level', '').strip()
+            section_name = request.POST.get('section_name', '').strip()
+            
+            if assignment_id and teacher_name and curriculum_id and track_code and grade_level and section_name:
+                try:
+                    assignment = TeacherAssignment.objects.get(id=assignment_id)
+                    curriculum = Curriculum.objects.get(id=curriculum_id)
+                    assignment.teacher_name = teacher_name
+                    assignment.curriculum = curriculum
+                    assignment.track_code = track_code
+                    assignment.grade_level = grade_level
+                    assignment.section_name = section_name
+                    assignment.save()
+                    messages.success(request, 'Assignment updated successfully.')
+                except TeacherAssignment.DoesNotExist:
+                    messages.error(request, 'Assignment not found.')
+                except Curriculum.DoesNotExist:
+                    messages.error(request, 'Curriculum not found.')
+            else:
+                messages.error(request, 'All assignment fields are required.')
+                
+        elif action == 'delete_assignment':
+            assignment_id = request.POST.get('assignment_id')
+            if assignment_id:
+                try:
+                    assignment = TeacherAssignment.objects.get(id=assignment_id)
+                    assignment.delete()
+                    messages.success(request, 'Assignment deleted successfully.')
+                except TeacherAssignment.DoesNotExist:
+                    messages.error(request, 'Assignment not found.')
+        
+        return redirect('manage_teachers')
+    
+    # GET request - display the management page
+    teachers = CustomUser.objects.filter(role='teacher').order_by('last_name', 'first_name')
+    teacher_assignments = TeacherAssignment.objects.all().select_related('curriculum').order_by('curriculum', 'grade_level', 'section_name')
+    curricula = Curriculum.objects.all()
+    
+    return render(request, 'maintenance/manage_teachers.html', {
+        'teachers': teachers,
+        'teacher_assignments': teacher_assignments,
+        'curricula': curricula,
+    })
 
 
 @login_required

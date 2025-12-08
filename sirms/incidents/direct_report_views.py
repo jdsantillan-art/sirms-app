@@ -241,7 +241,7 @@ def direct_report(request):
     context = {
         'form': form,
         'incident_types': IncidentType.objects.all().order_by('severity', 'name')[:100],  # Limit to prevent slow loading
-        'teacher_assignments': TeacherAssignment.objects.select_related('curriculum').all()[:500],  # Optimized with select_related
+        'teacher_assignments': TeacherAssignment.objects.select_related('curriculum').all(),  # All teacher assignments for dropdowns
         'is_direct_report': True,  # Flag to indicate this is a direct report
     }
     
