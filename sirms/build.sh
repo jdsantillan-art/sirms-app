@@ -18,4 +18,7 @@ timeout 30 python setup_render_data.py 2>&1 | head -n 20 || echo "⚠️  Data l
 echo "👥 Creating staff accounts (Guidance, DO, ESP Teachers)..."
 python manage.py create_staff_accounts || echo "⚠️  Staff accounts may already exist"
 
+echo "📚 Populating teacher assignments..."
+python manage.py populate_teacher_assignments || echo "⚠️  Teacher assignments may already exist"
+
 echo "✅ Build completed successfully!"
