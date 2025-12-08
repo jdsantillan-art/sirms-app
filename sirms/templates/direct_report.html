@@ -385,8 +385,78 @@
     });
 
     // Load section structure and teacher lookup from database (passed as JSON)
-    const curriculumStructure = {{ section_structure_json|safe }};
-    const teacherLookup = {{ teacher_lookup_json|safe }};
+    const curriculumStructure = {{ section_structure_json|safe }} || {};
+    const teacherLookup = {{ teacher_lookup_json|safe }} || {};
+
+    // Fallback section structure if database is empty
+    const fallbackStructure = {
+        'Junior High School': {
+            '7': [
+                {section_name: 'Section 1', track_code: 'STE'}, {section_name: 'Section 2', track_code: 'STE'},
+                {section_name: 'Section 1', track_code: 'SPA'}, {section_name: 'Section 2', track_code: 'SPA'},
+                {section_name: 'Section 1', track_code: 'ICT'}, {section_name: 'Section 2', track_code: 'ICT'},
+                {section_name: 'Section 1', track_code: 'RBEC'}, {section_name: 'Section 2', track_code: 'RBEC'}, {section_name: 'Section 3', track_code: 'RBEC'},
+                {section_name: 'Section 1', track_code: 'STVEP'}, {section_name: 'Section 2', track_code: 'STVEP'}, {section_name: 'Section 3', track_code: 'STVEP'},
+                {section_name: 'Section 4', track_code: 'STVEP'}, {section_name: 'Section 5', track_code: 'STVEP'}, {section_name: 'Section 6', track_code: 'STVEP'},
+                {section_name: 'Section 7', track_code: 'STVEP'}, {section_name: 'Section 8', track_code: 'STVEP'}, {section_name: 'Section 9', track_code: 'STVEP'},
+                {section_name: 'Section 10', track_code: 'STVEP'}
+            ],
+            '8': [
+                {section_name: 'Section 1', track_code: 'STE'}, {section_name: 'Section 2', track_code: 'STE'},
+                {section_name: 'Section 1', track_code: 'SPA'}, {section_name: 'Section 2', track_code: 'SPA'},
+                {section_name: 'Section 1', track_code: 'ICT'}, {section_name: 'Section 2', track_code: 'ICT'},
+                {section_name: 'Section 1', track_code: 'RBEC'}, {section_name: 'Section 2', track_code: 'RBEC'}, {section_name: 'Section 3', track_code: 'RBEC'},
+                {section_name: 'Section 1', track_code: 'STVEP'}, {section_name: 'Section 2', track_code: 'STVEP'}, {section_name: 'Section 3', track_code: 'STVEP'},
+                {section_name: 'Section 4', track_code: 'STVEP'}, {section_name: 'Section 5', track_code: 'STVEP'}, {section_name: 'Section 6', track_code: 'STVEP'},
+                {section_name: 'Section 7', track_code: 'STVEP'}, {section_name: 'Section 8', track_code: 'STVEP'}, {section_name: 'Section 9', track_code: 'STVEP'},
+                {section_name: 'Section 10', track_code: 'STVEP'}
+            ],
+            '9': [
+                {section_name: 'Section 1', track_code: 'STE'}, {section_name: 'Section 2', track_code: 'STE'},
+                {section_name: 'Section 1', track_code: 'SPA'}, {section_name: 'Section 2', track_code: 'SPA'},
+                {section_name: 'Section 1', track_code: 'ICT'}, {section_name: 'Section 2', track_code: 'ICT'},
+                {section_name: 'Section 1', track_code: 'RBEC'}, {section_name: 'Section 2', track_code: 'RBEC'}, {section_name: 'Section 3', track_code: 'RBEC'},
+                {section_name: 'Section 1', track_code: 'STVEP'}, {section_name: 'Section 2', track_code: 'STVEP'}, {section_name: 'Section 3', track_code: 'STVEP'},
+                {section_name: 'Section 4', track_code: 'STVEP'}, {section_name: 'Section 5', track_code: 'STVEP'}, {section_name: 'Section 6', track_code: 'STVEP'},
+                {section_name: 'Section 7', track_code: 'STVEP'}, {section_name: 'Section 8', track_code: 'STVEP'}, {section_name: 'Section 9', track_code: 'STVEP'},
+                {section_name: 'Section 10', track_code: 'STVEP'}
+            ],
+            '10': [
+                {section_name: 'Section 1', track_code: 'STE'}, {section_name: 'Section 2', track_code: 'STE'},
+                {section_name: 'Section 1', track_code: 'SPA'}, {section_name: 'Section 2', track_code: 'SPA'},
+                {section_name: 'Section 1', track_code: 'ICT'}, {section_name: 'Section 2', track_code: 'ICT'},
+                {section_name: 'Section 1', track_code: 'RBEC'}, {section_name: 'Section 2', track_code: 'RBEC'}, {section_name: 'Section 3', track_code: 'RBEC'},
+                {section_name: 'Section 1', track_code: 'STVEP'}, {section_name: 'Section 2', track_code: 'STVEP'}, {section_name: 'Section 3', track_code: 'STVEP'},
+                {section_name: 'Section 4', track_code: 'STVEP'}, {section_name: 'Section 5', track_code: 'STVEP'}, {section_name: 'Section 6', track_code: 'STVEP'},
+                {section_name: 'Section 7', track_code: 'STVEP'}, {section_name: 'Section 8', track_code: 'STVEP'}, {section_name: 'Section 9', track_code: 'STVEP'},
+                {section_name: 'Section 10', track_code: 'STVEP'}
+            ]
+        },
+        'Senior High School': {
+            '11': [
+                {section_name: 'Section 1', track_code: 'STEM'},
+                {section_name: 'Section 1', track_code: 'Arts & Design'},
+                {section_name: 'Section 1', track_code: 'TVL – ICT'},
+                {section_name: 'Section 1', track_code: 'TVL – SMAW'},
+                {section_name: 'Section 1', track_code: 'TVL – EIM'},
+                {section_name: 'Section 1', track_code: 'TVL – Dressmaking'},
+                {section_name: 'Section 1', track_code: 'TVL – FBS'},
+                {section_name: 'Section 1', track_code: 'TVL – Bread & Pastry'},
+                {section_name: 'Section 1', track_code: 'TVL – CSS'}
+            ],
+            '12': [
+                {section_name: 'Section 1', track_code: 'STEM'},
+                {section_name: 'Section 1', track_code: 'Arts & Design'},
+                {section_name: 'Section 1', track_code: 'TVL – ICT'},
+                {section_name: 'Section 1', track_code: 'TVL – SMAW'},
+                {section_name: 'Section 1', track_code: 'TVL – EIM'},
+                {section_name: 'Section 1', track_code: 'TVL – Dressmaking'},
+                {section_name: 'Section 1', track_code: 'TVL – FBS'},
+                {section_name: 'Section 1', track_code: 'TVL – Bread & Pastry'},
+                {section_name: 'Section 1', track_code: 'TVL – CSS'}
+            ]
+        }
+    };
 
     // Initialize dropdowns with empty options
     gradeLevelSelect.innerHTML = '<option value="">Select Grade Level</option>';
@@ -424,27 +494,35 @@
         sectionNameSelect.innerHTML = '<option value="">Select Section</option>';
         teacherNameInput.value = '';
 
-        if (selectedCurriculum && selectedGrade && curriculumStructure[selectedCurriculum] && curriculumStructure[selectedCurriculum][selectedGrade]) {
-            // Get sections for this curriculum and grade from database
-            const sections = curriculumStructure[selectedCurriculum][selectedGrade];
-            sections.forEach(sectionData => {
-                const option = document.createElement('option');
-                // For JHS: "Section 1 (STE)", for SHS: strand name (e.g., "STEM", "TVL – SMAW")
-                if (selectedCurriculum === 'Junior High School') {
-                    // JHS: Save as "Section X (TRACK)"
-                    option.value = `${sectionData.section_name} (${sectionData.track_code})`;
-                    option.text = `${sectionData.section_name} (${sectionData.track_code})`;
-                    option.dataset.trackCode = sectionData.track_code;
-                    option.dataset.sectionName = sectionData.section_name;
-                } else {
-                    // Senior High - section IS the strand, so save the track_code as section_name
-                    option.value = sectionData.track_code;  // Save strand as section_name
-                    option.text = sectionData.track_code;   // Display strand
-                    option.dataset.trackCode = sectionData.track_code;
-                    option.dataset.sectionName = sectionData.track_code;  // For SHS, section_name = strand
-                }
-                sectionNameSelect.appendChild(option);
-            });
+        if (selectedCurriculum && selectedGrade) {
+            // Try to get sections from database first, fallback to default structure
+            let sections = null;
+            if (curriculumStructure[selectedCurriculum] && curriculumStructure[selectedCurriculum][selectedGrade]) {
+                sections = curriculumStructure[selectedCurriculum][selectedGrade];
+            } else if (fallbackStructure[selectedCurriculum] && fallbackStructure[selectedCurriculum][selectedGrade]) {
+                sections = fallbackStructure[selectedCurriculum][selectedGrade];
+            }
+
+            if (sections && sections.length > 0) {
+                sections.forEach(sectionData => {
+                    const option = document.createElement('option');
+                    // For JHS: "Section 1 (STE)", for SHS: strand name (e.g., "STEM", "TVL – SMAW")
+                    if (selectedCurriculum === 'Junior High School') {
+                        // JHS: Save as "Section X (TRACK)"
+                        option.value = `${sectionData.section_name} (${sectionData.track_code})`;
+                        option.text = `${sectionData.section_name} (${sectionData.track_code})`;
+                        option.dataset.trackCode = sectionData.track_code;
+                        option.dataset.sectionName = sectionData.section_name;
+                    } else {
+                        // Senior High - section IS the strand, so save the track_code as section_name
+                        option.value = sectionData.track_code;  // Save strand as section_name
+                        option.text = sectionData.track_code;   // Display strand
+                        option.dataset.trackCode = sectionData.track_code;
+                        option.dataset.sectionName = sectionData.section_name || sectionData.track_code;  // For SHS, section_name = strand
+                    }
+                    sectionNameSelect.appendChild(option);
+                });
+            }
         }
     });
 
