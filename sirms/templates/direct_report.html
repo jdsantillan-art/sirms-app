@@ -355,34 +355,54 @@
     };
 
     // Show legal references and bullying type when incident type is selected
-    incidentTypeSelect.addEventListener('change', function () {
-        const selectedId = this.value;
-        const bullyingTypeDiv = document.getElementById('bullying-type-div');
-        const bullyingTypeSelect = document.getElementById('id_bullying_type');
-        
-        if (selectedId && incidentTypes[selectedId]) {
-            const incidentName = incidentTypes[selectedId].name.toLowerCase();
+    if (incidentTypeSelect) {
+        incidentTypeSelect.addEventListener('change', function () {
+            const selectedId = this.value;
+            const bullyingTypeDiv = document.getElementById('bullying-type-div');
+            const bullyingTypeSelect = document.getElementById('id_bullying_type');
             
-            // Show legal references
-            legalReferencesContent.innerHTML = incidentTypes[selectedId].legal_references;
-            legalReferencesDiv.style.display = 'block';
-            
-            // Show bullying type dropdown if "bullying" is in the incident name
-            if (incidentName.includes('bullying')) {
-                bullyingTypeDiv.style.display = 'block';
-                bullyingTypeSelect.required = true;
+            if (selectedId && incidentTypes[selectedId]) {
+                const incidentName = incidentTypes[selectedId].name.toLowerCase();
+                
+                // Show legal references
+                if (legalReferencesContent) {
+                    legalReferencesContent.innerHTML = incidentTypes[selectedId].legal_references;
+                }
+                if (legalReferencesDiv) {
+                    legalReferencesDiv.style.display = 'block';
+                }
+                
+                // Show bullying type dropdown if "bullying" is in the incident name
+                if (incidentName.includes('bullying')) {
+                    if (bullyingTypeDiv) {
+                        bullyingTypeDiv.style.display = 'block';
+                    }
+                    if (bullyingTypeSelect) {
+                        bullyingTypeSelect.required = true;
+                    }
+                } else {
+                    if (bullyingTypeDiv) {
+                        bullyingTypeDiv.style.display = 'none';
+                    }
+                    if (bullyingTypeSelect) {
+                        bullyingTypeSelect.required = false;
+                        bullyingTypeSelect.value = '';
+                    }
+                }
             } else {
-                bullyingTypeDiv.style.display = 'none';
-                bullyingTypeSelect.required = false;
-                bullyingTypeSelect.value = '';
+                if (legalReferencesDiv) {
+                    legalReferencesDiv.style.display = 'none';
+                }
+                if (bullyingTypeDiv) {
+                    bullyingTypeDiv.style.display = 'none';
+                }
+                if (bullyingTypeSelect) {
+                    bullyingTypeSelect.required = false;
+                    bullyingTypeSelect.value = '';
+                }
             }
-        } else {
-            legalReferencesDiv.style.display = 'none';
-            bullyingTypeDiv.style.display = 'none';
-            bullyingTypeSelect.required = false;
-            bullyingTypeSelect.value = '';
-        }
-    });
+        });
+    }
 
     // Load section structure and teacher lookup from database (passed as JSON)
     const curriculumStructure = {{ section_structure_json|safe }} || {};
