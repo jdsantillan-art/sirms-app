@@ -54,8 +54,8 @@ class GoogleOAuthBackend:
                 user = User.objects.get(email=email)
                 print(f"DEBUG AUTH: User found in database: {user.username}, role: {user.role}")
                 
-                # Validate email format matches role
-                is_valid = self.validate_email_format(email, user.role)
+                # Validate email format matches role (pass user object for teacher validation)
+                is_valid = self.validate_email_format(email, user.role, user=user)
                 print(f"DEBUG AUTH: Email format valid: {is_valid}")
                 
                 if is_valid:
@@ -63,6 +63,13 @@ class GoogleOAuthBackend:
                     return user
                 else:
                     print(f"DEBUG AUTH: Email format validation failed for {email}")
+                    # For teachers, show expected format
+                    if user.role == 'teacher':
+                        lastname = (user.last_name or '').lower().replace(' ', '').replace('-', '')
+                        first_letter = (user.first_name[0] if user.first_name else '').lower()
+                        middle_initial = (user.middle_name[0] if user.middle_name else '').lower()
+                        expected_email = f"{lastname}{first_letter}{middle_initial}dmlmhs.teacher@gmail.com"
+                        print(f"DEBUG AUTH: Expected email format for teacher: {expected_email}")
                     return None
                     
             except User.DoesNotExist:
@@ -78,26 +85,54 @@ class GoogleOAuthBackend:
             print(f"DEBUG AUTH: Exception: {e}")
             return None
     
-    def validate_email_format(self, email, role):
+    def validate_email_format(self, email, role, user=None):
         """
         Validate that email format matches the user's role
         
-        Format: lastname.dmlmhs[role]@gmail.com
+        For students: Allow any email (no restriction)
+        For teachers: Format must be: lastname + first_letter + middle_initial + dmlmhs.teacher@gmail.com
+        Example: santillanjddmlmhs.teacher@gmail.com
         
         Args:
             email: Email address to validate
             role: User role from database
+            user: User object (optional, needed for teacher validation)
             
         Returns:
             Boolean indicating if email format is valid
         """
+        # Students can use any email - no restriction
+        if role == 'student':
+            return True
+        
+        # For teachers, validate specific format
+        if role == 'teacher':
+            if not email.endswith('dmlmhs.teacher@gmail.com'):
+                return False
+            
+            # If user object is provided, validate against their name
+            if user:
+                # Get name components
+                lastname = (user.last_name or '').lower().replace(' ', '').replace('-', '')
+                first_letter = (user.first_name[0] if user.first_name else '').lower()
+                middle_initial = (user.middle_name[0] if user.middle_name else '').lower()
+                
+                # Construct expected email pattern
+                expected_local = f"{lastname}{first_letter}{middle_initial}dmlmhs.teacher"
+                email_local = email.split('@')[0].lower()
+                
+                return email_local == expected_local
+            else:
+                # If no user object, just check the pattern exists
+                email_local = email.split('@')[0].lower()
+                return 'dmlmhs.teacher' in email_local
+        
+        # For other roles, use existing validation
         if not email.endswith(settings.DMLMHS_EMAIL_DOMAIN):
             return False
         
         # Map database roles to email patterns
         role_mapping = {
-            'student': 'dmlmhsstudent',
-            'teacher': 'dmlmhsteacher',
             'counselor': 'dmlmhsguidance',
             'guidance': 'dmlmhsguidance',
             'do': 'dmlmhsdo',

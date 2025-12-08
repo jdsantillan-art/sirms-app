@@ -100,11 +100,29 @@ def google_callback(request):
             try:
                 existing_user = CustomUser.objects.get(email=email)
                 print(f"DEBUG: User exists but auth failed. Role: {existing_user.role}")  # Debug log
-                messages.error(
-                    request,
-                    f'Email format mismatch. Your email ({email}) should follow the format: '
-                    f'lastname.dmlmhs{existing_user.role}@gmail.com'
-                )
+                
+                # Provide specific error message based on role
+                if existing_user.role == 'student':
+                    messages.error(
+                        request,
+                        f'Authentication failed. Please try again or contact administrator.'
+                    )
+                elif existing_user.role == 'teacher':
+                    # Show expected email format for teacher
+                    lastname = (existing_user.last_name or '').lower().replace(' ', '').replace('-', '')
+                    first_letter = (existing_user.first_name[0] if existing_user.first_name else '').lower()
+                    middle_initial = (existing_user.middle_name[0] if existing_user.middle_name else '').lower()
+                    expected_email = f"{lastname}{first_letter}{middle_initial}dmlmhs.teacher@gmail.com"
+                    messages.error(
+                        request,
+                        f'Email format mismatch. As a teacher, your email must be: {expected_email}'
+                    )
+                else:
+                    messages.error(
+                        request,
+                        f'Email format mismatch. Your email ({email}) should follow the format: '
+                        f'lastname.dmlmhs{existing_user.role}@gmail.com'
+                    )
             except CustomUser.DoesNotExist:
                 print(f"DEBUG: User does not exist: {email}")  # Debug log
                 messages.error(
