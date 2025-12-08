@@ -115,7 +115,7 @@
                                 </a>
                                 <button
                                     class="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
-                                    onclick="showClassifyModal('{{ report.id }}', '{{ report.case_id }}', {% if item.involved_student_id %}'{{ item.involved_student_id }}', '{{ item.involved_student_name|escapejs }}'{% else %}null, null{% endif %})">
+                                    onclick="showClassifyModal('{{ report.id }}', '{{ report.case_id }}', {% if item.involved_student_id %}'{{ item.involved_student_id }}', '{{ item.involved_student_name|escapejs }}'{% else %}null, null{% endif %}, {% if item.raw_student_name %}'{{ item.raw_student_name|escapejs }}'{% else %}null{% endif %})">
                                     <i class="fas fa-check"></i>
                                 </button>
                             </div>
@@ -312,7 +312,7 @@
     }
 
     // Classification Modal Functions
-    function showClassifyModal(reportId, caseId, studentId, studentName) {
+    function showClassifyModal(reportId, caseId, studentId, studentName, rawStudentName) {
         document.getElementById('modalReportId').value = reportId;
         document.querySelector('#classifyModal h3 i').nextSibling.textContent = ` Verify & Classify Report - Case ${caseId}`;
         
@@ -351,6 +351,19 @@
                 assignedDisplay.style.display = 'block';
                 searchBox.style.display = 'none';
             }
+        } else if (rawStudentName) {
+            // No matching student found, but we have a raw name from involved_students field
+            // Display the name in the search field so DO can see it and search for the student
+            studentSearch.value = rawStudentName;
+            selectedStudentId.value = '';
+            assignedDisplay.style.display = 'none';
+            searchBox.style.display = 'block';
+            // Focus on the search field to help user find the student
+            setTimeout(() => {
+                studentSearch.focus();
+                // Try to trigger autocomplete/datalist
+                studentSearch.dispatchEvent(new Event('input', { bubbles: true }));
+            }, 100);
         } else {
             // No student - show search, hide assigned
             assignedDisplay.style.display = 'none';

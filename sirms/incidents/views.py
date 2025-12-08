@@ -1118,12 +1118,14 @@ def fact_check_reports(request):
             involved_student = None
             involved_student_id = None
             involved_student_name = None
+            raw_student_name = None  # Raw name from involved_students field (even if no match found)
             
             # First check if reported_student is already set
             if report.reported_student:
                 involved_student = report.reported_student
                 involved_student_id = report.reported_student.id
                 involved_student_name = report.reported_student.get_full_name()
+                raw_student_name = involved_student_name
             else:
                 # Check involved_parties for student (from direct reports or regular reports)
                 involved_parties = report.involved_parties.filter(party_type='student')
@@ -1135,9 +1137,11 @@ def fact_check_reports(request):
                         involved_student = first_party.student
                         involved_student_id = first_party.student.id
                         involved_student_name = first_party.student.get_full_name()
+                        raw_student_name = involved_student_name
                     # If no direct link, try to find student from name_if_unknown (from direct reports)
                     elif first_party.name_if_unknown:
                         name_text = first_party.name_if_unknown.strip()
+                        raw_student_name = name_text  # Store raw name even if no match
                         # Try to find by email/username first
                         student_match = CustomUser.objects.filter(
                             role='student',
@@ -1167,21 +1171,28 @@ def fact_check_reports(request):
                 
                 # If still no student, try to parse involved_students text field
                 if not involved_student and report.involved_students:
-                    # Try to find student by name or email from involved_students field
+                    # Get the raw text from involved_students
                     involved_students_text = report.involved_students.strip()
+                    # Extract first student name (in case multiple are listed)
+                    import re
+                    # Split by common delimiters and get first entry
+                    first_student_text = re.split(r'[,;\n]+', involved_students_text)[0].strip()
+                    raw_student_name = first_student_text  # Store raw name even if no match
+                    
+                    # Try to find student by name or email from involved_students field
                     # Try to match by email/username first
                     student_match = CustomUser.objects.filter(
                         role='student',
-                        email__iexact=involved_students_text
+                        email__iexact=first_student_text
                     ).first()
                     if not student_match:
                         student_match = CustomUser.objects.filter(
                             role='student',
-                            username__iexact=involved_students_text
+                            username__iexact=first_student_text
                         ).first()
                     # If not found, try by name (first name + last name)
                     if not student_match:
-                        name_parts = involved_students_text.split()
+                        name_parts = first_student_text.split()
                         if len(name_parts) >= 2:
                             first_name = name_parts[0]
                             last_name = name_parts[-1]
@@ -1202,6 +1213,7 @@ def fact_check_reports(request):
                 'report': report,
                 'involved_student_id': involved_student_id,
                 'involved_student_name': involved_student_name,
+                'raw_student_name': raw_student_name,  # Always include raw name for display
             })
         
         context = {
