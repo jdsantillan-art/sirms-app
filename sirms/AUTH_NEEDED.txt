@@ -1,0 +1,21 @@
+AUTHENTICATION REQUIRED FOR GIT PUSH
+
+The fix is complete and committed, but I cannot push to GitHub automatically 
+because it requires your GitHub credentials.
+
+WHAT'S READY:
+- Commit 179c178: Fixed syntax error in report_detail
+- Commit 6afe5a1: Added missing get_repeat_offender_info function
+
+TO DEPLOY:
+1. Open Git Bash or Command Prompt
+2. Navigate to: cd C:\Users\lenovo\Downloads\sirms-20251127T154258Z-1-001\sirms
+3. Run: git push origin main
+4. Enter your GitHub credentials when prompted
+
+OR use GitHub Desktop:
+1. Open GitHub Desktop
+2. Select SIRMS repository
+3. Click "Push origin"
+
+The fix will deploy automatically to Render once pushed to GitHub.

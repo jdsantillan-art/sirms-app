@@ -35,23 +35,27 @@ def google_callback(request):
     Handle Google OAuth callback
     Validates user and creates session
     """
-    # Debug logging
-    print(f"DEBUG: Callback received - Method: {request.method}")
-    print(f"DEBUG: GET params: {request.GET}")
-    print(f"DEBUG: Full path: {request.get_full_path()}")
-    
-    # Get authorization code from callback
-    code = request.GET.get('code')
-    error = request.GET.get('error')
-    
-    if error:
-        print(f"DEBUG: OAuth error: {error}")
-        messages.error(request, f'Google authentication failed: {error}')
-        return render(request, 'oauth/no_access.html')
-    
-    if not code:
-        print(f"DEBUG: No authorization code received")
-        messages.error(request, 'No authorization code received.')
+    try:
+        # Debug logging
+        print(f"DEBUG: Callback received - Method: {request.method}")
+        print(f"DEBUG: GET params: {request.GET}")
+        print(f"DEBUG: Full path: {request.get_full_path()}")
+        
+        # Get authorization code from callback
+        code = request.GET.get('code')
+        error = request.GET.get('error')
+        
+        if error:
+            print(f"DEBUG: OAuth error: {error}")
+            messages.error(request, f'Google authentication failed: {error}')
+            return render(request, 'oauth/no_access.html')
+        
+        if not code:
+            print(f"DEBUG: No authorization code received")
+            messages.error(request, 'No authorization code received.')
+            return render(request, 'oauth/no_access.html')
+    except Exception as e:
+        print(f"DEBUG: Error in callback initial processing: {str(e)}")
         return render(request, 'oauth/no_access.html')
     
     # Exchange code for tokens
@@ -163,3 +167,18 @@ def no_access(request):
     Display access denied page for unauthorized users
     """
     return render(request, 'oauth/no_access.html')
+
+
+def test_oauth(request):
+    """
+    Test endpoint to verify OAuth routing is working
+    """
+    from django.http import JsonResponse
+    return JsonResponse({
+        'status': 'ok',
+        'message': 'OAuth routing is working',
+        'client_id_set': bool(settings.GOOGLE_OAUTH_CLIENT_ID),
+        'client_secret_set': bool(settings.GOOGLE_OAUTH_CLIENT_SECRET),
+        'redirect_uri': settings.GOOGLE_OAUTH_REDIRECT_URI,
+        'site_url': settings.SITE_URL
+    })

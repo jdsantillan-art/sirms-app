@@ -14,7 +14,30 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="{% static 'js/auto_capitalize.js' %}"></script>
+    <script>
+        // Auto-capitalize names in input fields
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameFields = document.querySelectorAll(
+                'input[name*="name"]:not([name*="username"]):not([name*="section_name"]), ' +
+                'input[name="first_name"], input[name="last_name"], input[name="middle_name"], ' +
+                'input[name="reporter_first_name"], input[name="reporter_last_name"], ' +
+                'input[name="reporter_middle_name"], input[name="teacher_name"], ' +
+                'input[name="involved_students"]'
+            );
+            nameFields.forEach(function(field) {
+                field.addEventListener('input', function(e) {
+                    const cursorPosition = this.selectionStart;
+                    const oldValue = this.value;
+                    this.value = this.value.replace(/\b\w/g, function(char) {
+                        return char.toUpperCase();
+                    });
+                    if (oldValue.length === this.value.length) {
+                        this.setSelectionRange(cursorPosition, cursorPosition);
+                    }
+                });
+            });
+        });
+    </script>
     <style>
         :root {
             --primary: #2E8B57;

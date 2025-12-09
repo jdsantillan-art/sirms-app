@@ -17,8 +17,10 @@ urlpatterns = [
     # Google OAuth URLs
     path('auth/google/', oauth_views.google_login, name='google_login'),
     path('auth/callback/', oauth_views.google_callback, name='google_callback'),
+    path('auth/callback', oauth_views.google_callback, name='google_callback_no_slash'),  # Handle without trailing slash
     path('auth/logout/', oauth_views.google_logout, name='google_logout'),
     path('auth/no-access/', oauth_views.no_access, name='no_access'),
+    path('auth/test/', oauth_views.test_oauth, name='test_oauth'),  # Test endpoint
     
     # Traditional auth (keep for backward compatibility)
     path('register/', views.register, name='register'),
