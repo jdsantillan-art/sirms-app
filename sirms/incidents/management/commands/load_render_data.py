@@ -38,6 +38,44 @@ class Command(BaseCommand):
             self.stdout.write("\n📦 Loading teacher assignments...")
             create_teacher_assignments()
             
+            # Create Ms. Mercado's account
+            self.stdout.write("\n👩‍🏫 Creating Ms. Stephanie Mercado's account...")
+            try:
+                # Delete if exists
+                CustomUser.objects.filter(username='stephanie.mercado').delete()
+                
+                # Create user
+                user = CustomUser.objects.create_user(
+                    username='stephanie.mercado',
+                    password='Teacher2024!',
+                    email='stephanie.mercado@school.edu',
+                    first_name='Stephanie',
+                    last_name='Mercado',
+                    role='teacher',
+                    employee_id='TCH-2024-008',
+                    grade_level='Grade 8',
+                    section='Section 2',
+                    is_active=True
+                )
+                
+                # Create teacher assignment
+                TeacherAssignment.objects.get_or_create(
+                    teacher_name='Ms. Stephanie Mercado',
+                    grade_level='8',
+                    section_name='Section 2',
+                    track_code='ICT',
+                    defaults={'curriculum': None}
+                )
+                
+                self.stdout.write(self.style.SUCCESS(
+                    f"✅ Ms. Mercado's account created!"
+                ))
+                self.stdout.write(f"   Username: stephanie.mercado")
+                self.stdout.write(f"   Password: Teacher2024!")
+                
+            except Exception as e:
+                self.stdout.write(self.style.WARNING(f"⚠️  Could not create Ms. Mercado's account: {e}"))
+            
             self.stdout.write(self.style.SUCCESS("\n✅ All data loaded successfully!"))
             
         except Exception as e:

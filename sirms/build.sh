@@ -21,4 +21,7 @@ python manage.py create_staff_accounts || echo "⚠️  Staff accounts may alrea
 echo "📚 Populating teacher assignments..."
 python manage.py populate_teacher_assignments || echo "⚠️  Teacher assignments may already exist"
 
+echo "👩‍🏫 Creating Ms. Mercado's teacher account..."
+python manage.py create_mercado || echo "⚠️  Ms. Mercado's account may already exist"
+
 echo "✅ Build completed successfully!"
