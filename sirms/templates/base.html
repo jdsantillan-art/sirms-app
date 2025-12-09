@@ -225,7 +225,7 @@
             <!-- Navigation -->
             <nav class="flex-1 py-6">
                 {% if user.role != 'esp_teacher' %}
-                <a href="{% url 'dashboard' %}" class="nav-item" data-tooltip="Dashboard"></a>
+                <a href="{% url 'dashboard' %}" class="nav-item" data-tooltip="Dashboard">
                     <i class="fas fa-tachometer-alt"></i>
                     <span class="sidebar-text">Dashboard</span>
                 </a>
@@ -324,16 +324,6 @@
                     <span class="sidebar-text">Manage ESP Teacher/VPF</span>
                 </a>
 
-                {% elif user.role == 'esp_teacher' %}
-                <a href="{% url 'vpf_schedule' %}" class="nav-item" data-tooltip="VPF Schedule">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span class="sidebar-text">VPF Schedule</span>
-                </a>
-                <a href="{% url 'vpf_cases' %}" class="nav-item" data-tooltip="VPF Cases">
-                    <i class="fas fa-folder-open"></i>
-                    <span class="sidebar-text">VPF Cases</span>
-                </a>
-
                 {% elif user.role == 'principal' %}
                 <a href="{% url 'evaluated_cases' %}" class="nav-item">
                     <i class="fas fa-clipboard-list"></i>
@@ -354,15 +344,6 @@
                 <a href="{% url 'analytics_dashboard' %}" class="nav-item" data-tooltip="Analytics Dashboard">
                     <i class="fas fa-chart-line"></i>
                     <span class="sidebar-text">Analytics Dashboard</span>
-                </a>
-                {% elif user.role == 'esp_teacher' %}
-                <a href="{% url 'vpf_cases' %}" class="nav-item">
-                    <i class="fas fa-users"></i>
-                    <span class="sidebar-text">VPF Cases</span>
-                </a>
-                <a href="{% url 'vpf_schedule' %}" class="nav-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span class="sidebar-text">VrF Schedule</span>
                 </a>
                 {% elif user.role == 'guidance' or user.role == 'maintenance' %}
 
@@ -410,10 +391,6 @@
                 <a href="{% url 'manage_incident_types' %}" class="nav-item" data-tooltip="Manage Incident Types">
                     <i class="fas fa-exclamation-triangle"></i>
                     <span class="sidebar-text">Manage Incident Types</span>
-                </a>
-                <a href="{% url 'manage_legal_references' %}" class="nav-item" data-tooltip="Legal References">
-                    <i class="fas fa-balance-scale"></i>
-                    <span class="sidebar-text">Legal References</span>
                 </a>
                 <a href="{% url 'reports_analytics' %}" class="nav-item" data-tooltip="Reports & Analytics">
                     <i class="fas fa-chart-bar"></i>
