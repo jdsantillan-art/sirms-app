@@ -35,15 +35,22 @@ def google_callback(request):
     Handle Google OAuth callback
     Validates user and creates session
     """
+    # Debug logging
+    print(f"DEBUG: Callback received - Method: {request.method}")
+    print(f"DEBUG: GET params: {request.GET}")
+    print(f"DEBUG: Full path: {request.get_full_path()}")
+    
     # Get authorization code from callback
     code = request.GET.get('code')
     error = request.GET.get('error')
     
     if error:
+        print(f"DEBUG: OAuth error: {error}")
         messages.error(request, f'Google authentication failed: {error}')
         return render(request, 'oauth/no_access.html')
     
     if not code:
+        print(f"DEBUG: No authorization code received")
         messages.error(request, 'No authorization code received.')
         return render(request, 'oauth/no_access.html')
     
