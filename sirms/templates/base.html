@@ -224,10 +224,12 @@
 
             <!-- Navigation -->
             <nav class="flex-1 py-6">
-                <a href="{% url 'dashboard' %}" class="nav-item" data-tooltip="Dashboard">
+                {% if user.role != 'esp_teacher' %}
+                <a href="{% url 'dashboard' %}" class="nav-item" data-tooltip="Dashboard"></a>
                     <i class="fas fa-tachometer-alt"></i>
                     <span class="sidebar-text">Dashboard</span>
                 </a>
+                {% endif %}
 
                 {% if user.role == 'student' %}
                 <a href="{% url 'report_incident' %}" class="nav-item">
@@ -242,10 +244,6 @@
                     <i class="fas fa-calendar-alt"></i>
                     <span class="sidebar-text">Counseling Schedule</span>
                 </a>
-                <a href="{% url 'legal_references' %}" class="nav-item">
-                    <i class="fas fa-balance-scale"></i>
-                    <span class="sidebar-text">Legal References</span>
-                </a>
                 {% elif user.role == 'teacher' %}
                 <a href="{% url 'report_incident' %}" class="nav-item">
                     <i class="fas fa-edit"></i>
@@ -255,17 +253,9 @@
                     <i class="fas fa-clipboard-list"></i>
                     <span class="sidebar-text">My Reports</span>
                 </a>
-                <a href="{% url 'advisee_records' %}" class="nav-item">
-                    <i class="fas fa-users"></i>
-                    <span class="sidebar-text">Advisee Records</span>
-                </a>
                 <a href="{% url 'counseling_schedule' %}" class="nav-item">
                     <i class="fas fa-calendar-alt"></i>
                     <span class="sidebar-text">Counseling Schedule</span>
-                </a>
-                <a href="{% url 'legal_references' %}" class="nav-item">
-                    <i class="fas fa-book"></i>
-                    <span class="sidebar-text">Incident Reference</span>
                 </a>
                 {% elif user.role == 'do' %}
                 <a href="{% url 'direct_report' %}" class="nav-item" data-tooltip="Direct Report">
