@@ -171,6 +171,8 @@ def get_google_auth_url():
         Google OAuth URL for user authorization
     """
     base_url = "https://accounts.google.com/o/oauth2/v2/auth"
+    from urllib.parse import urlencode
+    
     params = {
         'client_id': settings.GOOGLE_OAUTH_CLIENT_ID,
         'redirect_uri': settings.GOOGLE_OAUTH_REDIRECT_URI,
@@ -180,7 +182,7 @@ def get_google_auth_url():
         'prompt': 'select_account',
     }
     
-    query_string = '&'.join([f"{k}={v}" for k, v in params.items()])
+    query_string = urlencode(params)
     return f"{base_url}?{query_string}"
 
 
